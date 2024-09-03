@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block body %}
+    <div class="jumbotron bg-white text-center shadow-sm rounded p-5">
+        <h1 class="display-4 text-primary font-weight-bold">Welcome to Project Management App</h1>
+        <p class="lead text-muted">The ultimate tool for managing projects, tasks, and issues efficiently.</p>
+        <hr class="my-4">
+        <p class="text-secondary">Streamline your workflow and enhance productivity with our user-friendly interface.</p>
+        <div class="mt-4">
+            {% if app.user %}
+                <a class="btn btn-primary btn-lg mx-2" href="{{ path('brand_index') }}" role="button">Go to Brands</a>
+            {% else %}
+                <a class="btn btn-primary btn-lg mx-2" href="{{ path('app_login') }}" role="button">Login</a>
+                <a class="btn btn-outline-primary btn-lg mx-2" href="{{ path('app_register') }}" role="button">Register</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Brand Details{% endblock %}
+
+{% block body %}
+    <h1>Brand Details</h1>
+
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <td>{{ brand.name }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ brand.description }}</td>
+        </tr>
+    </table>
+
+    <a href="{{ path('brand_edit', {'id': brand.id}) }}" class="btn btn-primary">Edit</a>
+    <a href="{{ path('brand_index') }}" class="btn btn-secondary">Back to list</a>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Brand List{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Brands</h1>
+        <div>
+            <div class="card-body">
+                <table class="table table-borderless table-hover">
+                    <thead class="bg-primary text-white">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col" class="text-center">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for brand in brands %}
+                        <tr class="align-middle">
+                            <td>{{ brand.name }}</td>
+                            <td>{{ brand.description }}</td>
+                            <td class="text-center">
+                                <a href="{{ path('brand_show', {'id': brand.id}) }}" class="btn btn-outline-info btn-sm mx-1">View</a>
+                                <a href="{{ path('brand_edit', {'id': brand.id}) }}" class="btn btn-outline-primary btn-sm mx-1">Edit</a>
+                                <form method="post" action="{{ path('brand_delete', {'id': brand.id}) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this brand?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ brand.id) }}">
+                                    <button class="btn btn-outline-danger btn-sm mx-1">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">No brands found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-end mt-3">
+                    <a href="{{ path('brand_new') }}" class="btn btn-primary">Create New Brand</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

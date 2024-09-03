@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  php:
+    build: .
+    container_name: pm_php
+    volumes:
+      - .:/var/www/pm:rw,cached
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    container_name: pm_postgres
+    environment:
+      POSTGRES_DB: pm
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+        - "5432:5432"
+
+volumes:
+  postgres_data:

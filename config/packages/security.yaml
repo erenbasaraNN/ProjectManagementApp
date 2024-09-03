@@ -1,0 +1,36 @@
+security:
+    password_hashers:
+        App\Entity\User:
+            algorithm: auto
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|styles|images|js)/
+            security: false
+
+        main:
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+            logout:
+                path: app_logout
+                target: app_home
+
+    access_control:
+        - { path: ^/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/register$, roles: PUBLIC_ACCESS }
+        - { path: ^/logout$, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/brand, roles: ROLE_PROJECT_MANAGER }
+        - { path: ^/project, roles: ROLE_PROJECT_MANAGER }
+        - { path: ^/task, roles: ROLE_PROJECT_MANAGER }
+        - { path: ^/issue, roles: ROLE_USER }
+        - { path: ^/$, roles: PUBLIC_ACCESS }  # Allow access to homepage

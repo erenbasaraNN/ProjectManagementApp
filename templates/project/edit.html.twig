@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Brand{% endblock %}
+
+{% block body %}
+    <h1>Edit Brand</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-success">Save changes</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('brand_index') }}" class="btn btn-secondary">Back to list</a>
+{% endblock %}

@@ -1,0 +1,33 @@
+// assets/styles/custom.scss
+
+:root {
+  --light: #0073f5;
+  --white: #ffffff;
+  --dark: #423d47;
+  --primary: #ed1f27;
+  --secondary: #ab0c04;
+  --info: #f6d8f0;
+  --accent-1: #10298f;
+  --accent-2: #2761f7;
+  --accent-3: #ccdff9;
+  --success: #63ae06;
+  --warning: #ffc376;
+  --danger: #f60268;
+}
+
+body {
+  background-color: var(--light);
+  color: var(--dark);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+}
+
+// Add more custom styles as needed

@@ -5,41 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% block title %}Welcome{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('styles/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/css/custom.css') }}">
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="{{ path('app_home') }}">PM App</a>
-        <button class="navbar-toggler btn-dark" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 {% if app.user %}
                     <li class="nav-item">
-                        <a class="nav-link btn-info" href="{{ path('brand_index') }}">Brands</a>
+                        <a class="nav-link btn btn-primary" href="/brands">Brands</a>
                     </li>
                     <li class="nav-item">
-                        {% if brand is defined %}
-                            <a class="nav-link btn-info" href="{{ path('project_index', {'brandId': brand.id}) }}">Projects</a>
-                        {% endif %}
-
+                        <a class="nav-link btn btn-primary" href="/projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary" href="/tasks">Tasks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary" href="/issues">Issues</a>
                     </li>
                 {% endif %}
             </ul>
             <ul class="navbar-nav ml-auto">
                 {% if app.user %}
                     <li class="nav-item">
-                        <a class="nav-link btn-dark" href="{{ path('app_logout') }}">Logout</a>
+                        <a class="nav-link btn btn-dark" href="{{ path('app_logout') }}">Logout</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link btn-dark" href="{{ path('app_login') }}">Login</a>
+                        <a class="nav-link btn btn-dark" href="{{ path('app_login') }}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn-dark" href="{{ path('app_register') }}">Register</a>
+                        <a class="nav-link btn btn-dark" href="{{ path('app_register') }}">Register</a>
                     </li>
                 {% endif %}
             </ul>
@@ -51,8 +54,8 @@
     {% block body %}{% endblock %}
 </div>
 
-<footer class="footer bg-dark text-white mt-5 py-3 ">
-    <div class="footer container-fot text-center " >
+<footer class=" bg-dark text-white mt-5 py-3" >
+    <div class="container-fluid container-fot text-center text-white" >
         &copy; {{ "now"|date("Y") }} PM App. All rights reserved.
     </div>
 </footer>

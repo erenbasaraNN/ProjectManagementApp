@@ -10,33 +10,47 @@
                     <div class="card-body">
                         <h2 class="text-center mb-4">Project Details</h2>
                         <table class="table table-bordered">
-                            <tr>
-                                <th>Name</th>
-                                <td>{{ project.name }}</td>
-                            </tr>
-                            <tr>
-                                <th>Description</th>
-                                <td>{{ project.description }}</td>
-                            </tr>
-                            <tr>
-                                <th>Status</th>
-                                <td>{{ project.status|capitalize }}</td>
-                            </tr>
+                            {% if project %}
+                                <tr>
+                                    <th>Name</th>
+                                    <td>{{ project.name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Description</th>
+                                    <td>{{ project.description }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>{{ project.status|capitalize }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Brand</th>
+                                    <td>
+                                        {% if project.brand %}
+                                            {{ project.brand.name }}
+                                        {% else %}
+                                            <span class="text-muted font-italic">No Brand</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <p>Project not found.</p>
+                            {% endif %}
                         </table>
 
                         <h3 class="text-center mt-5">Tasks</h3>
                         <ul class="list-group mt-3">
                             {% for task in project.tasks %}
                                 <li class="list-group-item">
-                                    <a href="{{ path('task_show', {projectId: project.id, taskId: task.id}) }}">{{ task.name }}</a>
+                                    <a href="{{ path('task_show', {'taskId': task.id}) }}">{{ task.name }}</a>
                                 </li>
                             {% else %}
                                 <li class="list-group-item">No tasks found for this project.</li>
                             {% endfor %}
                         </ul>
 
-                        <a href="{{ path('project_edit', {'id': project.id}) }}" class="btn btn-primary mt-3 w-100">Edit</a>
-                        <a href="{{ path('project_index', {'brandId': brand.id}) }}" class="btn btn-secondary mt-3 w-100">Back to List</a>
+                        <a href="{{ path('project_edit', {'projectId': project.id}) }}" class="btn btn-primary mt-3 w-100">Edit Project</a>
+                        <a href="{{ path('all_projects') }}" class="btn btn-secondary mt-3 w-100">Back to List</a>
                     </div>
                 </div>
             </div>

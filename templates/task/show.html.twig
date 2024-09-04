@@ -29,15 +29,15 @@
             <ul class="list-group mt-3">
                 {% for issue in task.issues %}
                     <li class="list-group-item">
-                        {{ issue.name }}
+                        <a href="{{ path('issue_show', {'issueId': issue.id}) }}">{{ issue.name }}</a>
                     </li>
                 {% else %}
                     <li class="list-group-item">No issues found for this task.</li>
                 {% endfor %}
             </ul>
 
-            <a href="{{ path('task_edit', {projectId: task.project.id, taskId: task.id}) }}" class="btn btn-warning mt-3 w-100">Edit</a>
-            <a href="{{ path('task_index', {projectId: task.project.id}) }}" class="btn btn-secondary mt-3 w-100">Back to List</a>
+            <a href="{{ path('task_edit', {'taskId': task.id}) }}" class="btn btn-warning mt-3 w-100">Edit</a>
+            <a href="{{ path('all_tasks') }}" class="btn btn-secondary mt-3 w-100">Back to List</a>
         </div>
     </div>
 {% endblock %}

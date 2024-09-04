@@ -57,7 +57,8 @@ Encore
     })
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .addStyleEntry('css/custom', './assets/styles/custom.scss') // Compile custom.scss
+    .enableSassLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()

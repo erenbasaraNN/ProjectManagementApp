@@ -1,11 +1,11 @@
 // assets/styles/custom.scss
 
 :root {
-  --light: #0073f5;
+  --light: #f8f9fa;
   --white: #ffffff;
   --dark: #423d47;
-  --primary: #ed1f27;
-  --secondary: #ab0c04;
+  --primary: #547ce5;
+  --secondary: #f60268;
   --info: #f6d8f0;
   --accent-1: #10298f;
   --accent-2: #2761f7;
@@ -18,6 +18,10 @@
 body {
   background-color: var(--light);
   color: var(--dark);
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+
 }
 
 .btn-primary {
@@ -30,4 +34,106 @@ body {
   border-color: var(--secondary);
 }
 
-// Add more custom styles as needed
+h1 {
+  color: #64b5f6;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+label {
+  color: #607d8b;
+}
+
+.form-check-input {
+  margin-top: 7px;
+}
+
+.form-check-label {
+  color: #607d8b;
+}
+
+.navbar-nav .nav-item .nav-link {
+  color: #ffffff;
+  margin-left: 20px;
+
+}
+/* Custom CSS for modern look */
+.card-custom {
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-custom {
+  border-radius: 50px;
+  font-weight: bold;
+}
+
+.table-custom th,
+.table-custom td {
+  vertical-align: middle;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+.card-footer {
+  background-color: #f8f9fa;
+}
+
+.btn-info {
+  border-radius: 3px;
+  font-weight: bold;
+}
+.card-body {
+  background-color: #f8f9fa;
+}
+.container {
+  max-width: 900px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  padding: 20px 40px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  display: grid;
+  flex-grow: 1;
+}
+.container-fot {
+  background-color: #343a40;
+  box-shadow: 0 6px 9px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  align-items: center;
+  padding: 20px;
+}
+
+.form-control {
+  border-radius: 20px;
+  border: 1px solid #ccdff9;
+  background-color: #f3f7fb;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+.nav-back {
+    background-color: #6c7783;
+}
+.container .navbar-brand {
+  margin-left: 5px;
+  font-weight: bolder;
+  color: #031633;
+
+  font-size: 1.50rem;
+}
+.bg-primary {
+  background-color: #64b5f6 !important;
+  color: #ffffff;
+}
+.footer {
+  position: page;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}

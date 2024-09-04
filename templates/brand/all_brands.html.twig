@@ -5,8 +5,8 @@
 {% block body %}
     <div class="container mt-5">
         <h1 class="text-center">Brands</h1>
-        <table class="table table-bordered">
-            <thead>
+        <table class="table table-bordered table-hover">
+            <thead class="bg-primary text-white">
             <tr>
                 <th>Name</th>
                 <th>Description</th>
@@ -19,17 +19,17 @@
                     <td>{{ brand.name }}</td>
                     <td>{{ brand.description }}</td>
                     <td>
-                        <a href="{{ path('brand_show', {id: brand.id}) }}" class="btn btn-info">View</a>
-                        <a href="{{ path('brand_edit', {id: brand.id}) }}" class="btn btn-warning">Edit</a>
+                        <a href="{{ path('brand_show', {'brandId': brand.id}) }}" class="btn btn-outline-info btn-sm">View</a>
+                        <a href="{{ path('brand_edit', {'brandId': brand.id}) }}" class="btn btn-outline-warning btn-sm">Edit</a>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="3" class="text-center">No brands found.</td>
+                    <td colspan="3" class="text-center text-muted">No brands found.</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-        <a href="{{ path('brand_new') }}" class="btn btn-primary">Create New Brand</a>
+        <a href="{{ path('brand_new') }}" class="btn btn-primary mt-3">Create New Brand</a>
     </div>
 {% endblock %}

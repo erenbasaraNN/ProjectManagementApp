@@ -25,9 +25,16 @@
                             {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
                             {{ form_errors(form.status) }}
                         </div>
+                        <div class="form-group mt-3">
+                            {{ form_label(form.brand) }}
+                            {{ form_widget(form.brand, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.brand) }}
+                        </div>
+
                         <button class="btn btn-success mt-4 w-100">Create</button>
+
                         {{ form_end(form) }}
-                        <a href="{{ path('project_index', {'brandId': brand.id}) }}" class="btn btn-secondary mt-3 w-100">Back to List</a>
+                        <a href="{{ path('all_projects') }}" class="btn btn-secondary mt-3 w-100">Back to List</a>
                     </div>
                 </div>
             </div>

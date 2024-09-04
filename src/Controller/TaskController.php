@@ -4,7 +4,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Project;
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
@@ -33,25 +32,20 @@ class TaskController extends AbstractController
         ]);
     }
 
-    #[Route('/project/{projectId}/tasks', name: 'task_index', methods: ['GET'])]
-    public function index(int $projectId, TaskRepository $taskRepository): Response
+    #[Route('/tasks/{taskId}', name: 'task_show', methods: ['GET'])]
+    public function show(int $taskId): Response
     {
-        $project = $this->entityManager->getRepository(Project::class)->find($projectId);
-        $tasks = $taskRepository->findBy(['project' => $project]);
+        $task = $this->entityManager->getRepository(Task::class)->find($taskId);
 
-        return $this->render('task/index.html.twig', [
-            'tasks' => $tasks,
-            'project' => $project,
+        return $this->render('task/show.html.twig', [
+            'task' => $task,
         ]);
     }
 
-    #[Route('/project/{projectId}/tasks/new', name: 'task_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, int $projectId): Response
+    #[Route('/tasks/new', name: 'task_new', methods: ['GET', 'POST'])]
+    public function new(Request $request): Response
     {
-        $project = $this->entityManager->getRepository(Project::class)->find($projectId);
         $task = new Task();
-        $task->setProject($project);
-
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
@@ -59,7 +53,7 @@ class TaskController extends AbstractController
             $this->entityManager->persist($task);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('task_index', ['projectId' => $projectId]);
+            return $this->redirectToRoute('all_tasks');
         }
 
         return $this->render('task/new.html.twig', [
@@ -67,20 +61,8 @@ class TaskController extends AbstractController
         ]);
     }
 
-    #[Route('/project/{projectId}/tasks/{taskId}', name: 'task_show', methods: ['GET'])]
-    public function show(int $projectId, int $taskId): Response
-    {
-        $task = $this->entityManager->getRepository(Task::class)->find($taskId);
-        $project = $this->entityManager->getRepository(Project::class)->find($projectId);
-
-        return $this->render('task/show.html.twig', [
-            'task' => $task,
-            'project' => $project,
-        ]);
-    }
-
-    #[Route('/project/{projectId}/tasks/{taskId}/edit', name: 'task_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, int $projectId, int $taskId): Response
+    #[Route('/tasks/{taskId}/edit', name: 'task_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, int $taskId): Response
     {
         $task = $this->entityManager->getRepository(Task::class)->find($taskId);
         $form = $this->createForm(TaskType::class, $task);
@@ -89,13 +71,11 @@ class TaskController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('task_index', ['projectId' => $projectId]);
+            return $this->redirectToRoute('all_tasks');
         }
 
         return $this->render('task/edit.html.twig', [
             'form' => $form->createView(),
-            'task' => $task,
-            'project' => $task->getProject(),
         ]);
     }
 }

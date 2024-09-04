@@ -33,16 +33,19 @@
 
             <div class="form-group mt-3">
                 <label>Assign Users</label>
-                <div class="form-check">
-                    {{ form_widget(form.assignedUsers, {'attr': {'class': 'form-check-input'}}) }}
-                    {{ form_errors(form.assignedUsers) }}
-                </div>
+                {{ form_widget(form.assignedUsers, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_errors(form.assignedUsers) }}
+            </div>
+            <div class="form-group mt-5">
+                {{ form_label(form.task) }}
+                {{ form_widget(form.task, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.task) }}
             </div>
 
             <button class="btn btn-primary mt-4 w-100">Save Changes</button>
             {{ form_end(form) }}
 
-            <a href="{{ path('issue_index') }}" class="btn btn-secondary mt-3 w-100">Back to List</a>
+            <a href="{{ path('all_issues') }}" class="btn btn-secondary mt-3 w-100">Back to List</a>
         </div>
     </div>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\IssueRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,12 +26,12 @@ class Issue
     private ?string $status = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $assignedAt = null;
+    private ?DateTimeInterface $assignedAt = null;
 
     #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'issues')]
     private ?Task $task = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'issues')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'issues')]
     private Collection $assignedUsers;
 
     public function __construct()
@@ -79,12 +80,12 @@ class Issue
         return $this;
     }
 
-    public function getAssignedAt(): ?\DateTimeInterface
+    public function getAssignedAt(): ?DateTimeInterface
     {
         return $this->assignedAt;
     }
 
-    public function setAssignedAt(?\DateTimeInterface $assignedAt): self
+    public function setAssignedAt(?DateTimeInterface $assignedAt): self
     {
         $this->assignedAt = $assignedAt;
 
@@ -114,7 +115,7 @@ class Issue
     public function addAssignedUser(User $user): self
     {
         if (!$this->assignedUsers->contains($user)) {
-            $this->assignedUsers->add($user);
+            $this->assignedUsers[] = $user;
         }
 
         return $this;

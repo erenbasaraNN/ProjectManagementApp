@@ -22,28 +22,34 @@ class IssueController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/issues', name: 'issue_index', methods: ['GET'])]
-    public function index(IssueRepository $issueRepository): Response
+    #[Route('/issues', name: 'all_issues', methods: ['GET'])]
+    public function allIssues(IssueRepository $issueRepository): Response
     {
         $issues = $issueRepository->findAll();
 
-        return $this->render('issue/index.html.twig', [
+        return $this->render('issue/all_issues.html.twig', [
             'issues' => $issues,
         ]);
     }
 
-    #[Route('/tasks/{taskId}/issues/new', name: 'issue_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, int $taskId): Response
+    #[Route('/issues/new', name: 'issue_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $issue = new Issue();
         $form = $this->createForm(IssueType::class, $issue);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($issue);
-            $this->entityManager->flush();
+            // Assign the selected users to the issue
+            $assignedUsers = $form->get('assignedUsers')->getData();
+            foreach ($assignedUsers as $user) {
+                $issue->addAssignedUser($user);
+            }
 
-            return $this->redirectToRoute('issue_index', ['taskId' => $taskId]);
+            $entityManager->persist($issue);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('all_issues');
         }
 
         return $this->render('issue/new.html.twig', [
@@ -51,24 +57,27 @@ class IssueController extends AbstractController
         ]);
     }
 
-    #[Route('/tasks/{taskId}/issues/{id}', name: 'issue_show', methods: ['GET'])]
-    public function show(Issue $issue): Response
+    #[Route('/issues/{issueId}', name: 'issue_show', methods: ['GET'])]
+    public function show(int $issueId): Response
     {
+        $issue = $this->entityManager->getRepository(Issue::class)->find($issueId);
+
         return $this->render('issue/show.html.twig', [
             'issue' => $issue,
         ]);
     }
 
-    #[Route('/tasks/{taskId}/issues/{id}/edit', name: 'issue_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Issue $issue, int $taskId): Response
+    #[Route('/issues/{issueId}/edit', name: 'issue_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, int $issueId): Response
     {
+        $issue = $this->entityManager->getRepository(Issue::class)->find($issueId);
         $form = $this->createForm(IssueType::class, $issue);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('issue_index', ['taskId' => $taskId]);
+            return $this->redirectToRoute('all_issues');
         }
 
         return $this->render('issue/edit.html.twig', [
@@ -76,14 +85,16 @@ class IssueController extends AbstractController
         ]);
     }
 
-    #[Route('/tasks/{taskId}/issues/{id}/delete', name: 'issue_delete', methods: ['POST'])]
-    public function delete(Request $request, Issue $issue, int $taskId): Response
+    #[Route('/issues/{issueId}/delete', name: 'issue_delete', methods: ['POST'])]
+    public function delete(Request $request, int $issueId): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $issue->getId(), $request->request->get('_token'))) {
+        $issue = $this->entityManager->getRepository(Issue::class)->find($issueId);
+
+        if ($this->isCsrfTokenValid('delete' . $issueId, $request->request->get('_token'))) {
             $this->entityManager->remove($issue);
             $this->entityManager->flush();
         }
 
-        return $this->redirectToRoute('issue_index', ['taskId' => $taskId]);
+        return $this->redirectToRoute('all_issues');
     }
 }

@@ -26,12 +26,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private ?string $password = null;
 
+    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'users')]
+    private Collection $projects;
     #[ORM\ManyToMany(targetEntity: Issue::class, inversedBy: 'assignedUsers')]
-    #[ORM\JoinTable(name: 'user_issues')]
     private Collection $issues;
 
     public function __construct()
     {
+        $this->projects = new ArrayCollection();
         $this->issues = new ArrayCollection();
     }
 
@@ -82,6 +84,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Issue>
      */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects->add($project);
+            $project->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->projects->removeElement($project)) {
+            $project->removeUser($this);
+        }
+
+        return $this;
+    }
+
     public function getIssues(): Collection
     {
         return $this->issues;

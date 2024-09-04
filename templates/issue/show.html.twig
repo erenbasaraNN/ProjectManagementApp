@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Issue Details{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Issue Details</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Name</th>
+                    <td>{{ issue.name }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ issue.description }}</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>{{ issue.status }}</td>
+                </tr>
+                <tr>
+                    <th>Assigned Users</th>
+                    <td>
+                        {% for user in issue.assignedUsers %}
+                            {{ user.email }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Assigned At</th>
+                    <td>{{ issue.assignedAt ? issue.assignedAt|date('Y-m-d H:i') : 'Not assigned' }}</td>
+                </tr>
+            </table>
+            <a href="{{ path('issue_edit', {'id': issue.id}) }}" class="btn btn-primary mt-3 w-100">Edit</a>
+            <a href="{{ path('issue_index') }}" class="btn btn-secondary mt-3 w-100">Back to List</a>
+        </div>
+    </div>
+{% endblock %}

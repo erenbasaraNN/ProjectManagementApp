@@ -22,7 +22,10 @@
                         <a class="nav-link btn-info" href="{{ path('brand_index') }}">Brands</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn-info" href="{{ path('project_index') }}">Projects</a>
+                        {% if brand is defined %}
+                            <a class="nav-link btn-info" href="{{ path('project_index', {'brandId': brand.id}) }}">Projects</a>
+                        {% endif %}
+
                     </li>
                 {% endif %}
             </ul>

@@ -1,60 +1,45 @@
-{% extends 'base.html.twig' %}// src/Form/ProjectType.php
+{% extends 'base.html.twig' %}
 
-namespace App\Form;
-
-use App\Entity\Project;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-
-class ProjectType extends AbstractType
-{
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        $builder
-            ->add('name', TextType::class, [
-                'label' => 'Project Name',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Enter project name'],
-            ])
-            ->add('description', TextareaType::class, [
-                'label' => 'Description',
-                'required' => false,
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Enter project description'],
-            ])
-            ->add('status', ChoiceType::class, [
-                'label' => 'Status',
-                'choices' => [
-                    'Not Started' => 'not_started',
-                    'In Progress' => 'in_progress',
-                    'Completed' => 'completed',
-                ],
-                'attr' => ['class' => 'form-control'],
-            ]);
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => Project::class,
-        ]);
-    }
-}
-
-
-{% block title %}Edit Project{% endblock %}
+{% block title %}Project Details{% endblock %}
 
 {% block body %}
     <div class="container mt-5">
-        <h1 class="text-center">Edit Project</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div>
+                    <div class="card-body">
+                        <h2 class="text-center mb-4">Project Details</h2>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Name</th>
+                                <td>{{ project.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td>{{ project.description }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>{{ project.status|capitalize }}</td>
+                            </tr>
+                        </table>
 
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button class="btn btn-success w-100 mt-3">Save changes</button>
-        {{ form_end(form) }}
+                        <h3 class="text-center mt-5">Tasks</h3>
+                        <ul class="list-group mt-3">
+                            {% for task in project.tasks %}
+                                <li class="list-group-item">
+                                    <a href="{{ path('task_show', {projectId: project.id, taskId: task.id}) }}">{{ task.name }}</a>
+                                </li>
+                            {% else %}
+                                <li class="list-group-item">No tasks found for this project.</li>
+                            {% endfor %}
+                        </ul>
 
-        <a href="{{ path('project_index') }}" class="btn btn-secondary mt-3">Back to list</a>
+                        <a href="{{ path('project_edit', {'id': project.id}) }}" class="btn btn-primary mt-3 w-100">Edit</a>
+                        <a href="{{ path('project_index', {'brandId': brand.id}) }}" class="btn btn-secondary mt-3 w-100">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\IssueRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -114,7 +115,6 @@ class Issue
     {
         if (!$this->assignedUsers->contains($user)) {
             $this->assignedUsers->add($user);
-            $user->addIssue($this);
         }
 
         return $this;
@@ -122,9 +122,7 @@ class Issue
 
     public function removeAssignedUser(User $user): self
     {
-        if ($this->assignedUsers->removeElement($user)) {
-            $user->removeIssue($this);
-        }
+        $this->assignedUsers->removeElement($user);
 
         return $this;
     }

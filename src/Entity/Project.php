@@ -29,15 +29,43 @@ class Project
 
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class)]
     private Collection $tasks;
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'projects')]
+    #[ORM\JoinTable(name: 'project_user')]
+    private Collection $users;
 
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->name ?: 'İsim Bulunamadı';
+    }
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        $this->users->removeElement($user);
+
+        return $this;
     }
 
     public function getName(): ?string

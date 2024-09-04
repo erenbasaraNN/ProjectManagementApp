@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Issue{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Edit Issue</h1>
+        <div class="form-container">
+            {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.name) }}
+            </div>
+
+            <div class="form-group mt-3">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="form-group mt-3">
+                {{ form_label(form.status) }}
+                {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.status) }}
+            </div>
+
+            <div class="form-group mt-3">
+                {{ form_label(form.assignedAt) }}
+                {{ form_widget(form.assignedAt, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.assignedAt) }}
+            </div>
+
+            <div class="form-group mt-3">
+                <label>Assign Users</label>
+                <div class="form-check">
+                    {{ form_widget(form.assignedUsers, {'attr': {'class': 'form-check-input'}}) }}
+                    {{ form_errors(form.assignedUsers) }}
+                </div>
+            </div>
+
+            <button class="btn btn-primary mt-4 w-100">Save Changes</button>
+            {{ form_end(form) }}
+
+            <a href="{{ path('issue_index') }}" class="btn btn-secondary mt-3 w-100">Back to List</a>
+        </div>
+    </div>
+{% endblock %}

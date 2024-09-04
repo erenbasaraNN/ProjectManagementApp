@@ -1,0 +1,38 @@
+{# templates/task/all_tasks.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}All Tasks{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center">All Tasks</h1>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Project</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.name }}</td>
+                    <td>{{ task.project.name }}</td>
+                    <td>{{ task.status }}</td>
+                    <td>
+                        <a href="{{ path('task_show', {projectId: task.project.id, taskId: task.id}) }}" class="btn btn-info btn-sm">View</a>
+                        <a href="{{ path('task_edit', {projectId: task.project.id, taskId: task.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center">No tasks found.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

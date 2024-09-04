@@ -18,10 +18,11 @@ class BrandType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Brand Name',
+                'attr' => ['class' => 'form-control']
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
-                'required' => false,
+                'attr' => ['class' => 'form-control']
             ]);
     }
 

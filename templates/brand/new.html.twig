@@ -3,12 +3,14 @@
 {% block title %}Create New Brand{% endblock %}
 
 {% block body %}
-    <h1>Create New Brand</h1>
+    <div class="container mt-5">
+        <h1 class="text-center">Create New Brand</h1>
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-success">Create</button>
-    {{ form_end(form) }}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-success mt-3 w-100">Create Brand</button>
+        {{ form_end(form) }}
 
-    <a href="{{ path('brand_index') }}" class="btn btn-secondary">Back to list</a>
+        <a href="{{ path('brand_index') }}" class="btn btn-secondary mt-3 w-100">Back to List</a>
+    </div>
 {% endblock %}

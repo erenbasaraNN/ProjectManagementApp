@@ -3,19 +3,31 @@
 {% block title %}Brand Details{% endblock %}
 
 {% block body %}
-    <h1>Brand Details</h1>
+    <div class="container mt-5">
+        <h1 class="text-center">Brand Details</h1>
+        <table class="table table-bordered">
+            <tr>
+                <th>Name</th>
+                <td>{{ brand.name }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ brand.description }}</td>
+            </tr>
+        </table>
 
-    <table class="table">
-        <tr>
-            <th>Name</th>
-            <td>{{ brand.name }}</td>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <td>{{ brand.description }}</td>
-        </tr>
-    </table>
+        <h3 class="mt-4">Projects for this Brand:</h3>
+        <ul class="list-group">
+            {% for project in projects %}
+                <li class="list-group-item">
+                    <a href="{{ path('project_show', {id: project.id}) }}">{{ project.name }}</a>
+                </li>
+            {% else %}
+                <li class="list-group-item">No projects found for this brand.</li>
+            {% endfor %}
+        </ul>
 
-    <a href="{{ path('brand_edit', {'id': brand.id}) }}" class="btn btn-primary">Edit</a>
-    <a href="{{ path('brand_index') }}" class="btn btn-secondary">Back to list</a>
+        <a href="{{ path('brand_edit', {'id': brand.id}) }}" class="btn btn-primary mt-3 w-100">Edit</a>
+        <a href="{{ path('brand_index') }}" class="btn btn-secondary mt-3 w-100">Back to List</a>
+    </div>
 {% endblock %}

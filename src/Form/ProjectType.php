@@ -4,7 +4,9 @@
 
 namespace App\Form;
 
+use App\Entity\Brand;
 use App\Entity\Project;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,6 +36,12 @@ class ProjectType extends AbstractType
                     'Completed' => 'completed',
                 ],
                 'attr' => ['class' => 'form-control'],
+            ])
+            ->add('brand', EntityType::class, [
+                'class' => Brand::class,
+                'choice_label' => 'name',
+                'label' => 'Select Brand',
+                'attr' => ['class' => 'form-control']
             ]);
     }
 

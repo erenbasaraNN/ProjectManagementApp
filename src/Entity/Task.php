@@ -12,9 +12,8 @@ class Task
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
@@ -24,11 +23,15 @@ class Task
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Project $project = null;
 
-    #[ORM\OneToMany(mappedBy: 'task', targetEntity: Issue::class)]
+    #[ORM\OneToMany(mappedBy: 'task', targetEntity: Issue::class, cascade: ['persist', 'remove'])]
     private Collection $issues;
+
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    private Collection $assignedUsers;
 
     public function __construct()
     {
@@ -38,6 +41,27 @@ class Task
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getAssignedUsers(): Collection
+    {
+        return $this->assignedUsers;
+    }
+
+    public function addAssignedUser(User $user): self
+    {
+        if (!$this->assignedUsers->contains($user)) {
+            $this->assignedUsers->add($user);
+        }
+
+        return $this;
+    }
+
+    public function removeAssignedUser(User $user): self
+    {
+        $this->assignedUsers->removeElement($user);
+
+        return $this;
     }
 
     public function getName(): ?string

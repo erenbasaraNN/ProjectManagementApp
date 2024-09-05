@@ -23,15 +23,18 @@ class Project
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
+    public const STATUS_OPTIONS = [
+        'not_started' => 'Not Started',
+        'in_progress' => 'In Progress',
+        'completed' => 'Completed',
+        'canceled' => 'Canceled',
+    ];
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
     private ?Brand $brand = null;
 
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class)]
     private Collection $tasks;
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'projects')]
-    #[ORM\JoinTable(name: 'project_user')]
-    private Collection $users;
 
     public function __construct()
     {
@@ -46,27 +49,17 @@ class Project
     {
         return $this->id;
     }
-
-    public function getUsers(): Collection
+    public function getTotalTimeSpent(): int
     {
-        return $this->users;
-    }
+        $totalTime = 0;
 
-    public function addUser(User $user): self
-    {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
+        foreach ($this->tasks as $task) {
+            $totalTime += $task->getTotalTimeSpent();  // Using the method we defined in Task
         }
 
-        return $this;
+        return $totalTime;
     }
 
-    public function removeUser(User $user): self
-    {
-        $this->users->removeElement($user);
-
-        return $this;
-    }
 
     public function getName(): ?string
     {

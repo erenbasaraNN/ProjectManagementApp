@@ -3,51 +3,90 @@
 {% block title %}All Issues{% endblock %}
 
 {% block body %}
+    <form method="get" class="mb-3 form-special">
+        <label for="status">Filter by Status:</label>
+        <select name="status" id="status" class="form-control" onchange="this.form.submit()">
+            <option value="">All</option>
+            <option value="not_started" {% if app.request.get('status') == 'not_started' %}selected{% endif %}>Not Started</option>
+            <option value="in_progress" {% if app.request.get('status') == 'in_progress' %}selected{% endif %}>In Progress</option>
+            <option value="completed" {% if app.request.get('status') == 'completed' %}selected{% endif %}>Completed</option>
+            <option value="break" {% if app.request.get('status') == 'break' %}selected{% endif %}>Break</option>
+        </select>
+    </form>
+
     <div class="container mt-5">
         <h1 class="text-center mb-4">All Issues</h1>
-        <div class="table-responsive">
-            <table class="table table-borderless table-hover">
-                <thead class="bg-primary text-white">
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Task</th>
-                    <th>Assigned Users</th>
-                    <th class="text-center">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for issue in issues %}
-                    <tr>
-                        <td>{{ issue.name }}</td>
-                        <td>{{ issue.description }}</td>
-                        <td>{{ issue.status }}</td>
-                        <td>{{ issue.task.name }}</td>
-                        <td>
-                            {% for user in issue.assignedUsers %}
-                                {{ user.email }}{% if not loop.last %}, {% endif %}
-                            {% endfor %}
-                        </td>
-                        <td class="text-center">
-                            <div class="d-flex justify-content-center">
-                                <a href="{{ path('issue_show', {'issueId': issue.id}) }}" class="btn btn-outline-info btn-sm mx-1">View</a>
-                                <a href="{{ path('issue_edit', {'issueId': issue.id}) }}" class="btn btn-outline-primary btn-sm mx-1">Edit</a>
-                                <a href="#" class="btn btn-outline-danger btn-sm mx-1" onclick="document.getElementById('delete-form-{{ issue.id }}').submit(); return false;">Delete</a>
-                            </div>
-                            <form id="delete-form-{{ issue.id }}" method="post" action="{{ path('issue_delete', {'issueId': issue.id}) }}" class="d-none">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ issue.id) }}">
-                            </form>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="6" class="text-center text-muted">No issues found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        {% set processedTasks = {} %}
+        {% for item in issuesWithNeighbors %}
+            {% if item.task.id not in processedTasks|keys %}
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="mb-0">Task: {{ item.task.name }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-hover">
+                                <thead class="bg-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>Assigned Users</th>
+                                    <th>Time Spent</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for issue in item.neighborIssues %}
+                                    <tr {% if issue.id == item.mainIssue.id %}class="table-primary"{% endif %}>
+                                        <td>{{ issue.name }}</td>
+                                        <td>
+                                            {% set words = issue.description ? issue.description|split(' ') : [] %}
+                                            {{ words|length > 6 ? words[:6]|join(' ') ~ '...' : issue.description }}
+                                        </td>
+                                        <td>
+                                            {% if issue.status == 'not_started' %}
+                                                Not Started
+                                            {% elseif issue.status == 'in_progress' %}
+                                                In Progress
+                                            {% elseif issue.status == 'completed' %}
+                                                Completed
+                                            {% elseif issue.status == 'canceled' %}
+                                                Canceled
+                                            {% else %}
+                                                Unknown Status
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% for user in issue.assignedUsers %}
+                                                {{ user.email }}{% if not loop.last %}, {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>{{ issue.getTimeSpent ~ ' hours' }}</td>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center">
+                                                <a href="{{ path('issue_show', {'issueId': issue.id}) }}" class="btn btn-outline-info btn-sm mx-1">View</a>
+                                                <a href="{{ path('issue_edit', {'issueId': issue.id}) }}" class="btn btn-outline-primary btn-sm mx-1">Edit</a>
+                                                {% if issue.status != 'completed' %}
+                                                    <a href="#" class="btn btn-outline-success btn-sm mx-1" onclick="document.getElementById('complete-form-{{ issue.id }}').submit(); return false;">Complete</a>
+                                                {% endif %}
+                                            </div>
+                                            <form id="complete-form-{{ issue.id }}" method="post" action="{{ path('issue_complete', {'issueId': issue.id}) }}" class="d-none">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('complete' ~ issue.id) }}">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% set processedTasks = processedTasks|merge({(item.task.id): true}) %}
+            {% endif %}
+        {% else %}
+            <p class="text-center text-muted">No issues found</p>
+        {% endfor %}
 
         <div class="d-flex justify-content-end mt-3">
             <a href="{{ path('issue_new') }}" class="btn btn-primary">Create New Issue</a>

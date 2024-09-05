@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Brand;
 use App\Form\BrandType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,11 +52,14 @@ class BrandController extends AbstractController
     public function show(int $brandId): Response
     {
         $brand = $this->entityManager->getRepository(Brand::class)->find($brandId);
+        $totalTimeSpent = $brand->getTotalTimeSpent();  // Calculate total time spent for the brand
 
         return $this->render('brand/show.html.twig', [
             'brand' => $brand,
+            'totalTimeSpent' => $totalTimeSpent,  // Pass total time to template
         ]);
     }
+
 
     #[Route('/brands/{brandId}/edit', name: 'brand_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $brandId): Response
@@ -73,5 +77,26 @@ class BrandController extends AbstractController
         return $this->render('brand/edit.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+    #[Route('/brands/{brandId}/delete', name: 'brand_delete', methods: ['POST'])]
+    public function delete(Request $request, int $brandId): Response
+    {
+        $brand = $this->entityManager->getRepository(Brand::class)->find($brandId);
+
+        if (!$brand) {
+            return $this->redirectToRoute('all_brands');
+        }
+
+        if ($this->isCsrfTokenValid('delete' . $brandId, $request->request->get('_token'))) {
+            try {
+                $this->entityManager->remove($brand);
+                $this->entityManager->flush();
+            } catch (ForeignKeyConstraintViolationException $e) {
+                // Handle the foreign key violation
+                $this->addFlash('error', 'Bu Brandin bir projesi var. Projesi olan brandler silinemez.');
+            }
+        }
+
+        return $this->redirectToRoute('all_brands');
     }
 }

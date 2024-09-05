@@ -33,6 +33,17 @@ class Brand
     {
         return $this->id;
     }
+    public function getTotalTimeSpent(): int
+    {
+        $totalTime = 0;
+
+        foreach ($this->projects as $project) {
+            $totalTime += $project->getTotalTimeSpent();  // Using the method we defined in Project
+        }
+
+        return $totalTime;
+    }
+
 
     public function getName(): ?string
     {

@@ -3,45 +3,86 @@
 {% block title %}All Tasks{% endblock %}
 
 {% block body %}
+
+
+        <!-- Filter form -->
+        <form method="get" class="mb-3 form-special">
+            <label for="status">Filter by Status:</label>
+            <select name="status" id="status" class="form-control" onchange="this.form.submit()">
+                <option value="">All</option>
+                <option value="not_started" {% if app.request.get('status') == 'not_started' %}selected{% endif %}>Not Started</option>
+                <option value="in_progress" {% if app.request.get('status') == 'in_progress' %}selected{% endif %}>In Progress</option>
+                <option value="completed" {% if app.request.get('status') == 'completed' %}selected{% endif %}>Completed</option>
+                <option value="break" {% if app.request.get('status') == 'break' %}selected{% endif %}>Break</option>
+            </select>
+        </form>
     <div class="container mt-5">
         <h1 class="text-center">All Tasks</h1>
         <div class="table-responsive">
             <table class="table table-borderless table-hover">
                 <thead class="bg-primary text-white">
+                <tr>
+                    <th>Task Name</th>
+                    <th>Project</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Time Spent</th>
+                    <th>Project</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.name }}</td>
+                        <td>{{ task.project.name }}</td>
+                        <td>
+                            {% set words = task.description ? task.description|split(' ') : [] %}
+                            {{ words|length > 6 ? words[:6]|join(' ') ~ '...' : task.description }}
+                        </td>
 
-            <tr>
-                <th>Task Name</th>
-                <th>Project</th>
-                <th>Status</th>
-                <th>Project</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for task in tasks %}
-                <tr>
-                    <td>{{ task.name }}</td>
-                    <td>{{ task.project.name }}</td>
-                    <td>{{ task.status }}</td>
-                    <td>
-                        {% if task.project %}
-                            {{ task.project.name }}
-                        {% else %}
-                            <span class="text-muted">No Project</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{{ path('task_show', {'taskId': task.id}) }}" class="btn btn-info btn-sm">View</a>
-                        <a href="{{ path('task_edit', {'taskId': task.id}) }}" class="btn btn-warning btn-sm">Edit</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4" class="text-center">No tasks found.</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                        <td>
+                            {% if task.status == 'not_started' %}
+                                Not Started
+                            {% elseif task.status == 'in_progress' %}
+                                In Progress
+                            {% elseif task.status == 'completed' %}
+                                Completed
+                            {% elseif task.status == 'break' %}
+                                Break
+                            {% else %}
+                                Unknown Status
+                            {% endif %}
+                        </td>
+                        <td>{{ task.totalTimeSpent ~ ' hours' }}</td>
+                        <td>
+                            {% if task.project %}
+                                {{ task.project.name }}
+                            {% else %}
+                                <span class="text-muted">No Project</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center">
+                                <a href="{{ path('task_show', {'taskId': task.id}) }}" class="btn btn-outline-info btn-sm mx-1">View</a>
+                                <a href="{{ path('task_edit', {'taskId': task.id}) }}" class="btn btn-outline-primary btn-sm mx-1">Edit</a>
+                                {% if task.status != 'completed' %}
+                                <a href="#" class="btn btn-outline-success btn-sm mx-1" onclick="document.getElementById('complete-form-{{ task.id }}').submit(); return false;">Complete</a>
+                                {% endif %}
+                            </div>
+                            <form id="complete-form-{{ task.id }}" method="post" action="{{ path('task_complete', {'taskId': task.id}) }}" class="d-none">
+                                <input type="hidden" name="_token" value="{{ csrf_token('complete' ~ task.id) }}">
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">No tasks found.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
+        <a href="{{ path('task_new') }}" class="btn btn-primary mt-3">Create New Task</a>
     </div>
 {% endblock %}

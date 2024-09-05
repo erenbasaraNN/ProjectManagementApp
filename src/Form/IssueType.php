@@ -8,6 +8,8 @@ use App\Entity\Task;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,9 +26,10 @@ class IssueType extends AbstractType
                 'label' => 'Description',
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Enter description'],
             ])
-            ->add('status', null, [
+            ->add('status', ChoiceType::class, [
+                'choices' => array_flip(Issue::STATUS_OPTIONS),
                 'label' => 'Status',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Enter status'],
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('assignedAt', null, [
                 'label' => 'Assigned At',
@@ -40,6 +43,11 @@ class IssueType extends AbstractType
                 'expanded' => true,
                 'by_reference' => false, // Important for ManyToMany relationship
                 'attr' => ['class' => 'form-check-list'],
+            ])
+            ->add('timeSpent', IntegerType::class, [
+                'label' => 'Time Spent (hours)',
+                'attr' => ['class' => 'form-control'],
+                'required' => false,
             ])
             ->add('task', EntityType::class, [
                 'class' => Task::class,

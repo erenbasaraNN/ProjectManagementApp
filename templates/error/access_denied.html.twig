@@ -1,0 +1,13 @@
+{# templates/error/access_denied.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Access Denied{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 text-center">
+        <h1 class="text-danger">Access Denied</h1>
+        <p>You do not have permission to view this page.</p>
+        <a href="{{ path('all_issues') }}" class="btn btn-primary">Return to Issues</a>
+    </div>
+{% endblock %}
+The association App\Entity\User#projects refers to the owning side field App\Entity\Project#users which does not exist.

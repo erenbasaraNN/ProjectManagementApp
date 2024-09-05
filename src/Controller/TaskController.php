@@ -23,24 +23,23 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks', name: 'all_tasks', methods: ['GET'])]
-    public function allTasks(TaskRepository $taskRepository): Response
+    public function allTasks(Request $request, TaskRepository $taskRepository): Response
     {
-        $tasks = $taskRepository->findAll();
+        $status = $request->query->get('status');
+        $criteria = [];
+
+        if ($status) {
+            $criteria['status'] = strtolower($status);
+        }
+
+        $tasks = $taskRepository->findBy($criteria);
 
         return $this->render('task/all_tasks.html.twig', [
             'tasks' => $tasks,
         ]);
     }
 
-    #[Route('/tasks/{taskId}', name: 'task_show', methods: ['GET'])]
-    public function show(int $taskId): Response
-    {
-        $task = $this->entityManager->getRepository(Task::class)->find($taskId);
 
-        return $this->render('task/show.html.twig', [
-            'task' => $task,
-        ]);
-    }
 
     #[Route('/tasks/new', name: 'task_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
@@ -60,6 +59,19 @@ class TaskController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    #[Route('/tasks/{taskId}', name: 'task_show', methods: ['GET'])]
+    public function show(int $taskId): Response
+    {
+        $task = $this->entityManager->getRepository(Task::class)->find($taskId);
+        $totalTimeSpent = $task->getTotalTimeSpent();
+
+        return $this->render('task/show.html.twig', [
+            'task' => $task,
+            'totalTimeSpent' => $totalTimeSpent,
+        ]);
+    }
+
+
 
     #[Route('/tasks/{taskId}/edit', name: 'task_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $taskId): Response
@@ -78,4 +90,26 @@ class TaskController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    // src/Controller/TaskController.php
+
+    #[Route('/tasks/{taskId}/complete', name: 'task_complete', methods: ['POST'])]
+    public function setCompleted(Request $request, int $taskId): Response
+    {
+        $task = $this->entityManager->getRepository(Task::class)->find($taskId);
+
+        if (!$task) {
+            throw $this->createNotFoundException('Task not found');
+        }
+
+        // Set the task status to 'completed'
+        $task->setStatus('completed');
+
+        if ($this->isCsrfTokenValid('complete' . $taskId, $request->request->get('_token'))) {
+            $this->entityManager->flush();
+        }
+
+        return $this->redirectToRoute('all_tasks');
+    }
+
 }

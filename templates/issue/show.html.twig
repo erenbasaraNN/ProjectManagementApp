@@ -31,6 +31,10 @@
                     <th>Assigned At</th>
                     <td>{{ issue.assignedAt ? issue.assignedAt|date('Y-m-d H:i') : 'Not assigned' }}</td>
                 </tr>
+                <tr>
+                    <th>Time Spent</th>
+                    <td>{{ issue.getTimeSpent ~ ' hours' }}</td>
+                </tr>
             </table>
             <a href="{{ path('issue_edit', {'issueId': issue.id}) }}" class="btn btn-primary mt-3 w-100">Edit</a>
             <a href="{{ path('all_issues') }}" class="btn btn-secondary mt-3 w-100">Back to List</a>

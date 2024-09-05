@@ -29,13 +29,9 @@ class ProjectType extends AbstractType
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Enter project description'],
             ])
             ->add('status', ChoiceType::class, [
-                'label' => 'Status',
-                'choices' => [
-                    'Not Started' => 'not_started',
-                    'In Progress' => 'in_progress',
-                    'Completed' => 'completed',
-                ],
-                'attr' => ['class' => 'form-control'],
+            'choices' => array_flip(Project::STATUS_OPTIONS),
+            'label' => 'Status',
+            'attr' => ['class' => 'form-control'],
             ])
             ->add('brand', EntityType::class, [
                 'class' => Brand::class,

@@ -5,23 +5,39 @@
 {% block body %}
     <div class="container mt-5">
         <h1 class="text-center">Brands</h1>
-        <table class="table table-bordered table-hover">
+        <table class="table table-hover">
             <thead class="bg-primary text-white">
             <tr>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Actions</th>
+                <th>Time Spent</th>
+                <th class="text-center">Actions</th>
             </tr>
             </thead>
             <tbody>
             {% for brand in brands %}
                 <tr>
                     <td>{{ brand.name }}</td>
-                    <td>{{ brand.description }}</td>
                     <td>
-                        <a href="{{ path('brand_show', {'brandId': brand.id}) }}" class="btn btn-outline-info btn-sm">View</a>
-                        <a href="{{ path('brand_edit', {'brandId': brand.id}) }}" class="btn btn-outline-warning btn-sm">Edit</a>
+                        {% set words = brand.description ? brand.description|split(' ') : [] %}
+                        {{ words|length > 6 ? words[:6]|join(' ') ~ '...' : brand.description }}
                     </td>
+                    <td>{{ brand.totalTimeSpent ~ ' hours' }}</td>
+                    <td class="text-center">
+                        <div class="d-flex justify-content-center">
+                            <a href="{{ path('brand_show', { 'brandId': brand.id }) }}" class="btn btn-outline-info btn-sm mx-1">View</a>
+                            <a href="{{ path('brand_edit', { 'brandId': brand.id }) }}" class="btn btn-outline-primary btn-sm mx-1">Edit</a>
+                            <a href="#" class="btn btn-outline-danger btn-sm mx-1"
+                               onclick="if(confirm('Bu Brandin bir projesi olabilir, silmek istediğinize emin misiniz?')) { document.getElementById('delete-form-{{ brand.id }}').submit(); } return false;">
+                                Delete
+                            </a>
+                        </div>
+                        <form id="delete-form-{{ brand.id }}" method="post" action="{{ path('brand_delete', { 'brandId': brand.id }) }}" class="d-none">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ brand.id) }}">
+                        </form>
+                    </td>
+
+
                 </tr>
             {% else %}
                 <tr>

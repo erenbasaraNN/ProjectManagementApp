@@ -7,6 +7,7 @@ use App\Entity\Project;
 use App\Entity\Task;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,7 +18,11 @@ class TaskType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            ->add('status')
+            ->add('status', ChoiceType::class, [
+                'choices' => array_flip(Task::STATUS_OPTIONS),
+                'label' => 'Status',
+                'attr' => ['class' => 'form-control'],
+            ])
             ->add('project', EntityType::class, [
                 'class' => Project::class,
                 'choice_label' => 'name', // This ensures the project name is displayed

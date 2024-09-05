@@ -1,7 +1,5 @@
 <?php
 
-// src/Security/TaskVoter.php
-
 namespace App\Security;
 
 use App\Entity\Task;
@@ -51,13 +49,18 @@ class TaskVoter extends Voter
 
     private function canView(Task $task, UserInterface $user): bool
     {
-        // Project Managers can view any task
         if ($this->security->isGranted('ROLE_PROJECT_MANAGER')) {
             return true;
         }
 
-        // Users can view tasks if they're assigned
-        return $task->getAssignedUsers()->contains($user);
+
+        foreach ($task->getIssues() as $issue) {
+            if ($issue->getAssignedUsers()->contains($user)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function canEdit(Task $task, UserInterface $user): bool
@@ -67,7 +70,18 @@ class TaskVoter extends Voter
             return true;
         }
 
-        // Users can edit tasks if they're assigned
-        return $task->getAssignedUsers()->contains($user);
+        // Users can edit the task if they are assigned to it
+        if ($task->getAssignedUsers()->contains($user)) {
+            return true;
+        }
+
+        // Check if the user is assigned to any issues under the task
+        foreach ($task->getIssues() as $issue) {
+            if ($issue->getAssignedUsers()->contains($user)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -24,9 +24,18 @@ class Issue
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
+    public const STATUS_OPTIONS = [
+        'not_started' => 'Not Started',
+        'in_progress' => 'In Progress',
+        'completed' => 'Completed',
+        'canceled' => 'Canceled',
+    ];
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTimeInterface $assignedAt = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $timeSpent = 0;
 
     #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'issues')]
     private ?Task $task = null;
@@ -44,6 +53,17 @@ class Issue
         return $this->id;
     }
 
+    public function getTimeSpent(): int
+    {
+        return $this->timeSpent;
+    }
+
+    public function setTimeSpent(int $timeSpent): self
+    {
+        $this->timeSpent = $timeSpent;
+
+        return $this;
+    }
     public function getName(): ?string
     {
         return $this->name;

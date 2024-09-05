@@ -23,6 +23,13 @@ class Task
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
 
+    public const STATUS_OPTIONS = [
+        'not_started' => 'Not Started',
+        'in_progress' => 'In Progress',
+        'completed' => 'Completed',
+        'canceled' => 'Canceled',
+    ];
+
     #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project = null;
@@ -41,6 +48,16 @@ class Task
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function getTotalTimeSpent(): int
+    {
+        $totalTime = 0;
+
+        foreach ($this->issues as $issue) {
+            $totalTime += $issue->getTimeSpent();  // Assuming getTimeSpent() is defined in Issue
+        }
+
+        return $totalTime;
     }
 
     public function getAssignedUsers(): Collection
@@ -91,7 +108,7 @@ class Task
         return $this->status;
     }
 
-    public function setStatus(?string $status): self
+    public function setStatus(string $status): self
     {
         $this->status = $status;
         return $this;

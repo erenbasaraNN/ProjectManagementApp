@@ -22,12 +22,20 @@ class ProjectController extends AbstractController
     }
 
     #[Route('/projects', name: 'all_projects', methods: ['GET'])]
-    public function allProjects(): Response
+    public function allProjects(Request $request): Response
     {
-        $projects = $this->entityManager->getRepository(Project::class)->findAll();
+        $status = $request->query->get('status');
+        $repository = $this->entityManager->getRepository(Project::class);
+
+        if ($status) {
+            $projects = $repository->findBy(['status' => $status]);
+        } else {
+            $projects = $repository->findAll();
+        }
 
         return $this->render('project/all_projects.html.twig', [
             'projects' => $projects,
+            'status' => $status, // Passing the selected status back to the template
         ]);
     }
 
@@ -54,18 +62,13 @@ class ProjectController extends AbstractController
     public function show(int $projectId): Response
     {
         $project = $this->entityManager->getRepository(Project::class)->find($projectId);
-
-        if (!$project) {
-            throw $this->createNotFoundException('The project does not exist');
-        }
+        $totalTimeSpent = $project->getTotalTimeSpent();
 
         return $this->render('project/show.html.twig', [
             'project' => $project,
+            'totalTimeSpent' => $totalTimeSpent,
         ]);
     }
-
-
-
 
     #[Route('/projects/{projectId}/edit', name: 'project_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $projectId): Response
@@ -90,5 +93,29 @@ class ProjectController extends AbstractController
             'project' => $project,  // Pass project to template
         ]);
     }
+    // src/Controller/ProjectController.php
+
+    // src/Controller/ProjectController.php
+
+    #[Route('/projects/{projectId}/complete', name: 'project_complete', methods: ['POST'])]
+    public function setCompleted(Request $request, int $projectId): Response
+    {
+        $project = $this->entityManager->getRepository(Project::class)->find($projectId);
+
+        if (!$project) {
+            throw $this->createNotFoundException('Project not found');
+        }
+
+        // Set the project status to 'completed'
+        $project->setStatus('completed');
+
+        if ($this->isCsrfTokenValid('complete' . $projectId, $request->request->get('_token'))) {
+            $this->entityManager->flush();
+        }
+
+        return $this->redirectToRoute('all_projects');
+    }
+
+
 
 }

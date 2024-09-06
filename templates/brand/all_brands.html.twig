@@ -22,7 +22,23 @@
                         {% set words = brand.description ? brand.description|split(' ') : [] %}
                         {{ words|length > 6 ? words[:6]|join(' ') ~ '...' : brand.description }}
                     </td>
-                    <td>{{ brand.totalTimeSpent ~ ' hours' }}</td>
+                    <td>
+                        {% set totalHours = brand.totalTimeSpent %}
+                        {% set days = totalHours // 24 %}
+                        {% set remainingHours = totalHours % 24 %}
+
+                        {% if days > 0 %}
+                            {{ days }} day{% if days > 1 %}s{% endif %}
+                        {% endif %}
+
+                        {% if remainingHours > 0 %}
+                            {{ remainingHours }} hour{% if remainingHours > 1 %}s{% endif %}
+                        {% endif %}
+
+                        {% if days == 0 and remainingHours == 0 %}
+                            0 hours
+                        {% endif %}
+                    </td>
                     <td class="text-center">
                         <div class="d-flex justify-content-center">
                             <a href="{{ path('brand_show', { 'brandId': brand.id }) }}" class="btn btn-outline-info btn-sm mx-1">View</a>

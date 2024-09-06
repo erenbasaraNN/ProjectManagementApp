@@ -49,7 +49,23 @@
                             Unknown Status
                         {% endif %}
                     </td>
-                    <td>{{ project.totalTimeSpent ~ ' hours' }}</td>
+                    <td>
+                        {% set totalHours = project.totalTimeSpent %}
+                        {% set days = totalHours // 24 %}
+                        {% set remainingHours = totalHours % 24 %}
+
+                        {% if days > 0 %}
+                            {{ days }} day{% if days > 1 %}s{% endif %}
+                        {% endif %}
+
+                        {% if remainingHours > 0 %}
+                            {{ remainingHours }} hour{% if remainingHours > 1 %}s{% endif %}
+                        {% endif %}
+
+                        {% if days == 0 and remainingHours == 0 %}
+                            0 hours
+                        {% endif %}
+                    </td>
                     <td>
                         {% if project.brand %}
                             {{ project.brand.name }}

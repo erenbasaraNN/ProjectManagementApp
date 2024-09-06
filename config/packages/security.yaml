@@ -33,5 +33,6 @@ security:
         - { path: ^/brand, roles: ROLE_PROJECT_MANAGER }
         - { path: ^/project, roles: ROLE_PROJECT_MANAGER }
         - { path: ^/task, roles: ROLE_PROJECT_MANAGER }
+        - { path: ^/notes, roles: ROLE_PROJECT_MANAGER }
         - { path: ^/issue, roles: ROLE_USER }
         - { path: ^/$, roles: PUBLIC_ACCESS }  # Allow access to homepage

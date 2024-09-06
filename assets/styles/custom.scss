@@ -177,3 +177,17 @@ label {
   right: 0;
   width: 100%;
 }
+.table-note {
+  thead {
+    background-color: #f8f9fa;
+  }
+
+  th, td {
+    vertical-align: middle;
+  }
+
+  td {
+    word-wrap: break-word;
+    max-width: 400px; /* Adjust the max width of the content column */
+  }
+}

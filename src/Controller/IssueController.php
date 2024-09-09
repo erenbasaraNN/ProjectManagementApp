@@ -5,6 +5,7 @@
 namespace App\Controller;
 
 use App\Entity\Issue;
+use App\Entity\PostIt;
 use App\Entity\Task;
 use App\Form\IssueType;
 use App\Repository\IssueRepository;
@@ -12,6 +13,7 @@ use App\Service\IssueService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -165,5 +167,54 @@ class IssueController extends AbstractController
         }
 
         return $this->redirectToRoute('all_issues');
+    }
+
+    #[Route('/issues/{issueId}/postits', name: 'issue_postit_add', methods: ['POST'])]
+    public function addPostIt(int $issueId, Request $request): JsonResponse
+    {
+        $issue = $this->entityManager->getRepository(Issue::class)->find($issueId);
+        $content = $request->request->get('content');
+
+        $postIt = new PostIt();
+        $postIt->setContent($content);
+        $postIt->setCreatedBy($this->getUser());
+        $postIt->setIssue($issue);
+
+        $this->entityManager->persist($postIt);
+        $this->entityManager->flush();
+
+        return new JsonResponse(['status' => 'PostIt added']);
+    }
+
+    #[Route('/postits/{postItId}/edit', name: 'postit_edit', methods: ['POST'])]
+    public function editPostIt(int $postItId, Request $request): JsonResponse
+    {
+        $postIt = $this->entityManager->getRepository(PostIt::class)->find($postItId);
+
+        if ($postIt->getCreatedBy() !== $this->getUser()) {
+            throw new AccessDeniedException('You do not have permission to edit this post-it');
+        }
+
+        $content = $request->request->get('content');
+        $postIt->setContent($content);
+
+        $this->entityManager->flush();
+
+        return new JsonResponse(['status' => 'PostIt updated']);
+    }
+
+    #[Route('/postits/{postItId}/delete', name: 'postit_delete', methods: ['DELETE'])]
+    public function deletePostIt(int $postItId): JsonResponse
+    {
+        $postIt = $this->entityManager->getRepository(PostIt::class)->find($postItId);
+
+        if ($postIt->getCreatedBy() !== $this->getUser()) {
+            throw new AccessDeniedException('You do not have permission to delete this post-it');
+        }
+
+        $this->entityManager->remove($postIt);
+        $this->entityManager->flush();
+
+        return new JsonResponse(['status' => 'PostIt deleted']);
     }
 }

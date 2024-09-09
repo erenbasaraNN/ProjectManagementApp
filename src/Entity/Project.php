@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,6 +37,13 @@ class Project
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class)]
     private Collection $tasks;
 
+    #[ORM\Column(type: 'date', nullable: true)]
+
+    private ?DateTimeInterface $createdAt;
+
+    #[ORM\Column(type: 'date', nullable: true)]
+
+    private ?DateTimeInterface $deadline;
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -59,7 +67,27 @@ class Project
 
         return $totalTime;
     }
+    public function getCreatedAt(): ?DateTimeInterface
+    {
+        return $this->createdAt;
+    }
 
+    public function setCreatedAt(?DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function getDeadline(): ?DateTimeInterface
+    {
+        return $this->deadline;
+    }
+
+    public function setDeadline(?DateTimeInterface $deadline): self
+    {
+        $this->deadline = $deadline;
+        return $this;
+    }
 
     public function getName(): ?string
     {

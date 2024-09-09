@@ -24,13 +24,16 @@
                 {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
                 {{ form_errors(form.status) }}
             </div>
-
             <div class="form-group mt-3">
-                {{ form_label(form.assignedAt) }}
-                {{ form_widget(form.assignedAt, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.assignedAt) }}
+                {{ form_label(form.createdAt) }}
+                {{ form_widget(form.createdAt, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.createdAt) }}
             </div>
-
+            <div class="form-group mt-3">
+                {{ form_label(form.deadline) }}
+                {{ form_widget(form.deadline, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.deadline) }}
+            </div>
             <div class="form-group mt-3 text-center">
                 <label class="d-block mb-2">Assign Users</label>
                 <div class="row justify-content-center">
@@ -79,5 +82,7 @@
                 timeInput.value = parseInt(timeInput.value) - 1;
             }
         });
+
     </script>
+
 {% endblock %}

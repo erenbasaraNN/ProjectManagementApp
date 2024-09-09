@@ -10,7 +10,13 @@
         <p class="text-secondary">Streamline your workflow and enhance productivity with our user-friendly interface.</p>
         <div class="mt-4">
             {% if app.user %}
-                <a class="btn btn-primary btn-lg mx-2" href="{{ path('all_brands') }}" role="button">Go to Brands</a>
+
+                {% if is_granted('ROLE_PROJECT_MANAGER') %}
+                    <a class="btn btn-primary btn-lg mx-2" href="{{ path('all_brands') }}" role="button">Go to Brands</a>
+                    <a class="btn btn-primary btn-lg mx-2" href="{{ path('all_projects') }}" role="button">Go to Projects</a>
+                    <a class="btn btn-primary btn-lg mx-2" href="{{ path('all_tasks') }}" role="button">Go to Tasks</a>
+                    {%endif%}
+                <a class="btn btn-primary btn-lg mx-2" href="{{ path('all_issues') }}" role="button">Go to Issues</a>
             {% else %}
                 <a class="btn btn-primary btn-lg mx-2" href="{{ path('app_login') }}" role="button">Login</a>
                 <a class="btn btn-outline-primary btn-lg mx-2" href="{{ path('app_register') }}" role="button">Register</a>

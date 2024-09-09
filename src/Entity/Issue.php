@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use AllowDynamicProperties;
 use App\Repository\IssueRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: IssueRepository::class)]
+#[AllowDynamicProperties] #[ORM\Entity(repositoryClass: IssueRepository::class)]
 class Issue
 {
     #[ORM\Id]
@@ -31,8 +32,10 @@ class Issue
         'canceled' => 'Canceled',
     ];
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?DateTimeInterface $assignedAt = null;
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?DateTimeInterface $createdAt = null;
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?DateTimeInterface $deadline = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $timeSpent = 0;
@@ -43,14 +46,44 @@ class Issue
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'issues')]
     private Collection $assignedUsers;
 
+    #[ORM\OneToMany(mappedBy: 'issue', targetEntity: PostIt::class, cascade: ['persist', 'remove'])]
+    private Collection $postIts;
+
     public function __construct()
     {
         $this->assignedUsers = new ArrayCollection();
+        $this->postIts = new ArrayCollection();
+
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function addPostIt(PostIt $postIt): self
+    {
+        if (!$this->postIts->contains($postIt)) {
+            $this->postIts[] = $postIt;
+            $postIt->setIssue($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostIt(PostIt $postIt): self
+    {
+        if ($this->postIts->removeElement($postIt)) {
+            // set the owning side to null (unless already changed)
+            if ($postIt->getIssue() === $this) {
+                $postIt->setIssue(null);
+            }
+        }
+
+        return $this;
+    }
+    public function getPostIts(): Collection
+    {
+        return $this->postIts;
     }
 
     public function getTimeSpent(): int
@@ -100,14 +133,24 @@ class Issue
         return $this;
     }
 
-    public function getAssignedAt(): ?DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
-        return $this->assignedAt;
+        return $this->createdAt;
     }
 
-    public function setAssignedAt(?DateTimeInterface $assignedAt): self
+    public function setCreatedAt(?DateTimeInterface $createdAt): self
     {
-        $this->assignedAt = $assignedAt;
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }public function getDeadline(): ?DateTimeInterface
+    {
+        return $this->deadline;
+    }
+
+    public function setDeadline(?DateTimeInterface $deadline): self
+    {
+        $this->deadline = $deadline;
 
         return $this;
     }

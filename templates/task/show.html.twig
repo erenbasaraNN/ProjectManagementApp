@@ -20,6 +20,14 @@
                     <td>{{ task.status|capitalize }}</td>
                 </tr>
                 <tr>
+                    <th>Created At</th>
+                    <td>{{ task.createdAt ? task.createdAt|date('d-m-Y') : 'Not assigned' }}</td>
+                </tr>
+                <tr>
+                    <th>Deadline</th>
+                    <td>{{ task.deadline ? task.deadline|date('d-m-Y') : 'Not assigned' }}</td>
+                </tr>
+                <tr>
                     <th>Total Time Spent</th>
                     <td>{{ totalTimeSpent }} hours</td>
                 </tr>

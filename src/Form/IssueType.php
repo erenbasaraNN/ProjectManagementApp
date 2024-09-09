@@ -31,8 +31,13 @@ class IssueType extends AbstractType
                 'label' => 'Status',
                 'attr' => ['class' => 'form-control'],
             ])
-            ->add('assignedAt', null, [
-                'label' => 'Assigned At',
+            ->add('createdAt', null, [
+                'label' => 'Created At',
+                'widget' => 'single_text',
+                'attr' => ['class' => 'form-control'],
+            ])
+            ->add('deadline', null, [
+                'label' => 'Deadline',
                 'widget' => 'single_text',
                 'attr' => ['class' => 'form-control'],
             ])

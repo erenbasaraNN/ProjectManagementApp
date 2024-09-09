@@ -33,6 +33,16 @@ class ProjectType extends AbstractType
             'label' => 'Status',
             'attr' => ['class' => 'form-control'],
             ])
+            ->add('createdAt', null, [
+                'label' => 'Created At',
+                'widget' => 'single_text',
+                'attr' => ['class' => 'form-control'],
+            ])
+            ->add('deadline', null, [
+                'label' => 'Deadline',
+                'widget' => 'single_text',
+                'attr' => ['class' => 'form-control'],
+            ])
             ->add('brand', EntityType::class, [
                 'class' => Brand::class,
                 'choice_label' => 'name',

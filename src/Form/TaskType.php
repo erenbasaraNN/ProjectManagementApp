@@ -23,6 +23,16 @@ class TaskType extends AbstractType
                 'label' => 'Status',
                 'attr' => ['class' => 'form-control'],
             ])
+            ->add('createdAt', null, [
+                'label' => 'Created At',
+                'widget' => 'single_text',
+                'attr' => ['class' => 'form-control'],
+            ])
+            ->add('deadline', null, [
+                'label' => 'Deadline',
+                'widget' => 'single_text',
+                'attr' => ['class' => 'form-control'],
+            ])
             ->add('project', EntityType::class, [
                 'class' => Project::class,
                 'choice_label' => 'name', // This ensures the project name is displayed

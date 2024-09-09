@@ -24,6 +24,14 @@
                                     <td>{{ project.status }}</td>
                                 </tr>
                                 <tr>
+                                    <th>Created At</th>
+                                    <td>{{ project.createdAt ? project.createdAt|date('d-m-Y') : 'Not assigned' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Deadline</th>
+                                    <td>{{ project.deadline ? project.deadline|date('d-m-Y') : 'Not assigned' }}</td>
+                                </tr>
+                                <tr>
                                     <th>Total Time Spent</th>
                                     <td>{{ totalTimeSpent }} hours</td>
                                 </tr>

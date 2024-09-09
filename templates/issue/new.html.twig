@@ -33,9 +33,14 @@
         </div>
 
         <div class="form-group">
-            {{ form_label(form.assignedAt) }}
-            {{ form_widget(form.assignedAt, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.assignedAt) }}
+            {{ form_label(form.createdAt) }}
+            {{ form_widget(form.createdAt, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.createdAt) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.deadline) }}
+            {{ form_widget(form.deadline, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.deadline) }}
         </div>
 
         <div class="form-group">
@@ -43,7 +48,11 @@
             {{ form_widget(form.task, {'attr': {'class': 'form-control'}}) }}
             {{ form_errors(form.task) }}
         </div>
-
+        <div class="form-group">
+            {{ form_label(form.timeSpent) }}
+            {{ form_widget(form.timeSpent, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.timeSpent) }}
+        </div>
         <button type="submit" class="btn btn-primary w-100">Create Issue</button>
 
         {{ form_end(form) }}

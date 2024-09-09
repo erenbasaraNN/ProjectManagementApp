@@ -23,8 +23,8 @@
                 <thead class="bg-primary text-white">
                 <tr>
                     <th>Task Name</th>
-                    <th>Project</th>
-                    <th>Description</th>
+                    <th>Created At</th>
+                    <th>Deadline</th>
                     <th>Status</th>
                     <th>Time Spent</th>
                     <th>Project</th>
@@ -35,11 +35,8 @@
                 {% for task in tasks %}
                     <tr>
                         <td>{{ task.name }}</td>
-                        <td>{{ task.project.name }}</td>
-                        <td>
-                            {% set words = task.description ? task.description|split(' ') : [] %}
-                            {{ words|length > 6 ? words[:6]|join(' ') ~ '...' : task.description }}
-                        </td>
+                        <td>{{ task.createdAt ? task.createdAt|date('d-m-Y') : 'Not assigned' }}</td>
+                        <td>{{ task.deadline ? task.deadline|date('d-m-Y') : 'Not assigned' }}</td>
 
                         <td>
                             {% if task.status == 'not_started' %}

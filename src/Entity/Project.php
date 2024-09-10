@@ -1,92 +1,40 @@
 <?php
 
+// src/Entity/Project.php
+
 namespace App\Entity;
 
-use App\Repository\ProjectRepository;
-use DateTimeInterface;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[ORM\Entity]
 class Project
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    private $id;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $name = null;
+    #[ORM\Column(type: 'string', length: 100)]
+    private $name;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $description = null;
+    private $description;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $status = null;
-    public const STATUS_OPTIONS = [
-        'not_started' => 'Not Started',
-        'in_progress' => 'In Progress',
-        'completed' => 'Completed',
-        'canceled' => 'Canceled',
-    ];
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    private $creator;
 
-    #[ORM\ManyToOne(inversedBy: 'projects')]
-    private ?Brand $brand = null;
+    #[ORM\Column(type: 'datetime')]
+    private $startDate;
 
-    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class)]
-    private Collection $tasks;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private $endDate;
 
-    #[ORM\Column(type: 'date', nullable: true)]
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Issue::class)]
+    private $issues;
 
-    private ?DateTimeInterface $createdAt;
-
-    #[ORM\Column(type: 'date', nullable: true)]
-
-    private ?DateTimeInterface $deadline;
-    public function __construct()
-    {
-        $this->tasks = new ArrayCollection();
-    }
-
-    public function __toString(): string
-    {
-        return $this->name ?: 'İsim Bulunamadı';
-    }
     public function getId(): ?int
     {
         return $this->id;
-    }
-    public function getTotalTimeSpent(): int
-    {
-        $totalTime = 0;
-
-        foreach ($this->tasks as $task) {
-            $totalTime += $task->getTotalTimeSpent();  // Using the method we defined in Task
-        }
-
-        return $totalTime;
-    }
-    public function getCreatedAt(): ?DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(?DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-
-    public function getDeadline(): ?DateTimeInterface
-    {
-        return $this->deadline;
-    }
-
-    public function setDeadline(?DateTimeInterface $deadline): self
-    {
-        $this->deadline = $deadline;
-        return $this;
     }
 
     public function getName(): ?string
@@ -94,7 +42,7 @@ class Project
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
@@ -111,49 +59,49 @@ class Project
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getCreator(): ?User
     {
-        return $this->status;
+        return $this->creator;
     }
 
-    public function setStatus(?string $status): self
+    public function setCreator(?User $creator): self
     {
-        $this->status = $status;
+        $this->creator = $creator;
         return $this;
     }
 
-    public function getBrand(): ?Brand
+    public function getStartDate(): ?\DateTimeInterface
     {
-        return $this->brand;
+        return $this->startDate;
     }
 
-    public function setBrand(?Brand $brand): self
+    public function setStartDate(\DateTimeInterface $startDate): self
     {
-        $this->brand = $brand;
+        $this->startDate = $startDate;
         return $this;
     }
 
-    public function getTasks(): Collection
+    public function getEndDate(): ?\DateTimeInterface
     {
-        return $this->tasks;
+        return $this->endDate;
     }
 
-    public function addTask(Task $task): self
+    public function setEndDate(?\DateTimeInterface $endDate): self
     {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks[] = $task;
-            $task->setProject($this);
-        }
+        $this->endDate = $endDate;
         return $this;
     }
 
-    public function removeTask(Task $task): self
+    public function getIssues()
     {
-        if ($this->tasks->removeElement($task)) {
-            // set the owning side to null (unless already changed)
-            if ($task->getProject() === $this) {
-                $task->setProject(null);
-            }
+        return $this->issues;
+    }
+
+    public function addIssue(Issue $issue): self
+    {
+        if (!$this->issues->contains($issue)) {
+            $this->issues[] = $issue;
+            $issue->setProject($this);
         }
         return $this;
     }

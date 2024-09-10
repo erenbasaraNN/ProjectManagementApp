@@ -2,94 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% block title %}Welcome{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('build/css/custom.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Proje Yönetimi{% endblock %}</title>
+
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{{ path('app_home') }}">PM App</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mr-auto">
-                {% if app.user %}
-                    {% if is_granted('ROLE_PROJECT_MANAGER') %}
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-primary" href="/brands">Brands</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-primary" href="/projects">Projects</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-primary" href="/tasks">Tasks</a>
-                        </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-primary" href="/issues">Issues</a> <!-- Visible to all users -->
-                    </li>
-                {% endif %}
-                {% if is_granted('ROLE_PROJECT_MANAGER') %}
-                <li class="nav-item">
-                    <a class="nav-link btn btn-primary" href="/notes">Notes</a>
-                </li>
-                {% endif %}
 
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                {% if app.user %}
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-dark" href="{{ path('app_logout') }}">Logout</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-dark" href="{{ path('app_login') }}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-dark" href="{{ path('app_register') }}">Register</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
+<!-- Navbar -->
+<header class="navbar">
+    <div class="navbar-left">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
+        <h1>Proje Yönetimi</h1>
     </div>
-</nav>
+    <div class="navbar-right">
+        {% if app.user %}
+            <div class="user-info">
+                <div class="user-circle">{{ app.user.username|slice(0, 1) | upper }}</div>
+                <span>{{ app.user.username }}</span>
+                <a href="{{ path('app_logout') }}" class="logout-btn">Çıkış</a>
+            </div>
+        {% endif %}
+    </div>
+</header>
 
-<div class="container mt-10">
-    {% if app.flashes('success') %}
-        <div class="alert alert-success">
-            {% for message in app.flashes('success') %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        </div>
-    {% endif %}
+<!-- Layout with Sidebar -->
+<div class="main-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Projeler</h2>
+        <ul>
+            {% if projects is not empty %}
+                {% for project in projects %}
+                    <li><a href="{{ path('project_show', { 'projectId': project.id }) }}">{{ project.name }}</a></li>
+                {% endfor %}
+            {% else %}
+                <li>Hiç Proje Yok</li>
+            {% endif %}
+        </ul>
+        <a href="{{ path('project_new') }}" class="new-project-btn">+ Yeni Proje Ekle</a>
+    </aside>
 
-    {% if app.flashes('error') %}
-        <div class="alert alert-danger">
-            {% for message in app.flashes('error') %}
-                <p>{{ 'BU BRANDIN BIR PROJESI VAR!' }}</p>
-            {% endfor %}
-        </div>
-    {% endif %}
-
-    {% block body %}{% endblock %}
+    <!-- Main Content Area -->
+    <main class="content">
+        {% block body %}{% endblock %}
+    </main>
 </div>
 
-<footer class=" bg-dark text-white mt-5 py-3">
-    <div class="container-fluid container-fot text-center text-white">
-        &copy; {{ "now"|date("Y") }} PM App. All rights reserved.
-    </div>
+<footer>
+    <!-- Optional Footer content -->
 </footer>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% block javascripts %}{% endblock %}
 </body>
 </html>

@@ -1,111 +1,56 @@
 <?php
 
+// src/Entity/Issue.php
+
 namespace App\Entity;
 
-use AllowDynamicProperties;
-use App\Repository\IssueRepository;
-use DateTimeInterface;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[AllowDynamicProperties] #[ORM\Entity(repositoryClass: IssueRepository::class)]
+#[ORM\Entity]
 class Issue
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    private $id;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $name = null;
+    #[ORM\Column(type: 'string', length: 100)]
+    private $name;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $description = null;
+    private $description;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $status = null;
-    public const STATUS_OPTIONS = [
-        'not_started' => 'Not Started',
-        'in_progress' => 'In Progress',
-        'completed' => 'Completed',
-        'canceled' => 'Canceled',
-    ];
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    private $assignees;
 
-    #[ORM\Column(type: 'date', nullable: true)]
-    private ?DateTimeInterface $createdAt = null;
-    #[ORM\Column(type: 'date', nullable: true)]
-    private ?DateTimeInterface $deadline = null;
+    #[ORM\Column(type: 'datetime')]
+    private $startDate;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private ?int $timeSpent = 0;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private $endDate;
 
-    #[ORM\ManyToOne(targetEntity: Task::class, inversedBy: 'issues')]
-    private ?Task $task = null;
+    #[ORM\Column(type: 'string', length: 50)]
+    private $status;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'issues')]
-    private Collection $assignedUsers;
+    #[ORM\Column(type: 'string', length: 50)]
+    private $priority;
 
-    #[ORM\OneToMany(mappedBy: 'issue', targetEntity: PostIt::class, cascade: ['persist', 'remove'])]
-    private Collection $postIts;
-
-    public function __construct()
-    {
-        $this->assignedUsers = new ArrayCollection();
-        $this->postIts = new ArrayCollection();
-
-    }
+    #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'issues')]
+    private $project;
 
     public function getId(): ?int
     {
         return $this->id;
     }
-    public function addPostIt(PostIt $postIt): self
-    {
-        if (!$this->postIts->contains($postIt)) {
-            $this->postIts[] = $postIt;
-            $postIt->setIssue($this);
-        }
 
-        return $this;
-    }
-
-    public function removePostIt(PostIt $postIt): self
-    {
-        if ($this->postIts->removeElement($postIt)) {
-            // set the owning side to null (unless already changed)
-            if ($postIt->getIssue() === $this) {
-                $postIt->setIssue(null);
-            }
-        }
-
-        return $this;
-    }
-    public function getPostIts(): Collection
-    {
-        return $this->postIts;
-    }
-
-    public function getTimeSpent(): int
-    {
-        return $this->timeSpent;
-    }
-
-    public function setTimeSpent(int $timeSpent): self
-    {
-        $this->timeSpent = $timeSpent;
-
-        return $this;
-    }
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -117,7 +62,47 @@ class Issue
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+        return $this;
+    }
 
+    public function getAssignees()
+    {
+        return $this->assignees;
+    }
+
+    public function addAssignee(User $assignee): self
+    {
+        if (!$this->assignees->contains($assignee)) {
+            $this->assignees[] = $assignee;
+        }
+        return $this;
+    }
+
+    public function removeAssignee(User $assignee): self
+    {
+        $this->assignees->removeElement($assignee);
+        return $this;
+    }
+
+    public function getStartDate(): ?\DateTimeInterface
+    {
+        return $this->startDate;
+    }
+
+    public function setStartDate(\DateTimeInterface $startDate): self
+    {
+        $this->startDate = $startDate;
+        return $this;
+    }
+
+    public function getEndDate(): ?\DateTimeInterface
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate(?\DateTimeInterface $endDate): self
+    {
+        $this->endDate = $endDate;
         return $this;
     }
 
@@ -126,68 +111,31 @@ class Issue
         return $this->status;
     }
 
-    public function setStatus(?string $status): self
+    public function setStatus(string $status): self
     {
         $this->status = $status;
-
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeInterface
+    public function getPriority(): ?string
     {
-        return $this->createdAt;
+        return $this->priority;
     }
 
-    public function setCreatedAt(?DateTimeInterface $createdAt): self
+    public function setPriority(string $priority): self
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }public function getDeadline(): ?DateTimeInterface
-    {
-        return $this->deadline;
-    }
-
-    public function setDeadline(?DateTimeInterface $deadline): self
-    {
-        $this->deadline = $deadline;
-
+        $this->priority = $priority;
         return $this;
     }
 
-    public function getTask(): ?Task
+    public function getProject(): ?Project
     {
-        return $this->task;
+        return $this->project;
     }
 
-    public function setTask(?Task $task): self
+    public function setProject(?Project $project): self
     {
-        $this->task = $task;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getAssignedUsers(): Collection
-    {
-        return $this->assignedUsers;
-    }
-
-    public function addAssignedUser(User $user): self
-    {
-        if (!$this->assignedUsers->contains($user)) {
-            $this->assignedUsers[] = $user;
-        }
-
-        return $this;
-    }
-
-    public function removeAssignedUser(User $user): self
-    {
-        $this->assignedUsers->removeElement($user);
-
+        $this->project = $project;
         return $this;
     }
 }

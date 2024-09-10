@@ -1,9 +1,10 @@
 security:
-    access_denied_url: /access-denied
+    # Password encoders are replaced with password_hashers
     password_hashers:
         App\Entity\User:
             algorithm: auto
 
+    # User providers for fetching users from the database
     providers:
         app_user_provider:
             entity:
@@ -12,9 +13,10 @@ security:
 
     firewalls:
         dev:
-            pattern: ^/(_(profiler|wdt)|styles|images|js)/
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        # Main firewall for the entire application
         main:
             lazy: true
             provider: app_user_provider
@@ -23,16 +25,10 @@ security:
                 check_path: app_login
             logout:
                 path: app_logout
-                target: app_home
+                target: /
+            # Enable anonymous access for unauthenticated users
 
+    # Access control settings for role-based access
     access_control:
-        - { path: ^/login$, roles: PUBLIC_ACCESS }
-        - { path: ^/register$, roles: PUBLIC_ACCESS }
-        - { path: ^/logout$, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/brand, roles: ROLE_PROJECT_MANAGER }
-        - { path: ^/project, roles: ROLE_PROJECT_MANAGER }
-        - { path: ^/task, roles: ROLE_PROJECT_MANAGER }
-        - { path: ^/notes, roles: ROLE_PROJECT_MANAGER }
-        - { path: ^/issue, roles: ROLE_USER }
-        - { path: ^/$, roles: PUBLIC_ACCESS }  # Allow access to homepage
+        - { path: ^/project, roles: ROLE_USER }

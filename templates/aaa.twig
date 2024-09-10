@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Proje Yönetimi{% endblock %}</title>
+
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+    <div class="navbar-left">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
+        <h1>Proje Yönetimi</h1>
+    </div>
+    <div class="navbar-right">
+        {% if app.user %}
+            <div class="user-info">
+                <div class="user-circle">{{ app.user.username|slice(0, 1) | upper }}</div>
+                <span>{{ app.user.username }}</span>
+                <a href="{{ path('app_logout') }}" class="logout-btn">Çıkış</a>
+            </div>
+        {% endif %}
+    </div>
+</header>
+
+<!-- Layout with Sidebar -->
+<div class="main-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Projeler</h2>
+        <ul>
+            {% if projects is not empty %}
+                {% for project in projects %}
+                    <li><a href="{{ path('project_show', { 'projectId': project.id }) }}">{{ project.name }}</a></li>
+                {% endfor %}
+            {% else %}
+                <li>Hiç Proje Yok</li>
+            {% endif %}
+        </ul>
+        <a href="{{ path('project_new') }}" class="new-project-btn">+ Yeni Proje Ekle</a>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content">
+        {% block body %}{% endblock %}
+    </main>
+</div>
+
+<footer>
+    <!-- Optional Footer content -->
+</footer>
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>

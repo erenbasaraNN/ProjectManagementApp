@@ -1,6 +1,6 @@
 /* General Styles */
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: #f5f5f5;
     margin: 0;
     padding: 0;
@@ -21,7 +21,7 @@ img.logo {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #007bff;
+    background-color: #d2e7ff;
     padding: 10px 20px;
     color: white;
 }
@@ -52,6 +52,12 @@ img.logo {
     color: #fff;
     font-size: 18px;
     margin-right: 10px;
+}
+
+.user-name-nav{
+    color: #6f42c1;
+    font-weight: bold;
+    margin-right: 15px;
 }
 
 .logout-btn {
@@ -120,9 +126,9 @@ img.logo {
     padding: 20px;
     background-color: #ffffff;
     border-left: 1px solid #ddd;
+    justify-content: center;
 }
 
-/* Table Styling */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -131,8 +137,9 @@ table {
 
 table th, table td {
     padding: 10px;
-    text-align: left;
+    text-align: center; /* Center align all content */
     border-bottom: 1px solid #ddd;
+    width: 20%; /* Split the columns equally */
 }
 
 table th {
@@ -174,43 +181,35 @@ table tr:nth-child(even) {
     background-color: #0056b3;
 }
 
-/* General Styles */
-body {
-    font-family: 'Arial', sans-serif;
-}
-
 h1, h2 {
     color: #333;
     margin: 0;
 }
 .project-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: block;
+    align-items: first baseline;
     margin-bottom: 60px;
 }
-/* Navbar */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #007bff;
-    padding: 10px 20px;
-    color: white;
+.project-header p {
+    font-size: 16px;
+    color: #6c757d;
+    margin: 0;
+}
+.project-header h1 {
+    font-size: 32px;
+    margin: 0;
 }
 
-/* Group Headers */
-body {
-    font-family: 'Arial', sans-serif;
-}
 
 .container {
-    max-width: 1200px;
-    margin: auto;
+    margin-left: 120px;
     padding: 20px;
 }
 
 /* Group Headers */
+.group {
+    margin-bottom: 80px;
+}
 .group-header {
     padding: 10px;
     font-size: 16px;
@@ -231,15 +230,15 @@ body {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.issue-table th, .issue-table td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    vertical-align: middle;
+.issue-table th,
+.issue-table td {
+    text-align: center; /* Center text in table cells */
+    padding: 10px; /* Padding inside cells */
+    border: 1px solid #ccc; /* Light border for cells */
 }
 
 .issue-table th {
-    background-color: #f4f6f8;
+    background-color: #e9edff;
     text-transform: uppercase;
     font-size: 12px;
     color: #555;
@@ -274,12 +273,13 @@ body {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-color: #007bff;
+    background-color: #7300ff;
     color: white;
     text-align: center;
     line-height: 30px;
     margin-right: 5px;
-    font-size: 14px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 /* Label Pill */
@@ -291,10 +291,27 @@ body {
     font-size: 12px;
     text-align: center;
 }
+.tagify {
+    --tag-bg: #81bcfa;
+    --tags-border-color: none;
+}
 
+span.tagify__input {
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+}
+
+span.tagify__input:focus {
+    min-width: 110px;
+    margin: 5px;
+    padding: var(--tag-pad);
+
+}
 /* Add Task Row */
 .add-task-row {
     background-color: #f9f9f9;
+
 }
 
 .add-task-link {
@@ -346,6 +363,101 @@ body {
 .priority-yüksek {
     background-color: #004085; /* Dark blue */
 }
+.datepicker {
+    width: 200px;
+}
+/* Container for the dropdown */
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Base dropdown styling */
+.status-dropdown {
+    appearance: none;
+    border: 2px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 150px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    color: white; /* Make text white by default */
+    transition: background-color 0.3s ease; /* Smooth transition for background change */
+}
+
+/* Custom arrow for dropdown */
+.status-dropdown:after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-top-color: #333;
+}
+
+/* Different statuses with their custom background colors */
+.status-dropdown option.status-completed {
+    background-color: #28a745;
+
+    color: white;
+}
+/* Define status colors */
+.status-completed {
+    background-color: #28a745;
+}
+
+.status-in-progress {
+    background-color: #ffc107;
+}
+
+.status-canceled {
+    background-color: #dc3545;
+}
+
+.status-not-started {
+    background-color: #6c757d;
+}
+
+.status-dropdown option.status-in-progress {
+    background-color: #ffc107;
+    color: white;
+}
+
+.status-dropdown option.status-canceled {
+    background-color: #dc3545;
+    color: white;
+}
+
+.status-dropdown option.status-not-started {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Dropdown open styling */
+.status-dropdown:focus {
+    outline: none;
+
+    border-color: #007bff;
+}
+
+/* Styling the dropdown items (colors for each option) */
+.status-dropdown option {
+    padding: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 200px;
+    height: 200px;
+}
+
+/* Custom dropdown arrow on hover */
+.status-dropdown:hover {
+    background-color: #e2e6ea;
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -365,5 +477,8 @@ body {
 
     .sidebar ul li a {
         font-size: 14px;
+    }
+    .status-dropdown {
+        width: 100%;
     }
 }

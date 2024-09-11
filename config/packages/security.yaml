@@ -16,8 +16,10 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+
         # Main firewall for the entire application
         main:
+
             lazy: true
             provider: app_user_provider
             form_login:

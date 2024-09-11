@@ -3,105 +3,141 @@
 namespace App\Controller;
 
 use App\Entity\Issue;
-use App\Entity\Tag;
-use App\Form\IssueType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-#[Route('/issue')]
 final class IssueController extends AbstractController
 {
-    #[Route(name: 'issue_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
-    {
-        $issues = $entityManager
-            ->getRepository(Issue::class)
-            ->findAll();
+    private $csrfTokenManager;
 
-        return $this->render('issue/index.html.twig', [
-            'issues' => $issues,
-        ]);
+    public function __construct(CsrfTokenManagerInterface $csrfTokenManager)
+    {
+        $this->csrfTokenManager = $csrfTokenManager;
     }
 
-    #[Route('/issue/new', name: 'issue_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/issue/{id}/edit-name', name: 'edit_issue_name', methods: ['POST'])]
+    public function editIssueName(int $id, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $issue = new Issue();
-        $form = $this->createForm(IssueType::class, $issue);
-        $form->handleRequest($request);
+        // Log the request for debugging
+        error_log('Received request for issue ID: ' . $id);
+        error_log('Request content: ' . $request->getContent());
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Tagify'dan gelen etiketler
-            $submittedTags = $request->request->get('tags'); // Tagify'dan gelen veriyi alın
-            $tagNames = json_decode($submittedTags, true);   // JSON'u bir diziye çevirin
+        $submittedToken = $request->headers->get('X-CSRF-TOKEN');
+        if (!$this->isCsrfTokenValid('authenticate', $submittedToken)) {
+            return new JsonResponse(['success' => false, 'error' => 'Invalid CSRF token'], 403);
+        }
 
-            if (is_null($tagNames)) {
-                throw new \Exception('Tagify JSON verisi çözülemedi.');
-            }
+        $issue = $entityManager->getRepository(Issue::class)->find($id);
 
-            foreach ($tagNames as $tagData) {
-                $tagName = $tagData['value'];
-                $tag = $entityManager->getRepository(Tag::class)->findOneBy(['name' => $tagName]);
+        if (!$issue) {
+            return new JsonResponse(['success' => false, 'error' => 'Issue not found.'], 404);
+        }
 
-                if (!$tag) {
-                    $tag = new Tag();
-                    $tag->setName($tagName);
-                    $tag->setColor('#' . dechex(rand(0x000000, 0xFFFFFF)));  // Yeni etiket için rastgele bir renk belirle
-                    $entityManager->persist($tag);
-                }
+        $data = json_decode($request->getContent(), true);
 
-                $issue->addTag($tag); // Issue'ya etiketi ekle
-            }
+        if (!isset($data['name'])) {
+            return new JsonResponse(['success' => false, 'error' => 'Name is required.'], 400);
+        }
 
+        $issue->setName($data['name']);
+        $entityManager->flush();
 
+        return new JsonResponse(['success' => true]);
+    }
+
+    #[Route('/issue/{id}/edit-status', name: 'edit_issue_status', methods: ['POST'])]
+    public function editStatus(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Retrieve the data from the request
+        $data = json_decode($request->getContent(), true);
+
+        // Check if 'status' is provided in the request
+        if (!isset($data['status'])) {
+            return new JsonResponse(['success' => false, 'error' => 'Status not provided'], 400);
+        }
+
+        // Update the status of the issue
+        $newStatus = $data['status'];
+        $issue->setStatus($newStatus);
+
+        // Save the updated issue
+        try {
             $entityManager->persist($issue);
             $entityManager->flush();
 
-            return $this->redirectToRoute('issue_index');
+            return new JsonResponse(['success' => true, 'status' => $newStatus]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['success' => false, 'error' => 'Failed to update status'], 500);
+        }
+    }
+
+    /**
+     * @Route("/issue/{id}/edit-priority", name="issue_edit_priority", methods={"POST"})
+     */
+    public function editIssuePriority(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $issue->setPriority($data['priority']);
+        $entityManager->flush();
+
+        return new JsonResponse(['status' => 'success']);
+    }
+
+    #[Route("/issue/{id}/edit-assignees", name: "issue_edit_assignees", methods: ["POST"])]
+    public function editIssueAssignees(
+        Issue $issue,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        UserRepository $userRepository
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['assignees']) || !is_array($data['assignees'])) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Invalid assignees data'], 400);
         }
 
-        return $this->render('issue/new.html.twig', [
-            'form' => $form->createView(),
+        // Clear current assignees
+        foreach ($issue->getAssignees() as $assignee) {
+            $issue->removeAssignee($assignee);
+        }
+
+        // Assign new users
+        foreach ($data['assignees'] as $assigneeName) {
+            $user = $userRepository->findOneBy(['name' => $assigneeName]);
+            if ($user) {
+                $issue->addAssignee($user);
+            }
+        }
+
+        $entityManager->flush();
+
+        // Return the updated list of assignees
+        $updatedAssignees = array_map(function ($assignee) {
+            return $assignee->getName();
+        }, $issue->getAssignees()->toArray());
+
+        return new JsonResponse([
+            'status' => 'success',
+            'assignees' => $updatedAssignees
         ]);
     }
 
-    #[Route('/{id}', name: 'app_issue_show', methods: ['GET'])]
-    public function show(Issue $issue): Response
+    /**
+     * @Route("/issue/{id}/edit-date", name="issue_edit_date", methods={"POST"})
+     */
+    public function editIssueDate(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        return $this->render('issue/show.html.twig', [
-            'issue' => $issue,
-        ]);
-    }
+        $data = json_decode($request->getContent(), true);
+        $issue->setEndDate(new \DateTime($data['endDate']));
+        $entityManager->flush();
 
-    #[Route('/{id}/edit', name: 'issue_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Issue $issue, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(IssueType::class, $issue);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('issue_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('issue/edit.html.twig', [
-            'issue' => $issue,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'issue_delete', methods: ['POST'])]
-    public function delete(Request $request, Issue $issue, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$issue->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($issue);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('issue_index', [], Response::HTTP_SEE_OTHER);
+        return new JsonResponse(['status' => 'success']);
     }
 }

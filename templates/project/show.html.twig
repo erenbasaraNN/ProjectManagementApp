@@ -3,19 +3,20 @@
 {% block title %}Project: {{ project.name }}{% endblock %}
 
 {% block body %}
+    <div class="project-header">
+        <h1>{{ project.name }}</h1>
+        <p>{{ project.description }}</p>
+    </div>
     <div class="project-page container">
         <!-- Project Header -->
-        <div class="project-header">
-            <h1>{{ project.name }}</h1>
-            <p>{{ project.description }}</p>
-        </div>
+
 
         <!-- Grouped Issues Table -->
         <div class="issue-groups">
             {% for tag in tags %}
                 <div class="group">
                     <!-- Tag Group Header with color -->
-                    <div class="group-header" style="border-left: 5px solid {{ tag.color }};">
+                    <div class="group-header" style="border-left: 20px solid {{ tag.color }}; border-radius:5px;">
                         <h3>{{ tag.name }}</h3>
                     </div>
                     <table class="issue-table">
@@ -25,7 +26,6 @@
                             <th>Kişi</th>
                             <th>Durum</th>
                             <th>Tarih</th>
-                            <th>Label</th>
                             <th>Priority</th>
                         </tr>
                         </thead>
@@ -37,23 +37,22 @@
                                         <span class="issue-name" data-id="{{ issue.id }}" contenteditable="true">{{ issue.name }}</span>
                                     </td>
                                     <td>
-                                        <input class="tagify-input" name="assignees" data-id="{{ issue.id }}" value="{{ issue.assignees|join(', ') }}" placeholder="Kişi seç...">
+                                        <input class="tagify-input" name="assignees" data-id="{{ issue.id }}"
+                                               value="{% for user in issue.assignees %}{{ user.name }}{% if not loop.last %}, {% endif %}{% endfor %}"
+                                               placeholder="Kişi seç...">
                                     </td>
                                     <td>
-                                        <select class="status-select" data-id="{{ issue.id }}">
-                                            <option value="Tamamlandı" {% if issue.status == 'Tamamlandı' %}selected{% endif %} style="color: green;">Tamamlandı</option>
-                                            <option value="Çalışılıyor" {% if issue.status == 'Çalışılıyor' %}selected{% endif %} style="color: yellow;">Çalışılıyor</option>
-                                            <option value="İptal" {% if issue.status == 'İptal' %}selected{% endif %} style="color: red;">İptal</option>
-                                            <option value="Başlanacak" {% if issue.status == 'Başlanacak' %}selected{% endif %} style="color: grey;">Başlanacak</option>
-                                        </select>
+                                        <div class="dropdown-container">
+                                            <select class="status-dropdown" data-id="{{ issue.id }}">
+                                                <option value="Completed" {% if issue.status == 'Completed' %}selected{% endif %} class="status-completed">Tamamlandı</option>
+                                                <option value="In Progress" {% if issue.status == 'In Progress' %}selected{% endif %} class="status-in-progress">Aktif Durumda</option>
+                                                <option value="Cancelled" {% if issue.status == 'Cancelled' %}selected{% endif %} class="status-canceled">İptal</option>
+                                                <option value="To DO" {% if issue.status == 'To DO' %}selected{% endif %} class="status-not-started">Başlanacak</option>
+                                            </select>
+                                        </div>
                                     </td>
                                     <td>
                                         <input type="text" class="datepicker" data-id="{{ issue.id }}" value="{{ issue.endDate ? issue.endDate|date('d M') : 'No Deadline' }}">
-                                    </td>
-                                    <td>
-                                        <div class="label-pill" style="background-color: {{ issue.labelColor }};">
-                                            {{ issue.label }}
-                                        </div>
                                     </td>
                                     <td>
                                         <select class="priority-select" data-id="{{ issue.id }}">
@@ -78,79 +77,11 @@
                         {% endif %}
                         </tbody>
                     </table>
+
                 </div>
             {% endfor %}
         </div>
     </div>
 
-    <script>
-        // Tagify for "Kişi" input fields
-        document.querySelectorAll('.tagify-input').forEach(function(input) {
-            new Tagify(input, {
-                whitelist: [{ value: 'User 1', email: 'user1@example.com' }, { value: 'User 2', email: 'user2@example.com' }],
-                dropdown: {
-                    position: "text", // position the dropdown near the typed text
-                    enabled: 0 // always show suggestions
-                }
-            });
-        });
 
-        // Datepicker for dates
-        document.querySelectorAll('.datepicker').forEach(function(input) {
-            flatpickr(input, {
-                dateFormat: "d M"
-            });
-        });
-
-        // Handle issue name edit
-        document.querySelectorAll('.issue-name').forEach(function(element) {
-            element.addEventListener('blur', function() {
-                const issueId = this.dataset.id;
-                const newName = this.innerText;
-                // Send AJAX request to update issue name in the database
-                fetch(`/issue/${issueId}/edit-name`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({ name: newName })
-                });
-            });
-        });
-
-        // Handle status dropdown change
-        document.querySelectorAll('.status-select').forEach(function(select) {
-            select.addEventListener('change', function() {
-                const issueId = this.dataset.id;
-                const newStatus = this.value;
-                // Send AJAX request to update issue status in the database
-                fetch(`/issue/${issueId}/edit-status`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({ status: newStatus })
-                });
-            });
-        });
-
-        // Handle priority dropdown change
-        document.querySelectorAll('.priority-select').forEach(function(select) {
-            select.addEventListener('change', function() {
-                const issueId = this.dataset.id;
-                const newPriority = this.value;
-                // Send AJAX request to update issue priority in the database
-                fetch(`/issue/${issueId}/edit-priority`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({ priority: newPriority })
-                });
-            });
-        });
-    </script>
 {% endblock %}

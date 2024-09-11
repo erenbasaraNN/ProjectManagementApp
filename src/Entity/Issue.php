@@ -48,10 +48,10 @@ class Issue
     public function getStatusColor(): string
     {
         return match ($this->status) {
-            'Completed' => '#28a745',
-            'In Progress' => '#ffc107',
-            'Blocked' => '#dc3545',
-            'Not Started' => '#6c757d',
+            'Completed' => '#DAF7A6',
+            'In Progress' => '#FFC300',
+            'Blocked' => '#900C3F',
+            'Not Started' => '#29a5d1',
             default => '#007bff',
         };
     }

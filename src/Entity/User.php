@@ -8,11 +8,13 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
+#[ORM\Table(name: 'users')]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -20,16 +22,16 @@ class User implements UserInterface
     private $id;
 
     #[ORM\Column(type: 'string', length: 100)]
-    private $name;
+    private ?string $name;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private $email;
+    private ?string $email;
 
     #[ORM\Column(type: 'string')]
-    private $password;
+    private ?string $password;
 
     #[ORM\Column(type: 'string', length: 50)]
-    private $role;
+    private ?string $role;
 
     public function getId(): ?int
     {

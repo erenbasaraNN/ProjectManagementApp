@@ -23,6 +23,8 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
+                username_parameter: email  # Specify the form field as "email" instead of "username"
+                password_parameter: password
             logout:
                 path: app_logout
                 target: /

@@ -1,38 +1,156 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Project{% endblock %}
+{% block title %}Project: {{ project.name }}{% endblock %}
 
 {% block body %}
-    <h1>Project</h1>
+    <div class="project-page container">
+        <!-- Project Header -->
+        <div class="project-header">
+            <h1>{{ project.name }}</h1>
+            <p>{{ project.description }}</p>
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ project.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ project.name }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ project.description }}</td>
-            </tr>
-            <tr>
-                <th>StartDate</th>
-                <td>{{ project.startDate ? project.startDate|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>EndDate</th>
-                <td>{{ project.endDate ? project.endDate|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <!-- Grouped Issues Table -->
+        <div class="issue-groups">
+            {% for tag in tags %}
+                <div class="group">
+                    <!-- Tag Group Header with color -->
+                    <div class="group-header" style="border-left: 5px solid {{ tag.color }};">
+                        <h3>{{ tag.name }}</h3>
+                    </div>
+                    <table class="issue-table">
+                        <thead>
+                        <tr>
+                            <th>Görev</th>
+                            <th>Kişi</th>
+                            <th>Durum</th>
+                            <th>Tarih</th>
+                            <th>Label</th>
+                            <th>Priority</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if tag.issues|length > 0 %}
+                            {% for issue in tag.issues %}
+                                <tr>
+                                    <td>
+                                        <span class="issue-name" data-id="{{ issue.id }}" contenteditable="true">{{ issue.name }}</span>
+                                    </td>
+                                    <td>
+                                        <input class="tagify-input" name="assignees" data-id="{{ issue.id }}" value="{{ issue.assignees|join(', ') }}" placeholder="Kişi seç...">
+                                    </td>
+                                    <td>
+                                        <select class="status-select" data-id="{{ issue.id }}">
+                                            <option value="Tamamlandı" {% if issue.status == 'Tamamlandı' %}selected{% endif %} style="color: green;">Tamamlandı</option>
+                                            <option value="Çalışılıyor" {% if issue.status == 'Çalışılıyor' %}selected{% endif %} style="color: yellow;">Çalışılıyor</option>
+                                            <option value="İptal" {% if issue.status == 'İptal' %}selected{% endif %} style="color: red;">İptal</option>
+                                            <option value="Başlanacak" {% if issue.status == 'Başlanacak' %}selected{% endif %} style="color: grey;">Başlanacak</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="datepicker" data-id="{{ issue.id }}" value="{{ issue.endDate ? issue.endDate|date('d M') : 'No Deadline' }}">
+                                    </td>
+                                    <td>
+                                        <div class="label-pill" style="background-color: {{ issue.labelColor }};">
+                                            {{ issue.label }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select class="priority-select" data-id="{{ issue.id }}">
+                                            <option value="Düşük" {% if issue.priority == 'Düşük' %}selected{% endif %} style="background-color: lightblue;">Düşük</option>
+                                            <option value="Orta" {% if issue.priority == 'Orta' %}selected{% endif %} style="background-color: blue;">Orta</option>
+                                            <option value="Yüksek" {% if issue.priority == 'Yüksek' %}selected{% endif %} style="background-color: darkblue;">Yüksek</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr class="add-task-row">
+                                <td colspan="6">
+                                    <a href="#" class="add-task-link">
+                                        <i class="fas fa-plus"></i> + öğe ekle
+                                    </a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6">No issues available under this group.</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 
-    <a href="{{ path('app_project_index') }}">back to list</a>
+    <script>
+        // Tagify for "Kişi" input fields
+        document.querySelectorAll('.tagify-input').forEach(function(input) {
+            new Tagify(input, {
+                whitelist: [{ value: 'User 1', email: 'user1@example.com' }, { value: 'User 2', email: 'user2@example.com' }],
+                dropdown: {
+                    position: "text", // position the dropdown near the typed text
+                    enabled: 0 // always show suggestions
+                }
+            });
+        });
 
-    <a href="{{ path('app_project_edit', {'id': project.id}) }}">edit</a>
+        // Datepicker for dates
+        document.querySelectorAll('.datepicker').forEach(function(input) {
+            flatpickr(input, {
+                dateFormat: "d M"
+            });
+        });
 
-    {{ include('project/_delete_form.html.twig') }}
+        // Handle issue name edit
+        document.querySelectorAll('.issue-name').forEach(function(element) {
+            element.addEventListener('blur', function() {
+                const issueId = this.dataset.id;
+                const newName = this.innerText;
+                // Send AJAX request to update issue name in the database
+                fetch(`/issue/${issueId}/edit-name`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ name: newName })
+                });
+            });
+        });
+
+        // Handle status dropdown change
+        document.querySelectorAll('.status-select').forEach(function(select) {
+            select.addEventListener('change', function() {
+                const issueId = this.dataset.id;
+                const newStatus = this.value;
+                // Send AJAX request to update issue status in the database
+                fetch(`/issue/${issueId}/edit-status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+            });
+        });
+
+        // Handle priority dropdown change
+        document.querySelectorAll('.priority-select').forEach(function(select) {
+            select.addEventListener('change', function() {
+                const issueId = this.dataset.id;
+                const newPriority = this.value;
+                // Send AJAX request to update issue priority in the database
+                fetch(`/issue/${issueId}/edit-priority`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ priority: newPriority })
+                });
+            });
+        });
+    </script>
 {% endblock %}

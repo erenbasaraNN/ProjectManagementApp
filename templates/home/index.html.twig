@@ -1,25 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Welcome{% endblock %}
+{% block title %}Ana Sayfa{% endblock %}
 
 {% block body %}
-    <div class="jumbotron bg-white text-center shadow-sm rounded p-5">
-        <h1 class="display-4 text-primary font-weight-bold">Welcome to Project Management App</h1>
-        <p class="lead text-muted">The ultimate tool for managing projects, tasks, and issues efficiently.</p>
-        <hr class="my-4">
-        <p class="text-secondary">Streamline your workflow and enhance productivity with our user-friendly interface.</p>
-        <div class="mt-4">
-            {% if app.user %}
+    <div class="home-container">
+        <h1>Hoş Geldiniz!</h1>
+        <p>Proje yönetimi platformumuza hoş geldiniz. Başlamak için giriş yapın ya da yeni bir proje oluşturun.</p>
 
-                {% if is_granted('ROLE_PROJECT_MANAGER') %}
-                    <a class="btn btn-primary btn-lg mx-2" href="{{ path('all_brands') }}" role="button">Go to Brands</a>
-                    <a class="btn btn-primary btn-lg mx-2" href="{{ path('all_projects') }}" role="button">Go to Projects</a>
-                    <a class="btn btn-primary btn-lg mx-2" href="{{ path('all_tasks') }}" role="button">Go to Tasks</a>
-                    {%endif%}
-                <a class="btn btn-primary btn-lg mx-2" href="{{ path('all_issues') }}" role="button">Go to Issues</a>
+        <div class="actions">
+            {% if app.user %}
+                <a href="{{ path('project_index') }}" class="btn btn-primary">Projeleri Gör</a>
+                <a href="{{ path('project_new') }}" class="btn btn-secondary">Yeni Proje Ekle</a>
             {% else %}
-                <a class="btn btn-primary btn-lg mx-2" href="{{ path('app_login') }}" role="button">Login</a>
-                <a class="btn btn-outline-primary btn-lg mx-2" href="{{ path('app_register') }}" role="button">Register</a>
+                <a href="{{ path('app_login') }}" class="btn btn-primary">Giriş Yap</a>
+                <a href="{{ path('app_register') }}" class="btn btn-primary">Kayıt Ol</a>
             {% endif %}
         </div>
     </div>

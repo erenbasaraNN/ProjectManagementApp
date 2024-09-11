@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Proje Yönetimi{% endblock %}</title>
 
     <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+
 
     {% block stylesheets %}{% endblock %}
 </head>
@@ -14,12 +20,37 @@
 
 <!-- Navbar -->
 <header class="navbar">
-
+    <div class="navbar-left">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
+        <h1>Proje Yönetimi</h1>
+    </div>
+    <div class="navbar-right">
+        {% if app.user %}
+            <div class="user-info">
+                <div class="user-circle">{{ app.user.name|slice(0, 1) | upper }}</div>
+                <span>{{ app.user.name }}</span>
+                <a href="{{ path('app_logout') }}" class="logout-btn">Çıkış</a>
+            </div>
+        {% endif %}
+    </div>
 </header>
 
 <!-- Layout with Sidebar -->
 <div class="main-layout">
-
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Projeler</h2>
+        <ul>
+            {% if projects is not empty %}
+                {% for project in projects %}
+                    <li><a href="{{ path('project_show', { 'id': project.id }) }}">{{ project.name }}</a></li>
+                {% endfor %}
+            {% else %}
+                <li>Hiç Proje Yok</li>
+            {% endif %}
+        </ul>
+        <a href="{{ path('project_new') }}" class="new-project-btn">+ Yeni Proje Ekle</a>
+    </aside>
 
     <!-- Main Content Area -->
     <main class="content">
@@ -31,6 +62,14 @@
     <!-- Optional Footer content -->
 </footer>
 
-{% block javascripts %}{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('build/runtime.js') }}" defer></script>
+    <script src="{{ asset('build/app.js') }}" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+
+{% endblock %}
 </body>
 </html>

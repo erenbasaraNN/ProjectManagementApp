@@ -4,6 +4,9 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -38,9 +41,50 @@ class Issue
     #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'issues')]
     private $project;
 
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'issues')]
+    #[ORM\JoinTable(name: 'issue_tag')]
+    private $tags;
+
+    public function getStatusColor(): string
+    {
+        return match ($this->status) {
+            'Completed' => '#28a745',
+            'In Progress' => '#ffc107',
+            'Blocked' => '#dc3545',
+            'Not Started' => '#6c757d',
+            default => '#007bff',
+        };
+    }
+
+    public function __construct()
+    {
+        // Initialize the assignees property with an ArrayCollection
+        $this->assignees = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+    }
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->tags->removeElement($tag);
+        return $this;
     }
 
     public function getName(): ?string
@@ -84,23 +128,23 @@ class Issue
         return $this;
     }
 
-    public function getStartDate(): ?\DateTimeInterface
+    public function getStartDate(): ?DateTimeInterface
     {
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTimeInterface $startDate): self
+    public function setStartDate(DateTimeInterface $startDate): self
     {
         $this->startDate = $startDate;
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
+    public function getEndDate(): ?DateTimeInterface
     {
         return $this->endDate;
     }
 
-    public function setEndDate(?\DateTimeInterface $endDate): self
+    public function setEndDate(?DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
         return $this;

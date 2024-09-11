@@ -174,6 +174,179 @@ table tr:nth-child(even) {
     background-color: #0056b3;
 }
 
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+h1, h2 {
+    color: #333;
+    margin: 0;
+}
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 60px;
+}
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #007bff;
+    padding: 10px 20px;
+    color: white;
+}
+
+/* Group Headers */
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Group Headers */
+.group-header {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #f8f9fa;
+    border-left-width: 5px;
+    border-left-style: solid;
+    margin-bottom: 10px;
+}
+
+/* Issue Table */
+.issue-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.issue-table th, .issue-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+.issue-table th {
+    background-color: #f4f6f8;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #555;
+}
+
+.issue-table td:first-child,
+.issue-table th:first-child {
+    width: 40px;
+    text-align: center;
+}
+
+.issue-table td:last-child {
+    text-align: center;
+}
+
+.issue-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Status Pill */
+.status-pill {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+}
+
+/* User Circle */
+.user-circle {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+/* Label Pill */
+.label-pill {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 3px;
+    color: white;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Add Task Row */
+.add-task-row {
+    background-color: #f9f9f9;
+}
+
+.add-task-link {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.add-task-link:hover {
+    text-decoration: underline;
+}
+
+/* Add Group Button */
+.new-group-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.new-group-btn:hover {
+    background-color: #0056b3;
+}
+
+.priority-pill {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 3px;
+    color: white;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Priority Levels */
+.priority-düşük {
+    background-color: #cce5ff; /* Light blue */
+}
+
+.priority-orta {
+    background-color: #339af0; /* Medium blue */
+}
+
+.priority-yüksek {
+    background-color: #004085; /* Dark blue */
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .navbar-left h1 {

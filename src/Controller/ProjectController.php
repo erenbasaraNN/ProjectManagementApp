@@ -2,10 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Issue;
 use App\Entity\Project;
+use App\Entity\Tag;
 use App\Form\ProjectType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,7 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/project')]
 final class ProjectController extends AbstractController
 {
-    #[Route(name: 'app_project_index', methods: ['GET'])]
+    #[Route(name: 'project_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $projects = $entityManager
@@ -25,7 +31,7 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_project_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'project_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $project = new Project();
@@ -36,7 +42,7 @@ final class ProjectController extends AbstractController
             $entityManager->persist($project);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('project_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('project/new.html.twig', [
@@ -45,15 +51,71 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_project_show', methods: ['GET'])]
-    public function show(Project $project): Response
+    #[Route('/project/{id}', name: 'project_show')]
+    public function show(Project $project, EntityManagerInterface $entityManager): Response
     {
+        // Get all tags associated with the project
+        $tags = $entityManager->getRepository(Tag::class)->findBy(['project' => $project]);
+
+        // Initialize an array to hold the issues grouped by tags
+        $tagIssues = [];
+
+        foreach ($tags as $tag) {
+            if ($tag !== null) {
+                // Find all issues related to this tag
+                $issues = $entityManager->getRepository(Issue::class)
+                    ->createQueryBuilder('i')
+                    ->join('i.tags', 't')
+                    ->where('t = :tag')
+                    ->setParameter('tag', $tag)
+                    ->getQuery()
+                    ->getResult();
+
+                // Add the tag and its issues to the array
+                $tagIssues[] = [
+                    'name' => $tag->getName(),
+                    'color' => $tag->getColor(),
+                    'issues' => $issues,
+                ];
+            }
+        }
+
+        // Pass the project and the issues grouped by tags to the template
         return $this->render('project/show.html.twig', [
             'project' => $project,
+            'tags' => $tagIssues,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_project_edit', methods: ['GET', 'POST'])]
+    #[Route('/project/{id}/add-group', name: 'add_group', methods: ['POST'])]
+    public function addGroup(Project $project, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Get the group name and color from the request
+        $groupName = $request->request->get('group_name');
+        $groupColor = $request->request->get('group_color');
+
+        if (empty($groupName) || empty($groupColor)) {
+            return new JsonResponse(['error' => 'Group name and color are required'], 400);
+        }
+
+        // Create a new Tag (Group)
+        $tag = new Tag();
+        $tag->setName($groupName);
+        $tag->setColor($groupColor);
+        $tag->setProject($project);
+
+        // Save the tag to the database
+        $entityManager->persist($tag);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'name' => $tag->getName(),
+            'color' => $tag->getColor(),
+            'id' => $tag->getId(),
+        ], 200);
+    }
+
+    #[Route('/{id}/edit', name: 'project_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ProjectType::class, $project);
@@ -62,7 +124,7 @@ final class ProjectController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('project_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('project/edit.html.twig', [
@@ -71,7 +133,7 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_project_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'project_delete', methods: ['POST'])]
     public function delete(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->getPayload()->getString('_token'))) {
@@ -79,6 +141,6 @@ final class ProjectController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('project_index', [], Response::HTTP_SEE_OTHER);
     }
 }

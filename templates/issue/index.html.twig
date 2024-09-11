@@ -30,7 +30,7 @@
                 <td>{{ issue.priority }}</td>
                 <td>
                     <a href="{{ path('app_issue_show', {'id': issue.id}) }}">show</a>
-                    <a href="{{ path('app_issue_edit', {'id': issue.id}) }}">edit</a>
+                    <a href="{{ path('issue_edit', {'id': issue.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -41,5 +41,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_issue_new') }}">Create new</a>
+    <a href="{{ path('issue_new') }}">Create new</a>
 {% endblock %}

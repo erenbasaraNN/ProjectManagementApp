@@ -78,16 +78,30 @@ final class IssueController extends AbstractController
         }
     }
 
-    /**
-     * @Route("/issue/{id}/edit-priority", name="issue_edit_priority", methods={"POST"})
-     */
-    public function editIssuePriority(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/issue/{id}/edit-priority', name: 'edit_issue_priority', methods: ['POST'])]
+    public function editPriority(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
+        // Retrieve the data from the request
         $data = json_decode($request->getContent(), true);
-        $issue->setPriority($data['priority']);
-        $entityManager->flush();
 
-        return new JsonResponse(['status' => 'success']);
+        // Check if 'priority' is provided in the request
+        if (!isset($data['priority'])) {
+            return new JsonResponse(['success' => false, 'error' => 'Priority not provided'], 400);
+        }
+
+        // Update the priority of the issue
+        $newPriority = $data['priority'];
+        $issue->setPriority($newPriority);
+
+        // Save the updated issue
+        try {
+            $entityManager->persist($issue);
+            $entityManager->flush();
+
+            return new JsonResponse(['success' => true, 'priority' => $newPriority]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['success' => false, 'error' => 'Failed to update priority'], 500);
+        }
     }
 
     #[Route("/issue/{id}/edit-assignees", name: "issue_edit_assignees", methods: ["POST"])]
@@ -130,14 +144,25 @@ final class IssueController extends AbstractController
     }
 
     /**
-     * @Route("/issue/{id}/edit-date", name="issue_edit_date", methods={"POST"})
+     * @throws \DateMalformedStringException
      */
+    #[Route("/issue/{id}/edit-date", name: "edit_issue_date", methods: ["POST"])]
+
     public function editIssueDate(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $issue->setEndDate(new \DateTime($data['endDate']));
-        $entityManager->flush();
 
-        return new JsonResponse(['status' => 'success']);
+        if (isset($data['endDate'])) {
+            $issue->setEndDate(new \DateTime($data['endDate']));
+            $entityManager->flush();
+
+            return new JsonResponse(['status' => 'success']);
+        }
+
+        return new JsonResponse(['status' => 'error', 'message' => 'Invalid date'], 400);
     }
+
+
+
+
 }

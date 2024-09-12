@@ -31,6 +31,7 @@
         "datatables.net-bs4": "^2.1.6",
         "datatables.net-bs5": "^2.1.6",
         "jquery": "^3.7.1",
+        "normalize.css": "^8.0.1",
         "postcss": "^8.4.45",
         "postcss-loader": "^8.1.1",
         "prettier": "^3.3.3"

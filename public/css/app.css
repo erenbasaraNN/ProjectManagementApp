@@ -163,9 +163,80 @@ table tr:nth-child(even) {
 .status-completed { background-color: #28a745; }
 .status-canceled { background-color: #dc3545; }
 
-.priority-low { background-color: #007bff; }
-.priority-medium { background-color: #6f42c1; }
-.priority-high { background-color: #dc3545; }
+/* Priority Dropdown Styles */
+.priority-dropdown {
+    appearance: none;
+    border: 2px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 150px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    color: white; /* Make text white by default */
+    transition: background-color 0.3s ease; /* Smooth transition for background change */
+}
+
+/* Custom arrow for dropdown */
+.priority-dropdown:after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-top-color: #333;
+}
+
+/* Different priority levels with their custom background colors */
+.priority-dropdown option.priority-low {
+    background-color: #007bff; /* Low priority: blue */
+    color: white;
+}
+
+.priority-dropdown option.priority-medium {
+    background-color: #6f42c1; /* Medium priority: purple */
+    color: white;
+}
+
+.priority-dropdown option.priority-high {
+    background-color: #dc3545; /* High priority: red */
+    color: white;
+}
+
+/* Define priority colors */
+.priority-low {
+    background-color: #007bff; /* Blue for low priority */
+}
+
+.priority-medium {
+    background-color: #6f42c1; /* Purple for medium priority */
+}
+
+.priority-high {
+    background-color: #dc3545; /* Red for high priority */
+}
+
+/* Dropdown open styling */
+.priority-dropdown:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Styling the dropdown items (colors for each option) */
+.priority-dropdown option {
+    padding: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Custom dropdown arrow on hover */
+.priority-dropdown:hover {
+    background-color: #e2e6ea;
+}
+
 
 /* Buttons */
 .btn {
@@ -202,8 +273,8 @@ h1, h2 {
 
 
 .container {
-    margin-left: 120px;
-    padding: 20px;
+    margin-left: 100px;
+    padding: 1px;
 }
 
 /* Group Headers */
@@ -248,6 +319,7 @@ h1, h2 {
 .issue-table th:first-child {
     width: 40px;
     text-align: center;
+    justify-content: space-between;
 }
 
 .issue-table td:last-child {
@@ -292,12 +364,23 @@ h1, h2 {
     text-align: center;
 }
 .tagify {
-    --tag-bg: #81bcfa;
     --tags-border-color: none;
 }
-
+.tagify__tag--circle {
+    border-radius: 50%;
+    width: 40px;  /* Adjust size as needed */
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+.tagify__tag {
+    background-color: var(--tag-bg, #ccc);}
 span.tagify__input {
-    min-width: 0;
+    min-width: 20px;
     padding: 0;
     margin: 0;
 }
@@ -308,23 +391,25 @@ span.tagify__input:focus {
     padding: var(--tag-pad);
 
 }
-/* Add Task Row */
-.add-task-row {
+/* Add issue Row */
+.add-issue-row {
     background-color: #f9f9f9;
-
+    align-items: flex-start;
 }
 
-.add-task-link {
+.add-issue-link {
     display: inline-block;
     padding: 10px 20px;
-    color: #007bff;
+    color: #278efd;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 500;
 }
 
-.add-task-link:hover {
+.add-issue-link:hover {
     text-decoration: underline;
 }
+
+
 
 /* Add Group Button */
 .new-group-btn {
@@ -342,27 +427,7 @@ span.tagify__input:focus {
     background-color: #0056b3;
 }
 
-.priority-pill {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 3px;
-    color: white;
-    font-size: 12px;
-    text-align: center;
-}
 
-/* Priority Levels */
-.priority-düşük {
-    background-color: #cce5ff; /* Light blue */
-}
-
-.priority-orta {
-    background-color: #339af0; /* Medium blue */
-}
-
-.priority-yüksek {
-    background-color: #004085; /* Dark blue */
-}
 .datepicker {
     width: 200px;
 }
@@ -400,39 +465,40 @@ span.tagify__input:focus {
 
 /* Different statuses with their custom background colors */
 .status-dropdown option.status-completed {
-    background-color: #28a745;
+    background-color: #46c965;
 
     color: white;
 }
+
 /* Define status colors */
 .status-completed {
-    background-color: #28a745;
+    background-color: #46c965;
 }
 
 .status-in-progress {
-    background-color: #ffc107;
+    background-color: #e3d324;
 }
 
 .status-canceled {
-    background-color: #dc3545;
+    background-color: #f12436;
 }
 
 .status-not-started {
-    background-color: #6c757d;
+    background-color: #29a5d1;
 }
 
 .status-dropdown option.status-in-progress {
-    background-color: #ffc107;
+    background-color: #e3d324;
     color: white;
 }
 
 .status-dropdown option.status-canceled {
-    background-color: #dc3545;
+    background-color: #f12436;
     color: white;
 }
 
 .status-dropdown option.status-not-started {
-    background-color: #6c757d;
+    background-color: #29a5d1;
     color: white;
 }
 
@@ -458,6 +524,210 @@ span.tagify__input:focus {
     background-color: #e2e6ea;
 }
 
+/* The modal container */
+.modal {
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+    overflow: auto; /* Enable scrolling if needed */
+    display: flex; /* Flexbox to center modal */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal content box */
+.modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative; /* For close button positioning */
+    animation: fadeIn 0.3s ease-in-out;
+    transform: translateY(0); /* Ensure modal is centered */
+    text-align: center; /* Center align text inside the modal */
+}
+
+/* Close button (top-right corner) */
+.close-modal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.close-modal:hover {
+    color: #f00;
+}
+
+/* Modal header */
+.modal h2 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+/* Modal form styling */
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content form .form-group {
+    margin-bottom: 15px;
+}
+
+.modal-content form label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.modal-content form input[type="text"],
+.modal-content form input[type="color"] {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Submit button styling */
+.modal-content form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.modal-content form button:hover {
+    background-color: #0056b3;
+}
+
+/* Fade-in animation for modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px); /* Adds smooth entrance animation */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); /* Reset to normal position */
+    }
+}
+
+/* Button to trigger modal */
+.new-group-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.new-group-btn:hover {
+    background-color: #0056b3;
+}
+/* Button to trigger modal */
+.new-group-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+/* Fullscreen loading screen */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 9999; /* Make sure it's on top of everything */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Hide the main content */
+body.hidden {
+    visibility: hidden;
+}
+
+.new-group-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Basic modal styling */
+.modal-update {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content-update {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 60%;
+}
+
+.close-modal {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.update-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.update-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.update-content p {
+    margin: 0;
+    padding: 5px 0;
+}
+
+
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -480,5 +750,8 @@ span.tagify__input:focus {
     }
     .status-dropdown {
         width: 100%;
+    }
+    .modal-content {
+        width: 90%;
     }
 }

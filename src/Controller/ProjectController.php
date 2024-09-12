@@ -70,6 +70,7 @@ final class ProjectController extends AbstractController
 
                 // Add the tag and its issues to the array
                 $tagIssues[] = [
+                    'id' => $tag->getId(),
                     'name' => $tag->getName(),
                     'color' => $tag->getColor(),
                     'issues' => $issues,
@@ -84,7 +85,7 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    #[Route('/project/{id}/add-group', name: 'add_group', methods: ['POST'])]
+    #[Route('/{id}/add-group', name: 'add_group', methods: ['POST'])]
     public function addGroup(Project $project, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         // Get the group name and color from the request
@@ -111,6 +112,9 @@ final class ProjectController extends AbstractController
             'id' => $tag->getId(),
         ], 200);
     }
+
+
+
 
     #[Route('/{id}/edit', name: 'project_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Project $project, EntityManagerInterface $entityManager): Response
@@ -140,4 +144,38 @@ final class ProjectController extends AbstractController
 
         return $this->redirectToRoute('project_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/{id}/add-issue', name: 'add_issue', methods: ['POST'])]
+    public function addIssue(Project $project, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $tagId = $request->request->get('tag_id');
+        $tag = $entityManager->getRepository(Tag::class)->find($tagId);
+
+        if (!$tag) {
+            return new JsonResponse(['error' => 'Tag not found'], 404);
+        }
+
+        // Create the new issue with default values
+        $issue = new Issue();
+        $issue->setName('Yeni Öğe');
+        $issue->setStatus('Not Started');
+        $issue->setPriority('Düşük');
+        $issue->setStartDate(new \DateTime());
+        $issue->setEndDate(new \DateTime());
+        $issue->setDescription('');
+        $issue->setProject($project);
+        $issue->addTag($tag);
+
+        // Save the issue
+        $entityManager->persist($issue);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'id' => $issue->getId(),
+            'name' => $issue->getName(),
+            'status' => $issue->getStatus(),
+            'priority' => $issue->getPriority(),
+            'endDate' => $issue->getEndDate()->format('d M Y'),
+        ], 200);
+    }
+
 }

@@ -31,6 +31,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 50)]
     private ?string $role;
 
+    #[ORM\Column(type: 'string', length: 7, nullable: true)]
+    private ?string $color = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -84,6 +87,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         return [$this->role];
+    }
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): self
+    {
+        $this->color = $color;
+
+        return $this;
     }
 
     public function getUserIdentifier(): string

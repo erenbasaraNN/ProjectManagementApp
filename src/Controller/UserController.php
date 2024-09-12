@@ -19,7 +19,7 @@ class UserController extends AbstractController
         try {
             $users = $entityManager->getRepository(User::class)->findAll();
             $userData = array_map(function($user) {
-                return ['value' => $user->getId(), 'name' => $user->getName()];
+                return ['value' => $user->getId(), 'name' => $user->getName(), 'color' => $user->getColor()];
             }, $users);
 
             return new JsonResponse($userData);

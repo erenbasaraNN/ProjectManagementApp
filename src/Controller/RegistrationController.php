@@ -18,6 +18,8 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
+        $predefinedColors = ['#FF8A8A', '#D2E0FB', '#B1AFFF', '#D37676', '#F6995C'];
+        $randomColor = $predefinedColors[array_rand($predefinedColors)];
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -33,6 +35,7 @@ class RegistrationController extends AbstractController
 
             // Set the role (if applicable)
             $user->setRole('ROLE_USER');
+            $user->setColor($randomColor);
 
             // Save the user
             $entityManager->persist($user);

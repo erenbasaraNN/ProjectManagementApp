@@ -1,26 +1,54 @@
-console.log('Start of script');
+import initializeAddIssue from "./add-issue";
+import initializeTagify from "./tagify";
+import initializeStatusDropdowns from "./status-dropdowns";
+import initializePriorityDropdowns from "./priority-dropdowns";
+import initializeDatePicker from "./datepicker";
+import handleIssueNameEdit from "./edit-issue-name";
 
-// Initialize the modules
-import initializeTagify from './tagify';
-import initializeStatusDropdowns from './status-dropdowns';
-import initializePriorityDropdowns from './priority-dropdowns';
-import initializeDatePicker from './datepicker';
-import handleIssueNameEdit from './edit-issue-name';
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded and parsed.');
 
-// Run the initialization functions
-initializeTagify();
-console.log('tagify.js loaded');
+    // Initial page load: Initialize for the entire page
+    initializeAll();
 
-initializeStatusDropdowns();
-console.log('status-dropdowns.js loaded');
+    // Add event listener for adding new issues
+    initializeAddIssue();
+});
 
-initializePriorityDropdowns();
-console.log('priority-dropdowns.js loaded');
+// Function to initialize all JavaScript for the page's existing content
+function initializeAll() {
+    try {
+        initializeTagify(document.querySelectorAll('.tagify-input'));
+        console.log('tagify.js initialized');
+    } catch (error) {
+        console.error('Error initializing tagify:', error);
+    }
 
-initializeDatePicker();
-console.log('datepicker.js loaded');
+    try {
+        initializeStatusDropdowns(document.querySelectorAll('.status-dropdown'));
+        console.log('status-dropdowns.js initialized');
+    } catch (error) {
+        console.error('Error initializing status-dropdowns:', error);
+    }
 
-handleIssueNameEdit();
-console.log('edit-issue-name.js loaded');
+    try {
+        initializePriorityDropdowns(document.querySelectorAll('.priority-dropdown'));
+        console.log('priority-dropdowns.js initialized');
+    } catch (error) {
+        console.error('Error initializing priority-dropdowns:', error);
+    }
 
-console.log('End of script');
+    try {
+        initializeDatePicker(document.querySelectorAll('.datepicker'));
+        console.log('datepicker.js initialized');
+    } catch (error) {
+        console.error('Error initializing datepicker:', error);
+    }
+
+    try {
+        handleIssueNameEdit(document.querySelectorAll('.issue-name'));
+        console.log('edit-issue-name.js initialized');
+    } catch (error) {
+        console.error('Error initializing edit-issue-name:', error);
+    }
+}

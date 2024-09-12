@@ -45,14 +45,14 @@ class Issue
     #[ORM\JoinTable(name: 'issue_tag')]
     private $tags;
 
+
     public function getStatusColor(): string
     {
         return match ($this->status) {
-            'Completed' => '#DAF7A6',
-            'In Progress' => '#FFC300',
-            'Blocked' => '#900C3F',
+            'Completed' => '#46c965',
+            'In Progress' => '#e3d324',
+            'Blocked' => '#f12436',
             'Not Started' => '#29a5d1',
-            default => '#007bff',
         };
     }
 
@@ -182,4 +182,5 @@ class Issue
         $this->project = $project;
         return $this;
     }
+
 }

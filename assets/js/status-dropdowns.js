@@ -6,13 +6,13 @@ export default function initializeStatusDropdowns() {
 
         switch (selectedStatus) {
             case 'Completed':
-                backgroundColor = '#DAF7A6'; // Completed
+                backgroundColor = '#46c965'; // Completed
                 break;
             case 'In Progress':
-                backgroundColor = '#FFC300'; // In Progress
+                backgroundColor = '#e3d324'; // In Progress
                 break;
             case 'Cancelled':
-                backgroundColor = '#900C3F'; // Blocked
+                backgroundColor = '#f12436'; // Blocked
                 break;
             case 'To DO':
                 backgroundColor = '#29a5d1'; // Not Started

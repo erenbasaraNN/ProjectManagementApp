@@ -59,12 +59,12 @@
                                     </td>
 
                                     <td>
-                                        <select class="priority-dropdown" data-id="{{ issue.id }}">
-                                            <option value="Düşük" {% if issue.priority == 'Düşük' %}selected{% endif %} class="priority-low">Düşük</option>
-                                            <option value="Orta" {% if issue.priority == 'Orta' %}selected{% endif %} class="priority-medium">Orta</option>
-                                            <option value="Yüksek" {% if issue.priority == 'Yüksek' %}selected{% endif %} class="priority-high">Yüksek</option>
-                                        </select>
+                                        <div class="priority-tagify-container">
+                                            <input class="priority-tagify" name="priority" data-id="{{ issue.id }}" value="{{ issue.priority }}" placeholder="Öncelik seç...">
+                                        </div>
                                     </td>
+
+
 
                                 </tr>
                             {% endfor %}

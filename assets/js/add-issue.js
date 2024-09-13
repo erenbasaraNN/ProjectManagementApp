@@ -1,6 +1,6 @@
 import initializeTagify from "./tagify";
 import {initializeStatusDropdowns} from "./status-dropdowns";
-import initializePriorityDropdowns from "./priority-dropdowns";
+import {initializePriorityDropdowns} from "./priority-dropdowns";
 import initializeDatePicker from "./datepicker";
 import handleIssueNameEdit from "./edit-issue-name";
 

@@ -746,6 +746,31 @@ body.hidden {
     cursor: pointer;
 }
 
+.priority-tagify-container .tagify__input {
+    display: none; /* Hide the text input part of Tagify */
+}
+
+.priority-tagify-container .tagify__tag {
+    border: none; /* No border around the tag */
+    padding: 5px 5px; /* Adjust padding to look like a dropdown */
+    color: white;
+    background-color: #6c757d;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.priority-tagify-container .tagify__dropdown {
+    border: 1px solid #ccc; /* Border for the dropdown */
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.priority-tagify-container .tagify__dropdown__item {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
 
 .update-item {
     padding: 10px;

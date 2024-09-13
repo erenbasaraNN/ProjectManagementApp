@@ -1,9 +1,10 @@
 import initializeAddIssue from "./add-issue";
 import initializeTagify from "./tagify";
 import {initializeStatusDropdowns} from "./status-dropdowns";
-import initializePriorityDropdowns from "./priority-dropdowns";
+import {initializePriorityDropdowns} from "./priority-dropdowns";
 import initializeDatePicker from "./datepicker";
 import handleIssueNameEdit from "./edit-issue-name";
+import initializeGroupAdd from "./group-add";
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed.');
@@ -50,5 +51,12 @@ function initializeAll() {
         console.log('edit-issue-name.js initialized');
     } catch (error) {
         console.error('Error initializing edit-issue-name:', error);
+    }
+
+    try {
+        initializeGroupAdd();
+        console.log('group-add.js initialized');
+    } catch (error) {
+        console.error('Error initializing group-add:', error);
     }
 }

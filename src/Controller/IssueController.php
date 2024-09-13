@@ -161,6 +161,27 @@ final class IssueController extends AbstractController
         return new JsonResponse(['status' => 'error', 'message' => 'Invalid date'], 400);
     }
 
+    #[Route('/api/issue/{id}/description', name: 'api_issue_description_get', methods: ['GET'])]
+    public function getDescription(Issue $issue): JsonResponse
+    {
+        return new JsonResponse(['description' => $issue->getDescription()]);
+    }
+
+    #[Route('/api/issue/{id}/description', name: 'api_issue_description_post', methods: ['POST'])]
+    public function saveDescription(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (isset($data['description'])) {
+            $issue->setDescription($data['description']);
+            $entityManager->flush();
+
+            return new JsonResponse(['status' => 'success']);
+        }
+
+        return new JsonResponse(['status' => 'error', 'message' => 'Invalid description'], 400);
+    }
+
 
 
 

@@ -5,6 +5,7 @@ import {initializePriorityDropdowns} from "./priority-dropdowns";
 import initializeDatePicker from "./datepicker";
 import handleIssueNameEdit from "./edit-issue-name";
 import initializeGroupAdd from "./group-add";
+import { initializeIssueModal } from './issueModal.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed.');
@@ -58,5 +59,12 @@ function initializeAll() {
         console.log('group-add.js initialized');
     } catch (error) {
         console.error('Error initializing group-add:', error);
+    }
+
+    try {
+        initializeIssueModal();
+        console.log('issueModal.js initialized');
+    } catch (error) {
+        console.error('Error initializing issueModal:', error);
     }
 }

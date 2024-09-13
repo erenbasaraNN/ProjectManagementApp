@@ -46,15 +46,14 @@
                                     </td>
 
                                     <td>
-                                        <div class="dropdown-container">
-                                            <select class="status-dropdown" data-id="{{ issue.id }}">
-                                                <option value="To DO" {% if issue.status == 'To DO' %}selected{% endif %} class="status-not-started">Başlanacak</option>
-                                                <option value="In Progress" {% if issue.status == 'In Progress' %}selected{% endif %} class="status-in-progress">Aktif Durumda</option>
-                                                <option value="Completed" {% if issue.status == 'Completed' %}selected{% endif %} class="status-completed">Tamamlandı</option>
-                                                <option value="Cancelled" {% if issue.status == 'Cancelled' %}selected{% endif %} class="status-canceled">İptal</option>
-                                            </select>
+                                        <div class="status-tagify-container">
+                                            <!-- Tagify Input for Status -->
+                                            <input class="status-tagify" name="status" data-id="{{ issue.id }}"
+                                                   value="{{ issue.status }}" placeholder="Durum seç...">
                                         </div>
                                     </td>
+
+
                                     <td>
                                         <input type="text" class="datepicker" data-id="{{ issue.id }}" value="{{ issue.endDate ? issue.endDate|date('d M Y') : 'No Deadline' }}">
                                     </td>

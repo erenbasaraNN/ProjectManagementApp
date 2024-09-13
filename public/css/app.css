@@ -377,7 +377,7 @@ h1, h2 {
     font-size: 16px;
     font-weight: bold;
 }
-.tagify__tag {
+.user-list .tagify__tag {
     background-color: var(--tag-bg, #ccc);}
 span.tagify__input {
     min-width: 20px;
@@ -709,6 +709,43 @@ body.hidden {
     font-size: 24px;
     cursor: pointer;
 }
+
+/* Apply styles only inside .status-tagify-container */
+.status-tagify-container .status-tagify {
+    border: none; /* Hide the input border */
+    background-color: inherit !important; /* Ensure the inline style takes precedence */
+    cursor: pointer; /* Indicate that this is a clickable element */
+}
+
+.status-tagify-container .tagify__input {
+    display: none; /* Hide the text input part of Tagify */
+}
+
+.status-tagify-container .tagify__tag {
+    border: none; /* No border around the tag */
+    padding: 5px 5px; /* Adjust padding to look like a dropdown */
+    color: white;
+    background-color: #6c757d;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color 0.3s ease-in-out;
+}
+.tagify__tag>div {
+     color: white;
+    font-weight: 500;
+ }
+
+.status-tagify-container .tagify__dropdown {
+    border: 1px solid #ccc; /* Border for the dropdown */
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.status-tagify-container .tagify__dropdown__item {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
 
 .update-item {
     padding: 10px;

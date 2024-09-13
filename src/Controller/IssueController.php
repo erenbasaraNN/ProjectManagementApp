@@ -55,19 +55,15 @@ final class IssueController extends AbstractController
     #[Route('/issue/{id}/edit-status', name: 'edit_issue_status', methods: ['POST'])]
     public function editStatus(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        // Retrieve the data from the request
         $data = json_decode($request->getContent(), true);
 
-        // Check if 'status' is provided in the request
-        if (!isset($data['status'])) {
-            return new JsonResponse(['success' => false, 'error' => 'Status not provided'], 400);
+        if (empty($data['status'])) {
+            return new JsonResponse(['success' => false, 'error' => 'Status cannot be empty'], 400);
         }
 
-        // Update the status of the issue
         $newStatus = $data['status'];
         $issue->setStatus($newStatus);
 
-        // Save the updated issue
         try {
             $entityManager->persist($issue);
             $entityManager->flush();
@@ -77,6 +73,8 @@ final class IssueController extends AbstractController
             return new JsonResponse(['success' => false, 'error' => 'Failed to update status'], 500);
         }
     }
+
+
 
     #[Route('/issue/{id}/edit-priority', name: 'edit_issue_priority', methods: ['POST'])]
     public function editPriority(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse

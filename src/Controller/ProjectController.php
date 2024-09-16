@@ -48,7 +48,7 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    #[Route('/project/{id}', name: 'project_show')]
+    #[Route('/{id}', name: 'project_show')]
     public function show(Project $project, EntityManagerInterface $entityManager): Response
     {
         // Get all tags associated with the project
@@ -74,7 +74,18 @@ final class ProjectController extends AbstractController
                     'id' => $tag->getId(),
                     'name' => $tag->getName(),
                     'color' => $tag->getColor(),
-                    'issues' => $issues,
+                    'issues' => array_map(function (Issue $issue) {
+                        return [
+                            'id' => $issue->getId(),
+                            'name' => $issue->getName(),
+                            'status' => $issue->getStatus(),
+                            'priority' => $issue->getPriority(),
+                            'endDate' => $issue->getEndDate() ? $issue->getEndDate()->format('d M Y') : 'No Deadline',
+                            'description' => $issue->getDescription(),
+                            'assignees' => $issue->getAssignees()->map(fn($user) => $user->getName())->toArray(),
+                            'postIts' => $issue->getPostIts()->map(fn($postIt) => $postIt->getContent())->toArray(),
+                        ];
+                    }, $issues),
                 ];
             }
         }

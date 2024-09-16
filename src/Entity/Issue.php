@@ -58,15 +58,45 @@ class Issue
     #[ORM\Column(type: 'boolean')]
     private $isArchived = false;
 
+    #[ORM\OneToMany(mappedBy: 'issue', targetEntity: PostIt::class, cascade: ['persist', 'remove'])]
+    private Collection $postIts;
+
     public function __construct()
     {
         // Initialize the assignees property with an ArrayCollection
         $this->assignees = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->postIts = new ArrayCollection();
     }
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function getPostIts(): Collection
+    {
+        return $this->postIts;
+    }
+
+    public function addPostIt(PostIt $postIt): self
+    {
+        if (!$this->postIts->contains($postIt)) {
+            $this->postIts->add($postIt);
+            $postIt->setIssue($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostIt(PostIt $postIt): self
+    {
+        if ($this->postIts->removeElement($postIt)) {
+            // set the owning side to null (unless already changed)
+            if ($postIt->getIssue() === $this) {
+                $postIt->setIssue(null);
+            }
+        }
+
+        return $this;
     }
 
     public function getIsArchived(): ?bool

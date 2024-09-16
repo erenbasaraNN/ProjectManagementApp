@@ -4,11 +4,13 @@ body {
     background-color: #f5f5f5;
     margin: 0;
     padding: 0;
+    color: #333;
+    line-height: 1.6;
 }
 
 h1, h2 {
-    color: #333;
-    margin: 0;
+    margin: 0 0 20px;
+    color: #ccdff9;
 }
 
 img.logo {
@@ -23,11 +25,13 @@ img.logo {
     top: 0;
     justify-content: space-between;
     align-items: center;
-    background-color: #d2e7ff;
+    background-color: #2c3e50;
     padding: 10px 20px;
     color: white;
     height: 80px;
     z-index: 1001; /* Higher z-index to sit above modal */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
 
 }
 
@@ -49,7 +53,7 @@ img.logo {
 .user-circle {
     width: 40px;
     height: 40px;
-    background-color: #ffc107;
+    background-color: #3498db;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -60,45 +64,45 @@ img.logo {
 }
 
 .user-name-nav{
-    color: #6f42c1;
+    color: #ecf0f1;
     font-weight: bold;
     margin-right: 15px;
 }
 
 .logout-btn {
     color: white;
-    background-color: #dc3545;
-    padding: 5px 10px;
-    border-radius: 3px;
+    background-color: #e74c3c;
+    padding: 8px 15px;
+    border-radius: 4px;
     text-decoration: none;
+    transition: background-color 0.3s ease;
 }
 
 .logout-btn:hover {
-    background-color: #c82333;
+    background-color: #c0392b;
 }
 
 /* Sidebar and Main Layout */
 .main-layout {
     display: flex;
-    min-height: 100vh;
+    min-height: calc(100vh - 60px);
 }
 
 /* Sidebar container styling */
 .sidebar {
     width: 250px;
-    background-color: #f4f5f7;
+    background-color: #34495e;
     padding: 20px;
     border-right: 1px solid #e3e4e6;
     height: auto;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    font-family: 'Arial', sans-serif;
 }
 
 /* Sidebar header styling */
 .sidebar h2 {
     font-size: 20px;
     font-weight: 600;
-    color: #333;
+    color: #ecf0f1;
     margin-bottom: 20px;
     padding-left: 5px;
 }
@@ -106,7 +110,7 @@ img.logo {
 .sidebar .title-sidebar {
     font-size: 20px;
     font-weight: 600;
-    color: #333;
+    color: #ecf0f1;
     margin-bottom: 20px;
     padding-left: 5px;
     text-decoration: none;
@@ -128,10 +132,10 @@ img.logo {
 .sidebar ul li a {
     text-decoration: none;
     font-size: 16px;
-    color: #4a4a4a;
+    color: #bdc3c7;
     padding: 10px;
     display: block;
-    border-radius: 8px;
+    border-radius: 4px;
     transition: background-color 0.3s, color 0.3s;
 }
 
@@ -144,7 +148,7 @@ img.logo {
 
 /* Active link styling */
 .sidebar ul li a.active {
-    background-color: #007bff;
+    background-color: #2980b9;
     color: white;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
@@ -152,7 +156,7 @@ img.logo {
 /* Button to add a new project */
 .new-project-btn {
     display: inline-block;
-    background-color: #28a745;
+    background-color: #27ae60;
     color: white;
     font-size: 14px;
     padding: 10px 15px;
@@ -163,7 +167,8 @@ img.logo {
 
 /* Hover and click effect for new project button */
 .new-project-btn:hover {
-    background-color: #218838;
+    background-color: #2ecc71;
+    transform: translateY(-2px);
 }
 
 .new-project-btn:active {
@@ -177,7 +182,6 @@ img.logo {
     padding: 20px;
     background-color: #ffffff;
     border-left: 1px solid #ddd;
-    justify-content: center;
 }
 
 table {
@@ -304,7 +308,6 @@ table tr:nth-child(even) {
 }
 
 h1, h2 {
-    color: #333;
     margin: 0;
 }
 .project-header {
@@ -320,6 +323,7 @@ h1, h2 {
 .project-header h1 {
     font-size: 32px;
     margin: 0;
+    color: #2c3e50;
 }
 
 
@@ -331,6 +335,7 @@ h1, h2 {
 /* Group Headers */
 .group {
     margin-bottom: 80px;
+    flex: 1;
 }
 .group-header {
     padding: 10px;
@@ -340,11 +345,12 @@ h1, h2 {
     border-left-width: 5px;
     border-left-style: solid;
     margin-bottom: 10px;
+    color: #2c3e50;
 }
 
 /* Issue Table */
 .issue-table {
-    width: 100%;
+    width: 110%;
     border-collapse: collapse;
     margin-bottom: 20px;
     background-color: #fff;
@@ -475,13 +481,13 @@ h1, h2 {
 .user-list .tagify__tag {
     background-color: var(--tag-bg, #ccc);}
 span.tagify__input {
-    min-width: 20px;
+    min-width: 3px;
     padding: 0;
     margin: 0;
 }
 
 span.tagify__input:focus {
-    min-width: 110px;
+    min-width: 5px;
     margin: 5px;
     padding: var(--tag-pad);
 
@@ -524,7 +530,19 @@ span.tagify__input:focus {
 
 
 .datepicker {
-    width: 200px;
+    width: 150px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #2c3e50;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #f8f8f8;
+    transition: border-color 0.3s ease;
+    text-align: center;
+
+    /* Optional shadow for styling */
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
 }
 /* Container for the dropdown */
 .dropdown-container {
@@ -809,11 +827,12 @@ body.hidden {
     border-radius: 4px;
     font-size: 16px;
     transition: background-color 0.3s ease-in-out;
+    width: 145px;
 }
 .tagify__tag>div {
-     color: white;
+    color: white;
     font-weight: 500;
- }
+}
 
 .status-tagify-container .tagify__dropdown {
     border: 1px solid #ccc; /* Border for the dropdown */
@@ -838,6 +857,7 @@ body.hidden {
     border-radius: 4px;
     font-size: 16px;
     transition: background-color 0.3s ease-in-out;
+    width: 85px ;
 }
 
 .priority-tagify-container .tagify__dropdown {
@@ -868,99 +888,118 @@ body.hidden {
     padding: 5px 0;
 }
 
-/* Modal Background */
-#issueModal .modal {
-    position: fixed; /* Fixed position to cover the entire viewport */
-    top: 0; /* Align to the top */
-    right: 0; /* Align to the right */
-    width: 400px; /* Fixed width for the modal */
-    height: 100%; /* Full height */
-    background-color: rgba(255, 255, 255, 0.9); /* Light background with slight transparency */
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3); /* Shadow to create a floating effect */
-    z-index: 1000; /* High z-index to sit above other elements */
-    display: flex; /* Flexbox for layout */
-    flex-direction: column; /* Column layout */
-    justify-content: flex-start; /* Start from the top */
-    padding: 20px; /* Padding inside the modal */
+/* Issue Modal styles */
+#issueModal.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* Modal Content */
-/* Modal Background */
-#issueModal {
-    display: none; /* Initially hidden */
-    position: fixed; /* Fixed position */
-    top: 60px; /* Align to the top of the viewport */
-    right: 0 !important; /* Align to the right side */
-    left: auto;
-    width: 420px; /* Width of the modal */
-    height: 100%; /* Full height of the viewport */
-    background-color: rgba(255, 255, 255, 0.9); /* Slight transparency */
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3); /* Shadow on the left for the right-aligned modal */
-    z-index: 1000; /* High z-index to appear above other elements */
-    overflow-y: auto; /* Allow scrolling inside the modal if content exceeds viewport height */
-}
-
-
-
-
-/* Modal Content */
 #issueModal .modal-content {
-    display: flex; /* Flexbox for content */
-    flex-direction: column; /* Stack children vertically */
-    height: 100%; /* Full height to stretch across the modal */
-    padding: 30px; /* Increased padding inside the modal content */
-    box-sizing: border-box; /* Include padding in height/width calculations */
+    background-color: #f8f9fa;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Close Button */
 #issueModal .close {
-    align-self: flex-end; /* Align to the right */
-    cursor: pointer; /* Pointer cursor for clickable item */
-    font-size: 24px; /* Font size for close button */
-    color: #333; /* Color for the close button */
-    margin-bottom: 15px; /* Space below the close button */
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
-/* Title Style */
+#issueModal .close:hover,
+#issueModal .close:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+/* Form elements */
 #issueModal h2 {
-    margin-top: 15px;
-    font-size: 24px; /* Font size for the title */
-    color: #333; /* Dark color for title */
+    margin-top: 0;
+    color: #333;
 }
 
-/* Textarea Style */
 #issueModal textarea {
-    resize: none; /* Disable resizing */
-    border: 1px solid #ccc; /* Light border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px; /* Padding inside textarea */
-    margin-top: 10px; /* Space above textarea */
-    font-size: 16px; /* Font size for textarea */
-    outline: none; /* Remove outline */
-    transition: border-color 0.3s; /* Smooth transition for border color */
-    width: 100%; /* Full width for textarea */
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
 }
 
-/* Textarea Focus Style */
-#issueModal textarea:focus {
-    border-color: #669d09; /* Change border color on focus */
-}
-
-/* Button Style */
 #issueModal button {
-    margin-top: 20px; /* Space above button */
-    padding: 10px 15px; /* Padding inside button */
-    background-color: #669d09; /* Green background */
-    color: white; /* White text color */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor for button */
-    transition: background-color 0.3s; /* Smooth transition for background color */
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/* Button Hover Style */
 #issueModal button:hover {
-    background-color: #5a8d07; /* Darker shade on hover */
+    background-color: #0056b3;
+}
+
+/* Post-it section */
+#issueModal #post-it-section {
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#issueModal .post-it {
+    background-color: #ffeeba;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#issueModal .post-it p {
+    margin: 0 0 10px 0;
+}
+
+#issueModal .post-it small {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+#issueModal .post-it button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    font-size: 0.8em;
+}
+
+#issueModal .edit-postit-btn {
+    background-color: #6c757d;
+}
+
+#issueModal .delete-postit-btn {
+    background-color: #dc3545;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    #issueModal .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
 }
 
 .archive-button-container {

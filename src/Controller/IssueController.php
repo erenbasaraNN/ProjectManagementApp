@@ -2,10 +2,15 @@
 
 namespace App\Controller;
 
+use AllowDynamicProperties;
 use App\Entity\Issue;
+use App\Entity\PostIt;
+use App\Repository\IssueRepository;
+use App\Repository\PostItRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,13 +19,18 @@ use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-final class IssueController extends AbstractController
+#[AllowDynamicProperties] final class IssueController extends AbstractController
 {
     private $csrfTokenManager;
+    private $issueRepository;
+    private $postItRepository;
 
-    public function __construct(CsrfTokenManagerInterface $csrfTokenManager)
+    public function __construct(CsrfTokenManagerInterface $csrfTokenManager,EntityManagerInterface $entityManager, IssueRepository $issueRepository, PostItRepository $postItRepository)
     {
         $this->csrfTokenManager = $csrfTokenManager;
+        $this->entityManager = $entityManager;
+        $this->issueRepository = $issueRepository;
+        $this->postItRepository = $postItRepository;
     }
 
     #[Route('/issue/{id}/edit-name', name: 'edit_issue_name', methods: ['POST'])]
@@ -168,6 +178,7 @@ final class IssueController extends AbstractController
         return new JsonResponse(['description' => $issue->getDescription()]);
     }
 
+
     #[Route('/api/issue/{id}/description', name: 'api_issue_description_post', methods: ['POST'])]
     public function saveDescription(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -182,6 +193,30 @@ final class IssueController extends AbstractController
 
         return new JsonResponse(['status' => 'error', 'message' => 'Invalid description'], 400);
     }
+
+    #[Route('/api/issue/{id}/data', name: 'api_issue_data', methods: ['GET'])]
+    public function getIssueData(Issue $issue, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $postIts = $entityManager->getRepository(PostIt::class)
+            ->findBy(['issue' => $issue]);
+
+        $postItData = array_map(function ($postIt) {
+            return [
+                'id' => $postIt->getId(),
+                'content' => $postIt->getContent(),
+                'createdBy' => $postIt->getCreatedBy()->getName(),
+                'createdAt' => $postIt->getCreatedAt()->format('c'),
+            ];
+        }, $postIts);
+
+        return new JsonResponse([
+            'description' => $issue->getDescription(),
+            'postIts' => $postItData,
+        ]);
+    }
+
+
+
     #[Route('/project/{projectId}/add-issue', name: 'add_issue', methods: ['POST'])]
     public function addIssue(int $projectId, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -232,7 +267,56 @@ final class IssueController extends AbstractController
         return $this->redirect($referer ?: $this->generateUrl('issue_list'));
     }
 
+    #[Route('/issues/{issueId}/postits', name: 'issue_postit_add', methods: ['POST'])]
+    public function addPostIt(int $issueId, Request $request): JsonResponse
+    {
+        $issue = $this->issueRepository->find($issueId);
+        $content = $request->request->get('content');
 
+        $postIt = new PostIt();
+        $postIt->setContent($content);
+        $postIt->setCreatedBy($this->getUser());
+        $postIt->setIssue($issue);
+
+        $this->entityManager->persist($postIt);
+        $this->entityManager->flush();
+
+        return new JsonResponse(['status' => 'PostIt added']);
+    }
+
+    // Edit Post-It
+    #[Route('/postits/{postItId}/edit', name: 'postit_edit', methods: ['POST'])]
+    public function editPostIt(int $postItId, Request $request): JsonResponse
+    {
+        $postIt = $this->postItRepository->find($postItId);
+
+        if ($postIt->getCreatedBy() !== $this->getUser()) {
+            throw new AccessDeniedException('You do not have permission to edit this post-it');
+        }
+
+        $content = $request->request->get('content');
+        $postIt->setContent($content);
+
+        $this->entityManager->flush();
+
+        return new JsonResponse(['status' => 'PostIt updated']);
+    }
+
+    // Delete Post-It
+    #[Route('/postits/{postItId}/delete', name: 'postit_delete', methods: ['DELETE'])]
+    public function deletePostIt(int $postItId): JsonResponse
+    {
+        $postIt = $this->postItRepository->find($postItId);
+
+        if ($postIt->getCreatedBy() !== $this->getUser()) {
+            throw new AccessDeniedException('You do not have permission to delete this post-it');
+        }
+
+        $this->entityManager->remove($postIt);
+        $this->entityManager->flush();
+
+        return new JsonResponse(['status' => 'PostIt deleted']);
+    }
 
 
 }

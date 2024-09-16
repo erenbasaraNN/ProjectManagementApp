@@ -1,5 +1,5 @@
 /* General page layout */
-.container {
+#project .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
@@ -7,7 +7,7 @@
 }
 
 /* Page title */
-h1 {
+#project h1 {
     color: #333;
     font-size: 28px;
     margin-bottom: 30px;
@@ -16,7 +16,7 @@ h1 {
 }
 
 /* Form styles */
-form {
+#project form {
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -25,9 +25,9 @@ form {
 }
 
 /* Form input fields */
-form input[type="text"],
-form input[type="email"],
-form textarea {
+#project form input[type="text"],
+#project  input[type="email"],
+#project form textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -37,7 +37,7 @@ form textarea {
 }
 
 /* Form labels */
-form label {
+#project form label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
@@ -45,7 +45,7 @@ form label {
 }
 
 /* Submit button */
-form button[type="submit"] {
+#project form button[type="submit"] {
     background-color: #007bff;
     color: white;
     border: none;
@@ -56,12 +56,12 @@ form button[type="submit"] {
     transition: background-color 0.3s;
 }
 
-form button[type="submit"]:hover {
+#project form button[type="submit"]:hover {
     background-color: #0056b3;
 }
 
 /* Back to list link */
-.back-link {
+#project .back-link {
     display: inline-block;
     margin-bottom: 20px;
     color: #007bff;
@@ -70,11 +70,11 @@ form button[type="submit"]:hover {
     transition: color 0.3s;
 }
 
-.back-link:hover {
+#project .back-link:hover {
     color: #0056b3;
     text-decoration: underline;
 }
-.delete-project-btn {
+#project .delete-project-btn {
     display: inline-block;
     background-color: #cb2b2b;
     color: white;
@@ -86,11 +86,11 @@ form button[type="submit"]:hover {
 }
 
 /* Hover and click effect for new project button */
-.delete-project-btn:hover {
+#project .delete-project-btn:hover {
     background-color: #882121;
 }
 
-.delete-project-btn:active {
+#project .delete-project-btn:active {
     transform: scale(0.98);
 }
 
@@ -105,5 +105,20 @@ form button[type="submit"]:hover {
     margin-bottom: 10px;
 }
 #project_startDate {
+    margin-bottom: 20px;
+}
+
+#post-it-section button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+}
+#addPostItButton {
     margin-bottom: 20px;
 }

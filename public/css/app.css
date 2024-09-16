@@ -19,11 +19,16 @@ img.logo {
 /* Navbar */
 .navbar {
     display: flex;
+    position: sticky;
+    top: 0;
     justify-content: space-between;
     align-items: center;
     background-color: #d2e7ff;
     padding: 10px 20px;
     color: white;
+    height: 80px;
+    z-index: 1001; /* Higher z-index to sit above modal */
+
 }
 
 .navbar-left {
@@ -83,6 +88,9 @@ img.logo {
     background-color: #f8f9fa;
     padding: 20px;
     border-right: 1px solid #ddd;
+    position: sticky;
+    right: 0;
+    top:60px;
 }
 
 .sidebar h2 {
@@ -93,6 +101,8 @@ img.logo {
     list-style-type: none;
     padding: 0;
     margin-top: 20px;
+    position: sticky;
+    top: 60px;
 }
 
 .sidebar ul li {
@@ -525,7 +535,7 @@ span.tagify__input:focus {
 }
 
 /* The modal container */
-.modal {
+#add-group-modal {
     position: fixed; /* Stay in place */
     z-index: 1000; /* Sit on top */
     left: 0;
@@ -540,7 +550,7 @@ span.tagify__input:focus {
 }
 
 /* Modal content box */
-.modal-content {
+#add-group-modal .modal-content {
     background-color: #fff;
     border-radius: 8px;
     padding: 20px;
@@ -554,7 +564,7 @@ span.tagify__input:focus {
 }
 
 /* Close button (top-right corner) */
-.close-modal {
+#add-group-modal .close-modal {
     position: absolute;
     right: 15px;
     top: 10px;
@@ -566,35 +576,35 @@ span.tagify__input:focus {
     background: none;
 }
 
-.close-modal:hover {
+#add-group-modal .close-modal:hover {
     color: #f00;
 }
 
 /* Modal header */
-.modal h2 {
+#add-group-modal .modal h2 {
     margin-top: 0;
     font-size: 20px;
     color: #333;
 }
 
 /* Modal form styling */
-.modal-content form {
+#add-group-modal .modal-content form {
     display: flex;
     flex-direction: column;
 }
 
-.modal-content form .form-group {
+#add-group-modal .modal-content form .form-group {
     margin-bottom: 15px;
 }
 
-.modal-content form label {
+#add-group-modal .modal-content form label {
     font-weight: bold;
     color: #333;
     margin-bottom: 5px;
 }
 
-.modal-content form input[type="text"],
-.modal-content form input[type="color"] {
+#add-group-modal .modal-content form input[type="text"],
+#add-group-modal .modal-content form input[type="color"] {
     width: 100%;
     padding: 8px;
     font-size: 14px;
@@ -604,7 +614,7 @@ span.tagify__input:focus {
 }
 
 /* Submit button styling */
-.modal-content form button {
+#add-group-modal .modal-content form button {
     background-color: #007bff;
     color: white;
     border: none;
@@ -615,7 +625,7 @@ span.tagify__input:focus {
     transition: background-color 0.3s ease-in-out;
 }
 
-.modal-content form button:hover {
+#add-group-modal .modal-content form button:hover {
     background-color: #0056b3;
 }
 
@@ -659,21 +669,6 @@ span.tagify__input:focus {
     cursor: pointer;
     margin-bottom: 20px;
 }
-/* Fullscreen loading screen */
-#loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: white;
-    z-index: 9999; /* Make sure it's on top of everything */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    color: #333;
-}
 
 /* Hide the main content */
 body.hidden {
@@ -685,7 +680,7 @@ body.hidden {
 }
 
 /* Basic modal styling */
-.modal-update {
+#add-group-modal .modal-update {
     display: none;
     position: fixed;
     z-index: 1000;
@@ -696,7 +691,7 @@ body.hidden {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-content-update {
+#add-group-modal .modal-content-update {
     background-color: #fefefe;
     margin: 5% auto;
     padding: 20px;
@@ -704,7 +699,7 @@ body.hidden {
     width: 60%;
 }
 
-.close-modal {
+#add-group-modal .close-modal {
     float: right;
     font-size: 24px;
     cursor: pointer;
@@ -788,38 +783,98 @@ body.hidden {
     padding: 5px 0;
 }
 
+/* Modal Background */
 #issueModal .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    position: fixed; /* Fixed position to cover the entire viewport */
+    top: 0; /* Align to the top */
+    right: 0; /* Align to the right */
+    width: 400px; /* Fixed width for the modal */
+    height: 100%; /* Full height */
+    background-color: rgba(255, 255, 255, 0.9); /* Light background with slight transparency */
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3); /* Shadow to create a floating effect */
+    z-index: 1000; /* High z-index to sit above other elements */
+    display: flex; /* Flexbox for layout */
+    flex-direction: column; /* Column layout */
+    justify-content: flex-start; /* Start from the top */
+    padding: 20px; /* Padding inside the modal */
 }
 
+/* Modal Content */
+/* Modal Background */
+#issueModal {
+    display: none; /* Initially hidden */
+    position: fixed; /* Fixed position */
+    top: 60px; /* Align to the top of the viewport */
+    right: 0 !important; /* Align to the right side */
+    left: auto;
+    width: 420px; /* Width of the modal */
+    height: 100%; /* Full height of the viewport */
+    background-color: rgba(255, 255, 255, 0.9); /* Slight transparency */
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3); /* Shadow on the left for the right-aligned modal */
+    z-index: 1000; /* High z-index to appear above other elements */
+    overflow-y: auto; /* Allow scrolling inside the modal if content exceeds viewport height */
+}
+
+
+
+/* Modal Content */
 #issueModal .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
+    display: flex; /* Flexbox for content */
+    flex-direction: column; /* Stack children vertically */
+    height: 100%; /* Full height to stretch across the modal */
+    padding: 30px; /* Increased padding inside the modal content */
+    box-sizing: border-box; /* Include padding in height/width calculations */
 }
 
+/* Close Button */
 #issueModal .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+    align-self: flex-end; /* Align to the right */
+    cursor: pointer; /* Pointer cursor for clickable item */
+    font-size: 24px; /* Font size for close button */
+    color: #333; /* Color for the close button */
+    margin-bottom: 15px; /* Space below the close button */
 }
 
-#issueModal .close:hover,
-#issueModal .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+/* Title Style */
+#issueModal h2 {
+    margin-top: 15px;
+    font-size: 24px; /* Font size for the title */
+    color: #333; /* Dark color for title */
+}
+
+/* Textarea Style */
+#issueModal textarea {
+    resize: none; /* Disable resizing */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Padding inside textarea */
+    margin-top: 10px; /* Space above textarea */
+    font-size: 16px; /* Font size for textarea */
+    outline: none; /* Remove outline */
+    transition: border-color 0.3s; /* Smooth transition for border color */
+    width: 100%; /* Full width for textarea */
+}
+
+/* Textarea Focus Style */
+#issueModal textarea:focus {
+    border-color: #669d09; /* Change border color on focus */
+}
+
+/* Button Style */
+#issueModal button {
+    margin-top: 20px; /* Space above button */
+    padding: 10px 15px; /* Padding inside button */
+    background-color: #669d09; /* Green background */
+    color: white; /* White text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor for button */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+/* Button Hover Style */
+#issueModal button:hover {
+    background-color: #5a8d07; /* Darker shade on hover */
 }
 
 

@@ -35,57 +35,59 @@ function getInitials(name) {
 }
 
 // Initialize Tagify with user-specific colors and initials
-export default function initializeTagify() {
-    document.querySelectorAll('.tagify-input').forEach(function(input) {
-        fetch('/users')  // Fetch the list of users from the server
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(function(whitelist) {
-                const tagify = new Tagify(input, {
-                    whitelist: whitelist.map(user => ({
-                        value: user.name,
-                        color: user.color // Use the user’s predefined color
-                    })),
-                    dropdown: {
-                        position: "text",
-                        enabled: 0
-                    },
-                    // Customize the tag template to display initials with color
-                    templates: {
-                        tag: function(tagData) {
-                            const initials = getInitials(tagData.value);
-                            const color = tagData.color || '#000000'; // Fallback to black if no color is provided
-                            return `
-                                <tag title="${tagData.value}" contenteditable="false" spellcheck="false" tabIndex="-1" class="tagify__tag tagify__tag--circle" style="--tag-bg:${color};">
-                                    <span class="tagify__tag-text" style="color: white;">
-                                        ${initials}
-                                    </span>
-                                </tag>
-                            `;
+export default function initializeTagify(input) {
+    const inputs = input ? [input] : document.querySelectorAll('.tagify-input');
+    inputs.forEach(function(input) {
+        if (!input.classList.contains('tagify-initialized')) {
+            fetch('/users')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(function(whitelist) {
+                    const tagify = new Tagify(input, {
+                        whitelist: whitelist.map(user => ({
+                            value: user.name,
+                            color: user.color
+                        })),
+                        dropdown: {
+                            position: "text",
+                            enabled: 0
+                        },
+                        templates: {
+                            tag: function(tagData) {
+                                const initials = getInitials(tagData.value);
+                                const color = tagData.color || '#000000';
+                                return `
+                                    <tag title="${tagData.value}" contenteditable="false" spellcheck="false" tabIndex="-1" class="tagify__tag tagify__tag--circle" style="--tag-bg:${color};">
+                                        <span class="tagify__tag-text" style="color: white;">
+                                            ${initials}
+                                        </span>
+                                    </tag>
+                                `;
+                            }
                         }
-                    }
-                });
+                    });
 
-                // Handle changes to update assignees
-                tagify.on('change', function(e) {
-                    const issueId = input.dataset.id;
-                    const assignees = e.detail.tagify.value.map(tag => tag.value);
-                    updateIssueAssignees(issueId, assignees);
+                    tagify.on('change', function(e) {
+                        const issueId = input.dataset.id;
+                        const assignees = e.detail.tagify.value.map(tag => tag.value);
+                        updateIssueAssignees(issueId, assignees);
+                    });
+
+                    input.classList.add('tagify-initialized');
+                })
+                .catch(error => {
+                    console.error('Error initializing Tagify:', error);
+                    new Tagify(input, {
+                        dropdown: {
+                            position: "text",
+                            enabled: 0
+                        }
+                    });
                 });
-            })
-            .catch(error => {
-                console.error('Error initializing Tagify:', error);
-                // Fallback to initialize Tagify without the whitelist
-                new Tagify(input, {
-                    dropdown: {
-                        position: "text",
-                        enabled: 0
-                    }
-                });
-            });
+        }
     });
 }

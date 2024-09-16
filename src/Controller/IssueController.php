@@ -181,6 +181,24 @@ final class IssueController extends AbstractController
 
         return new JsonResponse(['status' => 'error', 'message' => 'Invalid description'], 400);
     }
+    #[Route('/project/{projectId}/add-issue', name: 'add_issue', methods: ['POST'])]
+    public function addIssue(int $projectId, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Process the new issue creation
+        $issue = new Issue();
+        $issue->setName('New Issue'); // Example - make sure this is dynamic
+
+        // Persist the new issue to the database
+        $entityManager->persist($issue);
+        $entityManager->flush();
+
+        // Return the new issue's ID and other data as JSON
+        return new JsonResponse([
+            'id' => $issue->getId(),
+            'name' => $issue->getName(),
+            'endDate' => $issue->getEndDate()?->format('Y-m-d')
+        ]);
+    }
 
 
 

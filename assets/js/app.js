@@ -6,7 +6,26 @@ import initializeDatePicker from "./datepicker";
 import handleIssueNameEdit from "./edit-issue-name";
 import initializeGroupAdd from "./group-add";
 import { initializeIssueModal } from './issueModal.js';
+function initializeAll() {
+    const functions = [
+        { name: 'tagify', fn: initializeTagify },
+        { name: 'status-dropdowns', fn: initializeStatusDropdowns },
+        { name: 'priority-dropdowns', fn: initializePriorityDropdowns },
+        { name: 'datepicker', fn: initializeDatePicker },
+        { name: 'edit-issue-name', fn: handleIssueNameEdit },
+        { name: 'group-add', fn: initializeGroupAdd },
+        { name: 'issueModal', fn: initializeIssueModal }
+    ];
 
+    functions.forEach(({ name, fn }) => {
+        try {
+            fn();
+            console.log(`${name} initialized`);
+        } catch (error) {
+            console.error(`Error initializing ${name}:`, error);
+        }
+    });
+}
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed.');
 
@@ -18,53 +37,3 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Function to initialize all JavaScript for the page's existing content
-function initializeAll() {
-    try {
-        initializeTagify(document.querySelectorAll('.tagify-input'));
-        console.log('tagify.js initialized');
-    } catch (error) {
-        console.error('Error initializing tagify:', error);
-    }
-
-    try {
-        initializeStatusDropdowns(document.querySelectorAll('.status-dropdown'));
-        console.log('status-dropdowns.js initialized');
-    } catch (error) {
-        console.error('Error initializing status-dropdowns:', error);
-    }
-
-    try {
-        initializePriorityDropdowns(document.querySelectorAll('.priority-dropdown'));
-        console.log('priority-dropdowns.js initialized');
-    } catch (error) {
-        console.error('Error initializing priority-dropdowns:', error);
-    }
-
-    try {
-        initializeDatePicker(document.querySelectorAll('.datepicker'));
-        console.log('datepicker.js initialized');
-    } catch (error) {
-        console.error('Error initializing datepicker:', error);
-    }
-
-    try {
-        handleIssueNameEdit(document.querySelectorAll('.issue-name'));
-        console.log('edit-issue-name.js initialized');
-    } catch (error) {
-        console.error('Error initializing edit-issue-name:', error);
-    }
-
-    try {
-        initializeGroupAdd();
-        console.log('group-add.js initialized');
-    } catch (error) {
-        console.error('Error initializing group-add:', error);
-    }
-
-    try {
-        initializeIssueModal();
-        console.log('issueModal.js initialized');
-    } catch (error) {
-        console.error('Error initializing issueModal:', error);
-    }
-}

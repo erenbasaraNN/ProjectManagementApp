@@ -13,52 +13,75 @@ export default function initializeAddIssue() {
             const projectId = document.querySelector('meta[name="project-id"]').getAttribute('content');
             const csrfToken = document.querySelector('input[name="_token"]').value;
 
+            // AJAX call to add a new issue
             fetch(`/project/${projectId}/add-issue`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': csrfToken
                 },
                 body: `tag_id=${encodeURIComponent(tagId)}&_token=${csrfToken}`
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.error) {
                         alert(data.error);
                     } else {
-                        // Yeni issue'yu tabloya dinamik olarak ekleyin
                         const issueTableBody = link.closest('tbody');
+                        // Dynamically add a new row for the new issue
                         const newIssueHTML = `
                         <tr>
-                            <td><span class="issue-name" data-id="${data.id}" contenteditable="true">${data.name}</span></td>
-                            <td><input class="tagify-input" name="assignees" data-id="${data.id}" value="" placeholder="Kişi seç..."></td>
                             <td>
-                                <div class="dropdown-container">
-                                    <select class="status-dropdown" data-id="${data.id}">
-                                        <option value="To DO" selected class="status-not-started">Başlanacak</option>
-                                    </select>
+                                <span class="issue-name" data-id="${data.id}" contenteditable="true">${data.name}</span>
+                                <button class="open-updates-modal-btn" data-id="${data.id}">
+                                    <i class="fa-regular fa-comment"></i>
+                                </button>
+                            </td>
+                            <td>
+                                <div class="user-list">
+                                    <input class="tagify-input" name="assignees" data-id="${data.id}"
+                                           value="" placeholder="Kişi seç...">
                                 </div>
                             </td>
-                            <td><input type="text" class="datepicker" data-id="${data.id}" value="${data.endDate}"></td>
                             <td>
-                                <select class="priority-dropdown" data-id="${data.id}">
-                                    <option value="Düşük" selected class="priority-low">Düşük</option>
-                                </select>
+                                <div class="status-tagify-container">
+                                    <input class="status-tagify" name="status" data-id="${data.id}" value="Başlanacak" placeholder="Durum seç...">
+                                </div>
+                            </td>
+                            <td>
+                                <input type="text" class="datepicker" data-id="${data.id}" value="">
+                            </td>
+                            <td>
+                                <div class="priority-tagify-container">
+                                    <input class="priority-tagify" name="priority" data-id="${data.id}" value="Düşük" placeholder="Öncelik seç...">
+                                </div>
                             </td>
                         </tr>`;
+                        // Insert the new issue row into the table
                         issueTableBody.insertAdjacentHTML('beforeend', newIssueHTML);
 
-                        // Yeni issue'ya JS işlevselliğini uygula
-                        initializeTagify();  // Tagify için çağır
-                        initializeStatusDropdowns();  // Status dropdown için çağır
-                        initializePriorityDropdowns();  // Priority dropdown için çağır
-                        initializeDatePicker();  // Datepicker için çağır
-                        handleIssueNameEdit();  // İsim düzenleme fonksiyonunu çağır
+                        const newRow = issueTableBody.lastElementChild;
 
-                        console.log('JS functions re-initialized for new issue');
+                        // Initialize JS functionalities for the new row
+                        initializeTagify(newRow.querySelector('.tagify-input'));  // Tagify for assignees
+                        initializeStatusDropdowns(newRow.querySelector('.status-tagify'));  // Tagify for status
+                        initializePriorityDropdowns(newRow.querySelector('.priority-tagify'));  // Tagify for priority
+                        initializeDatePicker(newRow.querySelector('.datepicker'));  // Datepicker for end date
+                        handleIssueNameEdit(newRow.querySelector('.issue-name'));  // Contenteditable name editing
+
+                        console.log('JS functions initialized for new issue');
                     }
                 })
-                .catch(error => console.error('Error adding issue:', error));
+                .catch(error => {
+                    console.error('Error adding issue:', error);
+                    alert('An error occurred while adding the issue. Please try again.');
+                });
         });
     });
 }

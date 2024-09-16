@@ -1,13 +1,17 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
 
+{% endblock %}
 {% block title %}Edit Project{% endblock %}
-
 {% block body %}
-    <h1>Edit Project</h1>
+    <div class="container">
+        <h1>Edit Project</h1>
 
-    {{ include('project/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('project/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('project_index') }}">back to list</a>
+        <a href="{{ path('project_index') }}" class="delete-link new-project-btn">back to list</a>
+        <a href="_delete_form.html.twig" class="delete-project-btn">delete</a>
+    </div>
 
-    {{ include('project/_delete_form.html.twig') }}
+
 {% endblock %}

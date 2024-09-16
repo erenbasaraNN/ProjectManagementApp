@@ -18,13 +18,17 @@ class ProjectType extends AbstractType
             ->add('description')
             ->add('startDate', null, [
                 'widget' => 'single_text',
+                'data' => new \DateTime(),
+                'attr' => ['class' => 'js-datepicker'],
+                'input_format' => 'Y-m-d',
+
             ])
             ->add('endDate', null, [
                 'widget' => 'single_text',
             ])
             ->add('creator', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
         ;
     }

@@ -6,6 +6,7 @@
     <div class="project-header">
         <h1>{{ project.name }}</h1>
         <p>{{ project.description }}</p>
+        <a href="{{ path('project_archived_issues', { id: project.id }) }}">View Archive</a>
     </div>
     <div class="project-page container">
         <!-- Grouped Issues Table -->
@@ -23,19 +24,21 @@
                             <th>Kişi</th>
                             <th>Durum</th>
                             <th>Tarih</th>
-                            <th>Priority</th>
-                            <th>Actions</th>
+                            <th>ÖNCELİK</th>
+                            <th>EYLEMLER</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% if tag.issues|length > 0 %}
                             {% for issue in tag.issues %}
                                 <tr>
-                                    <td>
-                                        <span class="issue-name" data-id="{{ issue.id }}" contenteditable="true">{{ issue.name }}</span>
-                                        <button class="open-updates-modal-btn" data-id="{{ issue.id }}">
-                                            <i class="fa-regular fa-comment"></i>
-                                        </button>
+                                    <td class="issue-name-td">
+                                        <div class="issue-name-container">
+                                            <span class="issue-name" data-id="{{ issue.id }}" contenteditable="true">{{ issue.name }}</span>
+                                            <button class="open-updates-modal-btn" data-id="{{ issue.id }}">
+                                                <i class="fa-regular fa-comment"></i>
+                                            </button>
+                                        </div>
                                     </td>
                                     <td>
                                         <div class="user-list">
@@ -66,6 +69,7 @@
                                         </div>
                                     </td>
                                 </tr>
+
 
                             {% endfor %}
                             <tr class="add-issue-row">

@@ -1,0 +1,109 @@
+/* General page layout */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Page title */
+h1 {
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
+
+/* Form styles */
+form {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Form input fields */
+form input[type="text"],
+form input[type="email"],
+form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Form labels */
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Submit button */
+form button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Back to list link */
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+.delete-project-btn {
+    display: inline-block;
+    background-color: #cb2b2b;
+    color: white;
+    font-size: 14px;
+    padding: 10px 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+/* Hover and click effect for new project button */
+.delete-project-btn:hover {
+    background-color: #882121;
+}
+
+.delete-project-btn:active {
+    transform: scale(0.98);
+}
+
+#project_creator {
+    margin-bottom: 20px;
+}
+
+#project div {
+    margin-bottom: 10px;
+}
+#project_endDate {
+    margin-bottom: 10px;
+}
+#project_startDate {
+    margin-bottom: 20px;
+}

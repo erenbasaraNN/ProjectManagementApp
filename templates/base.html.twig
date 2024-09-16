@@ -14,10 +14,13 @@
     <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/edit-project.css') }}">
 
 
 
-    {% block stylesheets %}{% endblock %}
+
+    {% block stylesheets %}
+    {% endblock %}
 </head>
 <body >
 
@@ -26,7 +29,7 @@
     <div class="navbar-left">
         <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
         <h2>PM TOOL V2</h2>
-        <a href="{{ path('project_archived_issues', { id: project.id }) }}">Archive</a>
+
     </div>
     <div class="navbar-right">
         {% if app.user %}
@@ -47,7 +50,12 @@
         <ul>
             {% if projects is not empty %}
                 {% for project in projects %}
-                    <li><a href="{{ path('project_show', { 'id': project.id }) }}">{{ project.name }}</a></li>
+                    <li>
+                        <a href="{{ path('project_show', { 'id': project.id }) }}"
+                           class="{% if app.request.get('_route') == 'project_show' and app.request.get('id') == project.id %}active{% endif %}">
+                            {{ project.name }}
+                        </a>
+                    </li>
                 {% endfor %}
             {% else %}
                 <li>Hiç Proje Yok</li>
@@ -55,6 +63,7 @@
         </ul>
         <a href="{{ path('project_new') }}" class="new-project-btn">+ Yeni Proje Ekle</a>
     </aside>
+
 
     <!-- Main Content Area -->
     <main class="content">

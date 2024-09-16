@@ -37,11 +37,13 @@ export default function initializeAddIssue() {
                         // Dynamically add a new row for the new issue
                         const newIssueHTML = `
                         <tr>
-                            <td>
-                                <span class="issue-name" data-id="${data.id}" contenteditable="true">${data.name}</span>
-                                <button class="open-updates-modal-btn" data-id="${data.id}">
-                                    <i class="fa-regular fa-comment"></i>
-                                </button>
+                            <td class="issue-name-td">
+                                <div class="issue-name-container">
+                                    <span class="issue-name" data-id="${data.id}" contenteditable="true">${data.name}</span>
+                                    <button class="open-updates-modal-btn" data-id="${data.id}">
+                                        <i class="fa-regular fa-comment"></i>
+                                    </button>
+                                </div>
                             </td>
                             <td>
                                 <div class="user-list">

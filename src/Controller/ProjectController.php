@@ -64,6 +64,7 @@ final class ProjectController extends AbstractController
                     ->createQueryBuilder('i')
                     ->join('i.tags', 't')
                     ->where('t = :tag')
+                    ->andWhere('i.isArchived = false')
                     ->setParameter('tag', $tag)
                     ->getQuery()
                     ->getResult();
@@ -177,5 +178,25 @@ final class ProjectController extends AbstractController
             'endDate' => $issue->getEndDate()->format('d M Y'),
         ], 200);
     }
+
+    #[Route('/project/{id}/archives', name: 'project_archived_issues')]
+    public function archivedIssues(Project $project, EntityManagerInterface $entityManager): Response
+    {
+        // Fetch archived issues for this project
+        $archivedIssues = $entityManager->getRepository(Issue::class)
+            ->createQueryBuilder('i')
+            ->where('i.project = :project')
+            ->andWhere('i.isArchived = :archived')
+            ->setParameter('project', $project)
+            ->setParameter('archived', true)
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('project/archives.html.twig', [
+            'project' => $project,
+            'archived_issues' => $archivedIssues,
+        ]);
+    }
+
 
 }

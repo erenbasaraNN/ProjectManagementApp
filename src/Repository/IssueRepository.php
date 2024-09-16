@@ -40,4 +40,13 @@ class IssueRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findActiveIssues()
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.isArchived = :archived')
+            ->setParameter('archived', false)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -325,12 +325,7 @@ h1, h2 {
     color: #555;
 }
 
-.issue-table td:first-child,
-.issue-table th:first-child {
-    width: 40px;
-    text-align: center;
-    justify-content: space-between;
-}
+
 
 .issue-table td:last-child {
     text-align: center;
@@ -817,6 +812,7 @@ body.hidden {
 
 
 
+
 /* Modal Content */
 #issueModal .modal-content {
     display: flex; /* Flexbox for content */
@@ -877,6 +873,30 @@ body.hidden {
     background-color: #5a8d07; /* Darker shade on hover */
 }
 
+.archive-button-container {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center vertically */
+}
+
+/* Archive Button styles */
+.archive-button {
+    background-color: #e05563; /* Archive button color */
+    border: none; /* No border */
+    color: white; /* Text color */
+    padding: 5px 10px; /* Padding for the button */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+    font-size: 10px;
+}
+
+/* Hover effect for archive button */
+.archive-button:hover {
+    background-color: #c43a4e; /* Darker shade on hover for visual feedback */
+}
+.tagify__tag__removeBtn {
+    display: none;
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {

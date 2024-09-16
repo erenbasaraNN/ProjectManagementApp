@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -198,6 +199,37 @@ final class IssueController extends AbstractController
             'name' => $issue->getName(),
             'endDate' => $issue->getEndDate()?->format('Y-m-d')
         ]);
+    }
+    #[Route('/issue/{id}/archive', name: 'archive_issue', methods: ['POST'])]
+    public function archiveIssue(Issue $issue, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        // Set the issue as archived
+        $issue->setIsArchived(true);
+
+        // Save the changes
+        $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
+
+
+        // Redirect back to the issue list (or another page)
+        return $this->redirect($referer ?: $this->generateUrl('issue_list'));
+    }
+
+    #[Route('/issue/{id}/unarchive', name: 'unarchive_issue', methods: ['POST'])]
+    public function unarchiveIssue(Issue $issue, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        // Set the issue as archived
+        $issue->setIsArchived(false);
+
+        // Save the changes
+        $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
+
+
+        // Redirect back to the issue list (or another page)
+        return $this->redirect($referer ?: $this->generateUrl('issue_list'));
     }
 
 

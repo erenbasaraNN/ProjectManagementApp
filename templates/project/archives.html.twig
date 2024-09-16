@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Archived Issues - {{ project.name }}{% endblock %}
+
+{% block body %}
+    <h1>Archived Issues for Project: {{ project.name }}</h1>
+
+    {% if archived_issues is empty %}
+        <p>No archived issues found for this project.</p>
+    {% else %}
+        <table>
+            <thead>
+            <tr>
+                <th>Issue Name</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for issue in archived_issues %}
+                <tr>
+                    <td>{{ issue.name }}</td>
+                    <td>{{ issue.status }}</td>
+                    <td>{{ issue.priority }}</td>
+                    <td>{{ issue.description }}</td>
+                    <td>
+                        <!-- Archive button -->
+                        <form method="POST" action="{{ path('unarchive_issue', {'id': issue.id}) }}">
+                            <button type="submit" class="btn btn-danger">UnArchive</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <a href="{{ path('project_show', { id: project.id }) }}">Back to Project</a>
+{% endblock %}

@@ -55,6 +55,8 @@ class Issue
             'Not Started' => '#29a5d1',
         };
     }
+    #[ORM\Column(type: 'boolean')]
+    private $isArchived = false;
 
     public function __construct()
     {
@@ -65,6 +67,17 @@ class Issue
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getIsArchived(): ?bool
+    {
+        return $this->isArchived;
+    }
+
+    public function setIsArchived(bool $isArchived): self
+    {
+        $this->isArchived = $isArchived;
+        return $this;
     }
 
     public function getTags(): Collection

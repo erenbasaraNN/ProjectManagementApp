@@ -26,6 +26,7 @@
     <div class="navbar-left">
         <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
         <h2>PM TOOL V2</h2>
+        <a href="{{ path('project_archived_issues', { id: project.id }) }}">Archive</a>
     </div>
     <div class="navbar-right">
         {% if app.user %}

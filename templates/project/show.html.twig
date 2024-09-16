@@ -24,6 +24,7 @@
                             <th>Durum</th>
                             <th>Tarih</th>
                             <th>Priority</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -38,35 +39,34 @@
                                     </td>
                                     <td>
                                         <div class="user-list">
-                                            <!-- Tagify Input for Assignee Editing -->
                                             <input class="tagify-input" name="assignees" data-id="{{ issue.id }}"
                                                    value="{% for user in issue.assignees %}{{ user.name }}{% if not loop.last %}, {% endif %}{% endfor %}"
                                                    placeholder="Kişi seç...">
                                         </div>
                                     </td>
-
                                     <td>
                                         <div class="status-tagify-container">
-                                            <!-- Tagify Input for Status -->
                                             <input class="status-tagify" name="status" data-id="{{ issue.id }}"
                                                    value="{{ issue.status }}" placeholder="Durum seç...">
                                         </div>
                                     </td>
-
-
                                     <td>
                                         <input type="text" class="datepicker" data-id="{{ issue.id }}" value="{{ issue.endDate ? issue.endDate|date('d M Y') : 'No Deadline' }}">
                                     </td>
-
                                     <td>
                                         <div class="priority-tagify-container">
                                             <input class="priority-tagify" name="priority" data-id="{{ issue.id }}" value="{{ issue.priority }}" placeholder="Öncelik seç...">
                                         </div>
                                     </td>
-
-
-
+                                    <td>
+                                        <div class="archive-button-container">
+                                            <form method="POST" class="archive-form" action="{{ path('archive_issue', {'id': issue.id}) }}">
+                                                <button type="submit" id="archive-button" class="archive-button">Archive</button>
+                                            </form>
+                                        </div>
+                                    </td>
                                 </tr>
+
                             {% endfor %}
                             <tr class="add-issue-row">
                                 <td colspan="6">

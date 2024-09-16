@@ -62,6 +62,13 @@ export default function initializeAddIssue() {
                                     <input class="priority-tagify" name="priority" data-id="${data.id}" value="Düşük" placeholder="Öncelik seç...">
                                 </div>
                             </td>
+                            <td>
+                                        <div class="archive-button-container">
+                                            <form method="POST" class="archive-form" action="{{ path('archive_issue', {'id': issue.id}) }}">
+                                                <button type="submit" id="archive-button" class="archive-button">Archive</button>
+                                            </form>
+                                        </div>
+                            </td>
                         </tr>`;
                         // Insert the new issue row into the table
                         issueTableBody.insertAdjacentHTML('beforeend', newIssueHTML);

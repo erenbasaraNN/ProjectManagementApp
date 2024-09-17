@@ -82,7 +82,6 @@
     color: white;
     border: none;
     border-radius: 4px;
-    font-size: 0.9em;
     box-sizing: border-box;
 }
 
@@ -256,4 +255,87 @@
 .new-project-container .form-container form button:focus {
     outline: 2px solid #218838;
     outline-offset: 2px;
+}
+
+
+/* Base styling for the project index page */
+.project-index-page {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    margin: 20px;
+}
+
+/* Styling for the table */
+.project-index-page .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.project-index-page .table thead {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.project-index-page .table th,
+.project-index-page .table td {
+    padding: 12px 20px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.project-index-page .table th {
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.project-index-page .table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.project-index-page .table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.project-index-page .table a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.project-index-page .table a:hover {
+    text-decoration: underline;
+}
+
+/* Styling for the "Create new" link */
+.project-index-page a[href="{{ path('project_new') }}"] {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.project-index-page a[href="{{ path('project_new') }}"]:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .project-index-page .table th,
+    .project-index-page .table td {
+        padding: 10px;
+    }
+
+    .project-index-page a[href="{{ path('project_new') }}"] {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
 }

@@ -18,34 +18,31 @@ img.logo {
     margin-right: 10px;
 }
 
+/* Flex Center Utility Class */
+.flex-center {
+    display: flex;
+    align-items: center;
+}
+
 /* Navbar */
 .navbar {
     display: flex;
+    align-items: center;
     position: sticky;
     top: 0;
     justify-content: space-between;
-    align-items: center;
     background-color: #2c3e50;
     padding: 10px 20px;
     color: white;
     height: 80px;
-    z-index: 1001; /* Higher z-index to sit above modal */
+    z-index: 1001;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-
-
 }
 
-.navbar-left {
-    display: flex;
-    align-items: center;
-}
-
-.navbar-right {
-    display: flex;
-    align-items: center;
-}
-
-.user-info {
+.navbar-left,
+.navbar-right,
+.user-info,
+.user-circle {
     display: flex;
     align-items: center;
 }
@@ -55,15 +52,13 @@ img.logo {
     height: 40px;
     background-color: #3498db;
     border-radius: 50%;
-    display: flex;
     justify-content: center;
-    align-items: center;
     color: #fff;
     font-size: 18px;
     margin-right: 10px;
 }
 
-.user-name-nav{
+.user-name-nav {
     color: #ecf0f1;
     font-weight: bold;
     margin-right: 15px;
@@ -88,7 +83,6 @@ img.logo {
     min-height: calc(100vh - 60px);
 }
 
-/* Sidebar container styling */
 .sidebar {
     width: 250px;
     background-color: #34495e;
@@ -98,15 +92,7 @@ img.logo {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-/* Sidebar header styling */
-.sidebar h2 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #ecf0f1;
-    margin-bottom: 20px;
-    padding-left: 5px;
-}
-
+.sidebar h2,
 .sidebar .title-sidebar {
     font-size: 20px;
     font-weight: 600;
@@ -116,19 +102,16 @@ img.logo {
     text-decoration: none;
 }
 
-/* Sidebar list styling */
 .sidebar ul {
     list-style: none;
     padding: 0;
     margin-bottom: 20px;
 }
 
-/* Sidebar list items */
 .sidebar ul li {
     margin-bottom: 15px;
 }
 
-/* Sidebar links styling */
 .sidebar ul li a {
     text-decoration: none;
     font-size: 16px;
@@ -139,21 +122,18 @@ img.logo {
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* Hover effect for links */
 .sidebar ul li a:hover {
     background-color: #007bff;
     color: white;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Active link styling */
 .sidebar ul li a.active {
     background-color: #2980b9;
     color: white;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Button to add a new project */
 .new-project-btn {
     display: inline-block;
     background-color: #27ae60;
@@ -165,7 +145,6 @@ img.logo {
     transition: background-color 0.3s, transform 0.3s;
 }
 
-/* Hover and click effect for new project button */
 .new-project-btn:hover {
     background-color: #2ecc71;
     transform: translateY(-2px);
@@ -175,8 +154,6 @@ img.logo {
     transform: scale(0.98);
 }
 
-
-/* Main Content Area */
 .content {
     flex: 1;
     padding: 20px;
@@ -192,9 +169,9 @@ table {
 
 table th, table td {
     padding: 10px;
-    text-align: center; /* Center align all content */
+    text-align: center;
     border-bottom: 1px solid #ddd;
-    width: 20%; /* Split the columns equally */
+    width: 20%;
 }
 
 table th {
@@ -213,27 +190,23 @@ table tr:nth-child(even) {
     color: #fff;
 }
 
-.status-not-started { background-color: #6c757d; }
-.status-in-progress { background-color: #ffc107; }
-.status-completed { background-color: #28a745; }
-.status-canceled { background-color: #dc3545; }
-
-/* Priority Dropdown Styles */
-.priority-dropdown {
-    appearance: none;
-    border: 2px solid #ddd;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 14px;
-    width: 150px;
-    font-weight: bold;
-    text-align: center;
-    cursor: pointer;
-    color: white; /* Make text white by default */
-    transition: background-color 0.3s ease; /* Smooth transition for background change */
+.status-not-started {
+    background-color: #6c757d;
 }
 
-/* Custom arrow for dropdown */
+.status-in-progress {
+    background-color: #ffc107;
+}
+
+.status-completed {
+    background-color: #28a745;
+}
+
+.status-canceled {
+    background-color: #dc3545;
+}
+
+
 .priority-dropdown:after {
     content: '';
     position: absolute;
@@ -244,42 +217,38 @@ table tr:nth-child(even) {
     border-top-color: #333;
 }
 
-/* Different priority levels with their custom background colors */
 .priority-dropdown option.priority-low {
-    background-color: #007bff; /* Low priority: blue */
+    background-color: #007bff;
     color: white;
 }
 
 .priority-dropdown option.priority-medium {
-    background-color: #6f42c1; /* Medium priority: purple */
+    background-color: #6f42c1;
     color: white;
 }
 
 .priority-dropdown option.priority-high {
-    background-color: #dc3545; /* High priority: red */
+    background-color: #dc3545;
     color: white;
 }
 
-/* Define priority colors */
 .priority-low {
-    background-color: #007bff; /* Blue for low priority */
+    background-color: #007bff;
 }
 
 .priority-medium {
-    background-color: #6f42c1; /* Purple for medium priority */
+    background-color: #6f42c1;
 }
 
 .priority-high {
-    background-color: #dc3545; /* Red for high priority */
+    background-color: #dc3545;
 }
 
-/* Dropdown open styling */
 .priority-dropdown:focus {
     outline: none;
     border-color: #007bff;
 }
 
-/* Styling the dropdown items (colors for each option) */
 .priority-dropdown option {
     padding: 20px;
     font-size: 14px;
@@ -287,13 +256,10 @@ table tr:nth-child(even) {
     cursor: pointer;
 }
 
-/* Custom dropdown arrow on hover */
 .priority-dropdown:hover {
     background-color: #e2e6ea;
 }
 
-
-/* Buttons */
 .btn {
     padding: 8px 16px;
     border-radius: 5px;
@@ -307,14 +273,12 @@ table tr:nth-child(even) {
     background-color: #0056b3;
 }
 
-h1, h2 {
-    margin: 0;
-}
 .project-header {
     display: block;
     align-items: first baseline;
     margin-bottom: 30px;
 }
+
 .project-header p {
     font-size: 12px;
     color: #6c757d;
@@ -322,6 +286,7 @@ h1, h2 {
     margin-bottom: 6px;
     max-width: 35%;
 }
+
 .project-header h1 {
     font-size: 32px;
     margin: 0;
@@ -347,17 +312,16 @@ h1, h2 {
     color: white;
 }
 
-
 .container {
     margin-left: 100px;
     padding: 1px;
 }
 
-/* Group Headers */
 .group {
     margin-bottom: 80px;
     flex: 1;
 }
+
 .group-header {
     padding: 10px;
     font-size: 16px;
@@ -369,7 +333,6 @@ h1, h2 {
     color: #2c3e50;
 }
 
-/* Issue Table */
 .issue-table {
     width: 110%;
     border-collapse: collapse;
@@ -381,9 +344,9 @@ h1, h2 {
 
 .issue-table th,
 .issue-table td {
-    text-align: center; /* Center text in table cells */
-    padding: 10px; /* Padding inside cells */
-    border: 1px solid #ccc; /* Light border for cells */
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ccc;
 }
 
 .issue-table th {
@@ -400,6 +363,7 @@ h1, h2 {
 .issue-table tr:last-child td {
     border-bottom: none;
 }
+
 .issue-name-td {
     padding: 0 10px;
 }
@@ -408,51 +372,45 @@ h1, h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%; /* Ensure full width for proper spacing */
+    width: 100%;
 }
 
 .issue-name {
-    flex-grow: 1; /* Makes the issue name take up all the remaining space */
-    text-align: left; /* Aligns the issue name to the left */
-    padding-right: 3px; /* Adds some space between the name and the button */
+    flex-grow: 1;
+    text-align: left;
+    padding-right: 3px;
     margin-left: 10px;
     font-weight: 500;
-
 }
 
 .open-updates-modal-btn {
-    background-color: #007bff; /* Modern blue color */
+    background-color: #007bff;
     color: white;
     border: none;
     padding: 8px 12px;
     font-size: 14px;
-    border-radius: 8px; /* Rounded corners */
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+    transition: background-color 0.3s ease, transform 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.open-updates-modal-btn i {
-}
-
 .open-updates-modal-btn:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    transform: translateY(-2px); /* Slight lift effect */
+    background-color: #0056b3;
+    transform: translateY(-2px);
 }
 
 .open-updates-modal-btn:active {
-    transform: translateY(0); /* Return to original position when clicked */
+    transform: translateY(0);
 }
 
 .open-updates-modal-btn:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Focus outline */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
 }
 
-
-/* Status Pill */
 .status-pill {
     display: inline-block;
     padding: 5px 10px;
@@ -461,7 +419,6 @@ h1, h2 {
     text-align: center;
 }
 
-/* User Circle */
 .user-circle {
     display: inline-block;
     width: 30px;
@@ -476,7 +433,6 @@ h1, h2 {
     font-weight: 600;
 }
 
-/* Label Pill */
 .label-pill {
     display: inline-block;
     padding: 5px 10px;
@@ -485,12 +441,14 @@ h1, h2 {
     font-size: 12px;
     text-align: center;
 }
+
 .tagify {
     --tags-border-color: none;
 }
+
 .tagify__tag--circle {
     border-radius: 50%;
-    width: 40px;  /* Adjust size as needed */
+    width: 40px;
     height: 40px;
     display: inline-flex;
     align-items: center;
@@ -499,8 +457,11 @@ h1, h2 {
     font-size: 16px;
     font-weight: bold;
 }
+
 .user-list .tagify__tag {
-    background-color: var(--tag-bg, #ccc);}
+    background-color: var(--tag-bg, #ccc);
+}
+
 span.tagify__input {
     min-width: 3px;
     padding: 0;
@@ -511,9 +472,8 @@ span.tagify__input:focus {
     min-width: 5px;
     margin: 5px;
     padding: var(--tag-pad);
-
 }
-/* Add issue Row */
+
 .add-issue-row {
     background-color: #f9f9f9;
     align-items: flex-start;
@@ -531,9 +491,6 @@ span.tagify__input:focus {
     text-decoration: underline;
 }
 
-
-
-/* Add Group Button */
 .new-group-btn {
     display: inline-block;
     padding: 10px 20px;
@@ -549,7 +506,6 @@ span.tagify__input:focus {
     background-color: #0056b3;
 }
 
-
 .datepicker {
     width: 150px;
     padding: 12px 20px;
@@ -561,18 +517,15 @@ span.tagify__input:focus {
     background-color: #f8f8f8;
     transition: border-color 0.3s ease;
     text-align: center;
-
-    /* Optional shadow for styling */
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
 }
-/* Container for the dropdown */
+
 .dropdown-container {
     position: relative;
     display: inline-block;
 }
 
-/* Base dropdown styling */
-.status-dropdown {
+.status-dropdown , .priority-dropdown{
     appearance: none;
     border: 2px solid #ddd;
     padding: 10px;
@@ -582,11 +535,10 @@ span.tagify__input:focus {
     font-weight: bold;
     text-align: center;
     cursor: pointer;
-    color: white; /* Make text white by default */
-    transition: background-color 0.3s ease; /* Smooth transition for background change */
+    color: white;
+    transition: background-color 0.3s ease;
 }
 
-/* Custom arrow for dropdown */
 .status-dropdown:after {
     content: '';
     position: absolute;
@@ -597,14 +549,11 @@ span.tagify__input:focus {
     border-top-color: #333;
 }
 
-/* Different statuses with their custom background colors */
 .status-dropdown option.status-completed {
     background-color: #46c965;
-
     color: white;
 }
 
-/* Define status colors */
 .status-completed {
     background-color: #46c965;
 }
@@ -636,14 +585,11 @@ span.tagify__input:focus {
     color: white;
 }
 
-/* Dropdown open styling */
 .status-dropdown:focus {
     outline: none;
-
     border-color: #007bff;
 }
 
-/* Styling the dropdown items (colors for each option) */
 .status-dropdown option {
     padding: 20px;
     font-size: 14px;
@@ -653,27 +599,24 @@ span.tagify__input:focus {
     height: 200px;
 }
 
-/* Custom dropdown arrow on hover */
 .status-dropdown:hover {
     background-color: #e2e6ea;
 }
 
-/* The modal container */
 #add-group-modal {
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
+    position: fixed;
+    z-index: 1000;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
-    overflow: auto; /* Enable scrolling if needed */
-    display: flex; /* Flexbox to center modal */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    overflow: auto;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Modal content box */
 #add-group-modal .modal-content {
     background-color: #fff;
     border-radius: 8px;
@@ -681,13 +624,12 @@ span.tagify__input:focus {
     width: 400px;
     max-width: 90%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    position: relative; /* For close button positioning */
+    position: relative;
     animation: fadeIn 0.3s ease-in-out;
-    transform: translateY(0); /* Ensure modal is centered */
-    text-align: center; /* Center align text inside the modal */
+    transform: translateY(0);
+    text-align: center;
 }
 
-/* Close button (top-right corner) */
 #add-group-modal .close-modal {
     position: absolute;
     right: 15px;
@@ -704,14 +646,12 @@ span.tagify__input:focus {
     color: #f00;
 }
 
-/* Modal header */
 #add-group-modal .modal h2 {
     margin-top: 0;
     font-size: 20px;
     color: #333;
 }
 
-/* Modal form styling */
 #add-group-modal .modal-content form {
     display: flex;
     flex-direction: column;
@@ -737,7 +677,6 @@ span.tagify__input:focus {
     box-sizing: border-box;
 }
 
-/* Submit button styling */
 #add-group-modal .modal-content form button {
     background-color: #007bff;
     color: white;
@@ -753,15 +692,14 @@ span.tagify__input:focus {
     background-color: #0056b3;
 }
 
-/* Fade-in animation for modal */
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(-20px); /* Adds smooth entrance animation */
+        transform: translateY(-20px);
     }
     to {
         opacity: 1;
-        transform: translateY(0); /* Reset to normal position */
+        transform: translateY(0);
     }
 }
 
@@ -780,18 +718,6 @@ span.tagify__input:focus {
 
 .new-group-btn:hover {
     background-color: #0056b3;
-}
-/* Button to trigger modal */
-.new-group-btn {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    font-size: 16px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    margin-bottom: 20px;
 }
 
 /* Hide the main content */
@@ -799,11 +725,6 @@ body.hidden {
     visibility: hidden;
 }
 
-.new-group-btn:hover {
-    background-color: #0056b3;
-}
-
-/* Basic modal styling */
 #add-group-modal .modal-update {
     display: none;
     position: fixed;
@@ -831,18 +752,18 @@ body.hidden {
 
 /* Apply styles only inside .status-tagify-container */
 .status-tagify-container .status-tagify {
-    border: none; /* Hide the input border */
-    background-color: inherit !important; /* Ensure the inline style takes precedence */
-    cursor: pointer; /* Indicate that this is a clickable element */
+    border: none;
+    background-color: inherit !important;
+    cursor: pointer;
 }
 
 .status-tagify-container .tagify__input {
-    display: none; /* Hide the text input part of Tagify */
+    display: none;
 }
 
 .status-tagify-container .tagify__tag {
-    border: none; /* No border around the tag */
-    padding: 5px 5px; /* Adjust padding to look like a dropdown */
+    border: none;
+    padding: 5px 5px;
     color: white;
     background-color: #6c757d;
     border-radius: 4px;
@@ -850,13 +771,14 @@ body.hidden {
     transition: background-color 0.3s ease-in-out;
     width: 145px;
 }
+
 .tagify__tag>div {
     color: white;
     font-weight: 500;
 }
 
 .status-tagify-container .tagify__dropdown {
-    border: 1px solid #ccc; /* Border for the dropdown */
+    border: 1px solid #ccc;
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
@@ -867,22 +789,22 @@ body.hidden {
 }
 
 .priority-tagify-container .tagify__input {
-    display: none; /* Hide the text input part of Tagify */
+    display: none;
 }
 
 .priority-tagify-container .tagify__tag {
-    border: none; /* No border around the tag */
-    padding: 5px 5px; /* Adjust padding to look like a dropdown */
+    border: none;
+    padding: 5px 5px;
     color: white;
     background-color: #6c757d;
     border-radius: 4px;
     font-size: 16px;
     transition: background-color 0.3s ease-in-out;
-    width: 85px ;
+    width: 85px;
 }
 
 .priority-tagify-container .tagify__dropdown {
-    border: 1px solid #ccc; /* Border for the dropdown */
+    border: 1px solid #ccc;
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
@@ -891,7 +813,6 @@ body.hidden {
     padding: 5px 10px;
     cursor: pointer;
 }
-
 
 .update-item {
     padding: 10px;
@@ -909,7 +830,6 @@ body.hidden {
     padding: 5px 0;
 }
 
-/* Issue Modal styles */
 #issueModal.modal {
     display: none;
     position: fixed;
@@ -947,7 +867,6 @@ body.hidden {
     text-decoration: none;
 }
 
-/* Form elements */
 #issueModal h2 {
     margin-top: 0;
     color: #333;
@@ -976,7 +895,6 @@ body.hidden {
     background-color: #0056b3;
 }
 
-/* Post-it section */
 #issueModal #post-it-section {
     margin-top: 20px;
     max-height: 300px;
@@ -1004,7 +922,7 @@ body.hidden {
 #issueModal .post-it button {
     margin-right: 5px;
     padding: 5px 10px;
-    font-size: 0.8em;
+    font-size: 0.9em;
 }
 
 #issueModal .edit-postit-btn {
@@ -1015,7 +933,6 @@ body.hidden {
     background-color: #dc3545;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
     #issueModal .modal-content {
         width: 95%;
@@ -1024,31 +941,29 @@ body.hidden {
 }
 
 .archive-button-container {
-    display: flex; /* Use flexbox for alignment */
-    align-items: center; /* Center vertically */
+    display: flex;
+    align-items: center;
 }
 
-/* Archive Button styles */
 .archive-button {
-    background-color: #e05563; /* Archive button color */
-    border: none; /* No border */
-    color: white; /* Text color */
-    padding: 5px 10px; /* Padding for the button */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s; /* Smooth transition for background color */
-    font-size: 10px;
+    background-color: #e05563;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
 }
 
-/* Hover effect for archive button */
 .archive-button:hover {
-    background-color: #c43a4e; /* Darker shade on hover for visual feedback */
+    background-color: #c43a4e;
 }
+
 .tagify__tag__removeBtn {
     display: none;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .navbar-left h1 {
         font-size: 18px;
@@ -1067,9 +982,11 @@ body.hidden {
     .sidebar ul li a {
         font-size: 14px;
     }
+
     .status-dropdown {
         width: 100%;
     }
+
     .modal-content {
         width: 90%;
     }

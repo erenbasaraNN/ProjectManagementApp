@@ -4,6 +4,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -31,6 +32,15 @@ class Project
 
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: Issue::class)]
     private $issues;
+
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Tag::class, orphanRemoval: true)]
+    private $tags;
+
+    public function __construct()
+    {
+        $this->issues = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -103,6 +113,33 @@ class Project
             $this->issues[] = $issue;
             $issue->setProject($this);
         }
+        return $this;
+    }
+
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+            $tag->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->removeElement($tag)) {
+            // set the owning side to null (unless already changed)
+            if ($tag->getProject() === $this) {
+                $tag->setProject(null);
+            }
+        }
+
         return $this;
     }
 }

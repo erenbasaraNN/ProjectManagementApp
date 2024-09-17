@@ -339,3 +339,140 @@
         padding: 8px 16px;
     }
 }
+
+
+
+h1 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* Form styles */
+form {
+    display: grid;
+    gap: 20px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #34495e;
+}
+
+input[type="text"],
+input[type="datetime-local"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+/* Button styles */
+.btn {
+    background-color: #3498db;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+/* Link styles */
+.back-to-list,
+.delete-link,
+.delete-project-btn,
+.new-project-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #fff;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.back-to-list,
+.new-project-btn {
+    background-color: #2ecc71;
+}
+
+.delete-project-btn {
+    background-color: #e74c3c;
+}
+
+.back-to-list:hover,
+.new-project-btn:hover {
+    background-color: #27ae60;
+}
+
+.delete-project-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Specific styles for "Back to List" on create page */
+.content .back-to-list {
+    display: block;
+    text-align: center;
+    background-color: transparent;
+    color: #3498db;
+    font-weight: bold;
+}
+
+.new-group-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3f9cff;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    width: fit-content;
+}
+
+.new-group-btn:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+.content .back-to-list:hover {
+    text-decoration: underline;
+    background-color: transparent;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .container,
+    .new-project-container {
+        padding: 20px;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"],
+    textarea,
+    select {
+        font-size: 14px;
+    }
+
+    .btn {
+        font-size: 16px;
+    }
+}

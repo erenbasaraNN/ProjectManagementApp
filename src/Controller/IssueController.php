@@ -10,261 +10,204 @@ use App\Repository\PostItRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
-use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-#[AllowDynamicProperties] final class IssueController extends AbstractController
+#[AllowDynamicProperties]
+final class IssueController extends AbstractController
 {
     private $csrfTokenManager;
     private $issueRepository;
     private $postItRepository;
-
-    public function __construct(CsrfTokenManagerInterface $csrfTokenManager,EntityManagerInterface $entityManager, IssueRepository $issueRepository, PostItRepository $postItRepository)
+    private $userRepository;
+    public function __construct(CsrfTokenManagerInterface $csrfTokenManager,EntityManagerInterface $entityManager, IssueRepository $issueRepository, PostItRepository $postItRepository, UserRepository $userRepository)
     {
         $this->csrfTokenManager = $csrfTokenManager;
         $this->entityManager = $entityManager;
         $this->issueRepository = $issueRepository;
         $this->postItRepository = $postItRepository;
+        $this->userRepository = $userRepository;
     }
 
     #[Route('/issue/{id}/edit-name', name: 'edit_issue_name', methods: ['POST'])]
-    public function editIssueName(int $id, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function editIssueName(int $id, Request $request): JsonResponse
     {
-        // Log the request for debugging
-        error_log('Received request for issue ID: ' . $id);
-        error_log('Request content: ' . $request->getContent());
-
         $submittedToken = $request->headers->get('X-CSRF-TOKEN');
         if (!$this->isCsrfTokenValid('authenticate', $submittedToken)) {
-            return new JsonResponse(['success' => false, 'error' => 'Invalid CSRF token'], 403);
+            return $this->jsonError('Invalid CSRF token', Response::HTTP_FORBIDDEN);
         }
 
-        $issue = $entityManager->getRepository(Issue::class)->find($id);
-
+        $issue = $this->issueRepository->find($id);
         if (!$issue) {
-            return new JsonResponse(['success' => false, 'error' => 'Issue not found.'], 404);
+            return $this->jsonError('Issue not found.', Response::HTTP_NOT_FOUND);
         }
 
-        $data = json_decode($request->getContent(), true);
-
+        $data = $this->getJsonData($request);
         if (!isset($data['name'])) {
-            return new JsonResponse(['success' => false, 'error' => 'Name is required.'], 400);
+            return $this->jsonError('Name is required.', Response::HTTP_BAD_REQUEST);
         }
 
         $issue->setName($data['name']);
-        $entityManager->flush();
+        $this->entityManager->flush();
 
-        return new JsonResponse(['success' => true]);
+        return $this->jsonSuccess();
     }
 
     #[Route('/issue/{id}/edit-status', name: 'edit_issue_status', methods: ['POST'])]
-    public function editStatus(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function editStatus(Issue $issue, Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
-
+        $data = $this->getJsonData($request);
         if (empty($data['status'])) {
-            return new JsonResponse(['success' => false, 'error' => 'Status cannot be empty'], 400);
+            return $this->jsonError('Status cannot be empty', Response::HTTP_BAD_REQUEST);
         }
 
-        $newStatus = $data['status'];
-        $issue->setStatus($newStatus);
+        $issue->setStatus($data['status']);
+        $this->entityManager->flush();
 
-        try {
-            $entityManager->persist($issue);
-            $entityManager->flush();
-
-            return new JsonResponse(['success' => true, 'status' => $newStatus]);
-        } catch (\Exception $e) {
-            return new JsonResponse(['success' => false, 'error' => 'Failed to update status'], 500);
-        }
+        return $this->jsonSuccess(['status' => $issue->getStatus()]);
     }
-
-
 
     #[Route('/issue/{id}/edit-priority', name: 'edit_issue_priority', methods: ['POST'])]
-    public function editPriority(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function editPriority(Issue $issue, Request $request): JsonResponse
     {
-        // Retrieve the data from the request
-        $data = json_decode($request->getContent(), true);
-
-        // Check if 'priority' is provided in the request
+        $data = $this->getJsonData($request);
         if (!isset($data['priority'])) {
-            return new JsonResponse(['success' => false, 'error' => 'Priority not provided'], 400);
+            return $this->jsonError('Priority not provided', Response::HTTP_BAD_REQUEST);
         }
 
-        // Update the priority of the issue
-        $newPriority = $data['priority'];
-        $issue->setPriority($newPriority);
+        $issue->setPriority($data['priority']);
+        $this->entityManager->flush();
 
-        // Save the updated issue
-        try {
-            $entityManager->persist($issue);
-            $entityManager->flush();
-
-            return new JsonResponse(['success' => true, 'priority' => $newPriority]);
-        } catch (\Exception $e) {
-            return new JsonResponse(['success' => false, 'error' => 'Failed to update priority'], 500);
-        }
+        return $this->jsonSuccess(['priority' => $issue->getPriority()]);
     }
 
-
-    #[Route("/issue/{id}/edit-assignees", name: "issue_edit_assignees", methods: ["POST"])]
-    public function editIssueAssignees(
-        Issue $issue,
-        Request $request,
-        EntityManagerInterface $entityManager,
-        UserRepository $userRepository
-    ): JsonResponse {
-        $data = json_decode($request->getContent(), true);
-
-        if (!isset($data['assignees']) || !is_array($data['assignees'])) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Invalid assignees data'], 400);
-        }
-
-        // Clear current assignees
-        foreach ($issue->getAssignees() as $assignee) {
-            $issue->removeAssignee($assignee);
-        }
-
-        // Assign new users
-        foreach ($data['assignees'] as $assigneeName) {
-            $user = $userRepository->findOneBy(['name' => $assigneeName]);
-            if ($user) {
-                $issue->addAssignee($user);
-            }
-        }
-
-        $entityManager->flush();
-
-        // Return the updated list of assignees
-        $updatedAssignees = array_map(function ($assignee) {
-            return $assignee->getName();
-        }, $issue->getAssignees()->toArray());
-
-        return new JsonResponse([
-            'status' => 'success',
-            'assignees' => $updatedAssignees
-        ]);
-    }
-
-    /**
-     * @throws \DateMalformedStringException
-     */
-    #[Route("/issue/{id}/edit-date", name: "edit_issue_date", methods: ["POST"])]
-
-    public function editIssueDate(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/issue/{id}/edit-assignees', name: 'issue_edit_assignees', methods: ['POST'])]
+    public function editIssueAssignees(Issue $issue, Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
-
-        if (isset($data['endDate'])) {
-            $issue->setEndDate(new \DateTime($data['endDate']));
-            $entityManager->flush();
-
-            return new JsonResponse(['status' => 'success']);
+        $data = $this->getJsonData($request);
+        if (!isset($data['assignees']) || !is_array($data['assignees'])) {
+            return $this->jsonError('Invalid assignees data', Response::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse(['status' => 'error', 'message' => 'Invalid date'], 400);
+        try {
+            $this->entityManager->beginTransaction();
+
+            // Remove all current assignees
+            foreach ($issue->getAssignees() as $currentAssignee) {
+                $issue->removeAssignee($currentAssignee);
+            }
+
+            // Add new assignees
+            foreach ($data['assignees'] as $assigneeName) {
+                $user = $this->userRepository->findOneBy(['name' => $assigneeName]);
+                if ($user) {
+                    $issue->addAssignee($user);
+                }
+            }
+
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+
+            $updatedAssignees = $issue->getAssignees()->map(fn($assignee) => $assignee->getName())->toArray();
+            return $this->jsonSuccess(['assignees' => $updatedAssignees]);
+        } catch (\Exception $e) {
+            $this->entityManager->rollback();
+            return $this->jsonError('Failed to update assignees: ' . $e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    #[Route('/api/issue/{id}/description', name: 'api_issue_description_get', methods: ['GET'])]
+    #[Route('/issue/{id}/edit-date', name: 'edit_issue_date', methods: ['POST'])]
+    public function editIssueDate(Issue $issue, Request $request): JsonResponse
+    {
+        $data = $this->getJsonData($request);
+        if (!isset($data['endDate'])) {
+            return $this->jsonError('Invalid date', Response::HTTP_BAD_REQUEST);
+        }
+
+        try {
+            $issue->setEndDate(new \DateTime($data['endDate']));
+            $this->entityManager->flush();
+            return $this->jsonSuccess();
+        } catch (\Exception $e) {
+            return $this->jsonError('Invalid date format', Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    #[Route('/api/issue/{id}/description', name: 'app_issue_getdescription', methods: ['GET'])]
     public function getDescription(Issue $issue): JsonResponse
     {
-        return new JsonResponse(['description' => $issue->getDescription()]);
+        return $this->jsonSuccess(['description' => $issue->getDescription()]);
     }
 
-
     #[Route('/api/issue/{id}/description', name: 'api_issue_description_post', methods: ['POST'])]
-    public function saveDescription(Issue $issue, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function saveDescription(Issue $issue, Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
-
-        if (isset($data['description'])) {
-            $issue->setDescription($data['description']);
-            $entityManager->flush();
-
-            return new JsonResponse(['status' => 'success']);
+        $data = $this->getJsonData($request);
+        if (!isset($data['description'])) {
+            return $this->jsonError('Invalid description', Response::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse(['status' => 'error', 'message' => 'Invalid description'], 400);
+        $issue->setDescription($data['description']);
+        $this->entityManager->flush();
+
+        return $this->jsonSuccess();
     }
 
     #[Route('/api/issue/{id}/data', name: 'api_issue_data', methods: ['GET'])]
-    public function getIssueData(Issue $issue, EntityManagerInterface $entityManager): JsonResponse
+    public function getIssueData(Issue $issue): JsonResponse
     {
-        $postIts = $entityManager->getRepository(PostIt::class)
-            ->findBy(['issue' => $issue]);
+        $postIts = $this->postItRepository->findBy(['issue' => $issue]);
+        $postItData = array_map(fn($postIt) => [
+            'id' => $postIt->getId(),
+            'content' => $postIt->getContent(),
+            'createdBy' => $postIt->getCreatedBy()->getName(),
+            'createdAt' => $postIt->getCreatedAt()->format('c'),
+        ], $postIts);
 
-        $postItData = array_map(function ($postIt) {
-            return [
-                'id' => $postIt->getId(),
-                'content' => $postIt->getContent(),
-                'createdBy' => $postIt->getCreatedBy()->getName(),
-                'createdAt' => $postIt->getCreatedAt()->format('c'),
-            ];
-        }, $postIts);
-
-        return new JsonResponse([
+        return $this->jsonSuccess([
             'description' => $issue->getDescription(),
             'postIts' => $postItData,
         ]);
     }
 
-
-
     #[Route('/project/{projectId}/add-issue', name: 'add_issue', methods: ['POST'])]
-    public function addIssue(int $projectId, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function addIssue(int $projectId, Request $request): JsonResponse
     {
-        // Process the new issue creation
+        $data = $this->getJsonData($request);
         $issue = new Issue();
-        $issue->setName('New Issue'); // Example - make sure this is dynamic
+        $issue->setName($data['name'] ?? 'New Issue');
+        // Add more fields as necessary
 
-        // Persist the new issue to the database
-        $entityManager->persist($issue);
-        $entityManager->flush();
+        $this->entityManager->persist($issue);
+        $this->entityManager->flush();
 
-        // Return the new issue's ID and other data as JSON
-        return new JsonResponse([
+        return $this->jsonSuccess([
             'id' => $issue->getId(),
             'name' => $issue->getName(),
             'endDate' => $issue->getEndDate()?->format('Y-m-d')
         ]);
     }
+
     #[Route('/issue/{id}/archive', name: 'archive_issue', methods: ['POST'])]
-    public function archiveIssue(Issue $issue, EntityManagerInterface $entityManager, Request $request): Response
+    public function archiveIssue(Issue $issue, Request $request): Response
     {
-        // Set the issue as archived
         $issue->setIsArchived(true);
+        $this->entityManager->flush();
 
-        // Save the changes
-        $entityManager->flush();
-
-        $referer = $request->headers->get('referer');
-
-
-        // Redirect back to the issue list (or another page)
-        return $this->redirect($referer ?: $this->generateUrl('issue_list'));
+        return $this->redirectToReferer($request);
     }
 
-    #[Route('/issue/{id}/unarchive', name: 'unarchive_issue', methods: ['POST'])]
-    public function unarchiveIssue(Issue $issue, EntityManagerInterface $entityManager, Request $request): Response
+    #[Route('/{id}/unarchive', name: 'unarchive', methods: ['POST'])]
+    public function unarchiveIssue(Issue $issue, Request $request): Response
     {
-        // Set the issue as archived
         $issue->setIsArchived(false);
+        $this->entityManager->flush();
 
-        // Save the changes
-        $entityManager->flush();
-
-        $referer = $request->headers->get('referer');
-
-
-        // Redirect back to the issue list (or another page)
-        return $this->redirect($referer ?: $this->generateUrl('issue_list'));
+        return $this->redirectToReferer($request);
     }
 
     #[Route('/issues/{issueId}/postits', name: 'issue_postit_add', methods: ['POST'])]
@@ -274,49 +217,61 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
         $content = $request->request->get('content');
 
         $postIt = new PostIt();
-        $postIt->setContent($content);
-        $postIt->setCreatedBy($this->getUser());
-        $postIt->setIssue($issue);
+        $postIt->setContent($content)
+            ->setCreatedBy($this->getUser())
+            ->setIssue($issue);
 
         $this->entityManager->persist($postIt);
         $this->entityManager->flush();
 
-        return new JsonResponse(['status' => 'PostIt added']);
+        return $this->jsonSuccess(['message' => 'PostIt added']);
     }
 
-    // Edit Post-It
     #[Route('/postits/{postItId}/edit', name: 'postit_edit', methods: ['POST'])]
     public function editPostIt(int $postItId, Request $request): JsonResponse
     {
         $postIt = $this->postItRepository->find($postItId);
-
-        if ($postIt->getCreatedBy() !== $this->getUser()) {
-            throw new AccessDeniedException('You do not have permission to edit this post-it');
-        }
+        $this->denyAccessUnlessGranted('edit', $postIt);
 
         $content = $request->request->get('content');
         $postIt->setContent($content);
 
         $this->entityManager->flush();
 
-        return new JsonResponse(['status' => 'PostIt updated']);
+        return $this->jsonSuccess(['message' => 'PostIt updated']);
     }
 
-    // Delete Post-It
     #[Route('/postits/{postItId}/delete', name: 'postit_delete', methods: ['DELETE'])]
     public function deletePostIt(int $postItId): JsonResponse
     {
         $postIt = $this->postItRepository->find($postItId);
-
-        if ($postIt->getCreatedBy() !== $this->getUser()) {
-            throw new AccessDeniedException('You do not have permission to delete this post-it');
-        }
+        $this->denyAccessUnlessGranted('delete', $postIt);
 
         $this->entityManager->remove($postIt);
         $this->entityManager->flush();
 
-        return new JsonResponse(['status' => 'PostIt deleted']);
+        return $this->jsonSuccess(['message' => 'PostIt deleted']);
+    }
+
+    private function getJsonData(Request $request): array
+    {
+        return json_decode($request->getContent(), true) ?? [];
+    }
+
+    private function jsonError(string $message, int $status = Response::HTTP_BAD_REQUEST): JsonResponse
+    {
+        return new JsonResponse(['success' => false, 'error' => $message], $status);
+    }
+
+    private function jsonSuccess(array $data = []): JsonResponse
+    {
+        return new JsonResponse(array_merge(['success' => true], $data));
     }
 
 
+    private function redirectToReferer(Request $request): Response
+    {
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer ?: $this->generateUrl('issue_list'));
+    }
 }

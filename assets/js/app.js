@@ -6,6 +6,8 @@ import initializeDatePicker from "./datepicker";
 import handleIssueNameEdit from "./edit-issue-name";
 import initializeGroupAdd from "./group-add";
 import { initializeIssueModal } from './issueModal.js';
+import { initializeFilterSystem } from './filter-system.js'; // Add this line
+
 function initializeAll() {
     const functions = [
         { name: 'tagify', fn: initializeTagify },
@@ -14,7 +16,8 @@ function initializeAll() {
         { name: 'datepicker', fn: initializeDatePicker },
         { name: 'edit-issue-name', fn: handleIssueNameEdit },
         { name: 'group-add', fn: initializeGroupAdd },
-        { name: 'issueModal', fn: initializeIssueModal }
+        { name: 'issueModal', fn: initializeIssueModal },
+        { name: 'filter-system', fn: initializeFilterSystem } // Add this line
     ];
 
     functions.forEach(({ name, fn }) => {
@@ -26,6 +29,7 @@ function initializeAll() {
         }
     });
 }
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed.');
 
@@ -35,5 +39,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add event listener for adding new issues
     initializeAddIssue();
 });
-
-// Function to initialize all JavaScript for the page's existing content

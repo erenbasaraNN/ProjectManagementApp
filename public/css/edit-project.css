@@ -1,112 +1,4 @@
-/* General page layout */
-#project .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-}
 
-/* Page title */
-#project h1 {
-    color: #333;
-    font-size: 28px;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 10px;
-}
-
-/* Form styles */
-#project form {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-/* Form input fields */
-#project form input[type="text"],
-#project  input[type="email"],
-#project form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-/* Form labels */
-#project form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #555;
-}
-
-/* Submit button */
-#project form button[type="submit"] {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#project form button[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
-/* Back to list link */
-#project .back-link {
-    display: inline-block;
-    margin-bottom: 20px;
-    color: #007bff;
-    text-decoration: none;
-    font-size: 16px;
-    transition: color 0.3s;
-}
-
-#project .back-link:hover {
-    color: #0056b3;
-    text-decoration: underline;
-}
-#project .delete-project-btn {
-    display: inline-block;
-    background-color: #cb2b2b;
-    color: white;
-    font-size: 14px;
-    padding: 10px 15px;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-/* Hover and click effect for new project button */
-#project .delete-project-btn:hover {
-    background-color: #882121;
-}
-
-#project .delete-project-btn:active {
-    transform: scale(0.98);
-}
-
-#project_creator {
-    margin-bottom: 20px;
-}
-
-#project div {
-    margin-bottom: 10px;
-}
-#project_endDate {
-    margin-bottom: 10px;
-}
-#project_startDate {
-    margin-bottom: 20px;
-}
 
 #post-it-section button {
     background-color: #007bff;
@@ -121,4 +13,235 @@
 }
 #addPostItButton {
     margin-bottom: 20px;
+}
+
+
+/* Container for filter section as a bar */
+.filter-section {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping to next line if space is insufficient */
+    align-items: center;
+    padding: 10px;
+    max-width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin: 15px 15px 50px;
+}
+
+/* Style for each filter item in the bar */
+.filter-options {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between filter items */
+    flex: 1; /* Allow filter items to take available space */
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between label and input */
+}
+
+.filter-option label {
+    font-weight: 500;
+    color: #555;
+    margin-top: 7px;
+}
+
+.filter-title {
+    margin-left: 20px;
+    margin-bottom: 0px;
+    font-size: 1em;
+    font-weight: 500;
+    color: #555;
+}
+
+.archive-title {
+    margin-left: 20px;
+    margin-bottom: 20px;
+    font-size: 2em;
+    font-weight: 500;
+    color: #2c3e50;
+}
+.filter-tagify {
+    width: 170px; /* Adjust width for a more compact appearance */
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    box-sizing: border-box;
+}
+
+.filter-section .tagify__tag {
+    background-color: #9329d1; /* Blue color for tags */
+    color: #ffffff;
+}
+
+    /* Apply Tagify styles for different filters */
+.filter-tagify.tagify--status {
+    background-color: #e3f2fd; /* Light blue background for status */
+}
+
+.filter-tagify.tagify--status .tagify__tag {
+    background-color: #29a5d1; /* Blue color for tags */
+    color: #ffffff;
+}
+
+.filter-tagify.tagify--priority {
+    background-color: #f9f9f9; /* Light gray background for priority */
+}
+
+.filter-tagify.tagify--priority .tagify__tag {
+    background-color: #ffeb3b; /* Yellow color for tags */
+    color: #000000;
+}
+
+.filter-tagify.tagify--assignee {
+    background-color: #f9f9f9; /* Light gray background for assignees */
+}
+
+.filter-tagify.tagify--assignee .tagify__tag {
+    background-color: #81c784; /* Green color for tags */
+    color: #ffffff;
+}
+/* Button styling */
+.filter-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between buttons */
+}
+
+#apply-filters, #clear-filters {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#apply-filters {
+    background-color: #29a5d1; /* Blue color for apply button */
+    margin-right: 10px;
+
+}
+
+#clear-filters {
+    background-color: #f12436; /* Red color for clear button */
+}
+
+#apply-filters:hover {
+    background-color: #1f8ab7; /* Darker blue for hover effect */
+}
+
+#clear-filters:hover {
+    background-color: #d1132e; /* Darker red for hover effect */
+}
+
+/* Styles for New Project page */
+.new-project-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
+}
+
+.new-project-container h1 {
+    margin-bottom: 20px;
+    font-size: 2.5em;
+    color: #333333;
+    font-weight: 600;
+    text-align: center;
+}
+
+.new-project-container .form-container {
+    margin-bottom: 30px;
+}
+
+.back-to-list {
+    display: inline-block;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1em;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.new-project-container .back-to-list:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.new-project-container .back-to-list:focus {
+    outline: 2px solid #0056b3;
+    outline-offset: 2px;
+}
+
+/* Form styles */
+.new-project-container .form-container form {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.new-project-container #project_name,
+.new-project-container #project_description,
+.new-project-container #project_startDate,
+.new-project-container #project_creator,
+.new-project-container #project_endDate {
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 12px;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px; /* Increased space between fields */
+}
+
+.new-project-container #project_name,
+.new-project-container #project_description {
+    height: auto; /* Allow for more content in these fields */
+}
+
+.new-project-container #project_startDate,
+.new-project-container #project_endDate {
+    height: 40px; /* Consistent height for date fields */
+}
+
+.new-project-container #project_creator {
+    height: 50px; /* Consistent height for creator field */
+}
+
+/* Button styles */
+.new-project-container .form-container form button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    background-color: #28a745;
+    color: #ffffff;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.new-project-container .form-container form button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.new-project-container .form-container form button:focus {
+    outline: 2px solid #218838;
+    outline-offset: 2px;
 }

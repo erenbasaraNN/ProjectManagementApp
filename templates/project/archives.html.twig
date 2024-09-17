@@ -3,7 +3,7 @@
 {% block title %}Archived Issues - {{ project.name }}{% endblock %}
 
 {% block body %}
-    <h1>Archived Issues for Project: {{ project.name }}</h1>
+    <h1 class="archive-title">Archived Issues for Project: {{ project.name }}</h1>
 
     {% if archived_issues is empty %}
         <p>No archived issues found for this project.</p>

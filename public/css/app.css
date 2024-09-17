@@ -313,7 +313,7 @@ h1, h2 {
 .project-header {
     display: block;
     align-items: first baseline;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
 }
 .project-header p {
     font-size: 16px;
@@ -324,6 +324,25 @@ h1, h2 {
     font-size: 32px;
     margin: 0;
     color: #2c3e50;
+}
+
+.archive-btn {
+    background-color: #e0c955;
+    border: none;
+    color: #6c757d;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 12px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.archive-btn:hover {
+    background-color: #d3b74b;
+    text-decoration: none;
+    color: white;
 }
 
 

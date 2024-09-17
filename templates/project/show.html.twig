@@ -6,7 +6,28 @@
     <div class="project-header">
         <h1>{{ project.name }}</h1>
         <p>{{ project.description }}</p>
-        <a href="{{ path('project_archived_issues', { id: project.id }) }}">View Archive</a>
+        <a class="archive-btn" href="{{ path('project_archived_issues', { id: project.id }) }}">
+            <i class="fas fa-archive"></i> View Archive
+        </a>
+    </div>
+    <div class="filter-section">
+
+        <div class="filter-options">
+            <div class="filter-option">
+                <label for="status-filter">Status:</label>
+                <input id="status-filter" class="filter-tagify" placeholder="Select status...">
+            </div>
+            <div class="filter-option">
+                <label for="priority-filter">Priority:</label>
+                <input id="priority-filter" class="filter-tagify" placeholder="Select priority...">
+            </div>
+            <div class="filter-option">
+                <label for="assignee-filter">Assignee:</label>
+                <input id="assignee-filter" class="filter-tagify" placeholder="Select assignee...">
+            </div>
+        </div>
+        <button id="apply-filters">Apply Filters</button>
+        <button id="clear-filters">Clear Filters</button>
     </div>
     <div class="project-page container">
         <!-- Grouped Issues Table -->

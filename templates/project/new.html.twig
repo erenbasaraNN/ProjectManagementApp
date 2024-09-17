@@ -3,9 +3,12 @@
 {% block title %}New Project{% endblock %}
 
 {% block body %}
-    <h1>Create new Project</h1>
+    <div class="new-project-container">
+        <h1>Create New Project</h1>
 
-    {{ include('project/_form.html.twig') }}
+        {{ include('project/_form.html.twig') }}
 
-    <a href="{{ path('project_index') }}" class="delete-link new-project-btn">back to list</a>
+    </div>
+    <a href="{{ path('project_index') }}" class="back-to-list">Back to List</a>
+
 {% endblock %}

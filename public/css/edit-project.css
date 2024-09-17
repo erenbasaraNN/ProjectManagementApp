@@ -74,6 +74,18 @@
     box-sizing: border-box;
 }
 
+.filter-section span.tagify__input {
+    width: 170px; /* Adjust width for a more compact appearance */
+    height: 30px;
+    padding: 4px 8px;
+    background-color: #dddddd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    box-sizing: border-box;
+}
+
 .filter-section .tagify__tag {
     background-color: #9329d1; /* Blue color for tags */
     color: #ffffff;

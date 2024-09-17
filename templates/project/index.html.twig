@@ -4,17 +4,17 @@
 
 {% block body %}
     <div class="project-index-page">
-        <h1>Project index</h1>
+        <h1>PROJELER</h1>
 
         <table class="table">
             <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>StartDate</th>
-                <th>EndDate</th>
-                <th>actions</th>
+                <th>ID</th>
+                <th>AD</th>
+                <th>AÇIKLAMA</th>
+                <th>BAŞLANGIÇ</th>
+                <th>BİTİŞ</th>
+                <th>EYLEMLER</th>
             </tr>
             </thead>
             <tbody>
@@ -22,12 +22,16 @@
                 <tr>
                     <td>{{ project.id }}</td>
                     <td>{{ project.name }}</td>
-                    <td>{{ project.description }}</td>
+                    {% set words = project.description|split(' ') %}
+                    <td>{{ words|slice(0, 10)|join(' ') }}{% if words|length > 10 %}...{% endif %}</td>
+
                     <td>{{ project.startDate ? project.startDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ project.endDate ? project.endDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>
-                        <a href="{{ path('project_show', {'id': project.id}) }}">show</a>
-                        <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
+                        <div class="button-container">
+                            <button id="butonum">Show</button>
+                            <button id="butonum">Edit</button>
+                        </div>
                     </td>
                 </tr>
             {% else %}
@@ -38,6 +42,7 @@
             </tbody>
         </table>
 
-        <a href="{{ path('project_new') }}">Create new</a>
+        <a href="{{ path('project_new') }}" class="new-project-btn">+ Yeni Proje Ekle</a>
+
     </div>
 {% endblock %}

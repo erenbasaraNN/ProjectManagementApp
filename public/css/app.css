@@ -1,16 +1,45 @@
 /* General Styles */
-body {
+* {
     font-family: 'Poppins', sans-serif;
-    background-color: #f5f5f5;
     margin: 0;
     padding: 0;
-    color: #333;
-    line-height: 1.6;
+    color: #2c3e50;
+    line-height: 1.5;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+body {
+    background-color: #f4f4f9;
+}
+a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 
 h1, h2 {
     margin: 0 2px 0;
     color: #ccdff9;
+    display: flex;
 }
 
 img.logo {
@@ -214,7 +243,7 @@ table tr:nth-child(even) {
     top: 50%;
     transform: translateY(-50%);
     border: 5px solid transparent;
-    border-top-color: #333;
+    border-top-color: #2c3e50;
 }
 
 .priority-dropdown option.priority-low {
@@ -283,12 +312,12 @@ table tr:nth-child(even) {
     font-size: 12px;
     color: #6c757d;
     margin-top: 3px;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
     max-width: 35%;
 }
 
 .project-header h1 {
-    font-size: 32px;
+    font-size: 30px;
     margin: 0;
     color: #2c3e50;
 }
@@ -561,7 +590,7 @@ span.tagify__input:focus {
     top: 50%;
     transform: translateY(-50%);
     border: 5px solid transparent;
-    border-top-color: #333;
+    border-top-color: #2c3e50;
 }
 
 .status-dropdown option.status-completed {
@@ -651,7 +680,7 @@ span.tagify__input:focus {
     top: 10px;
     font-size: 18px;
     font-weight: bold;
-    color: #333;
+    color: #2c3e50;
     cursor: pointer;
     border: none;
     background: none;
@@ -664,7 +693,7 @@ span.tagify__input:focus {
 #add-group-modal .modal h2 {
     margin-top: 0;
     font-size: 20px;
-    color: #333;
+    color: #2c3e50;
 }
 
 #add-group-modal .modal-content form {
@@ -678,7 +707,7 @@ span.tagify__input:focus {
 
 #add-group-modal .modal-content form label {
     font-weight: bold;
-    color: #333;
+    color: #2c3e50;
     margin-bottom: 5px;
 }
 
@@ -884,7 +913,7 @@ body.hidden {
 
 #issueModal h2 {
     margin-top: 0;
-    color: #333;
+    color: #2c3e50;
 }
 
 #issueModal textarea {
@@ -969,6 +998,7 @@ body.hidden {
     cursor: pointer;
     transition: background-color 0.3s;
     font-size: 14px;
+    width: fit-content;
 }
 
 .archive-button:hover {
@@ -1006,3 +1036,4 @@ body.hidden {
         width: 90%;
     }
 }
+

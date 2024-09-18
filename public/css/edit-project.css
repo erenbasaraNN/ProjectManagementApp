@@ -418,7 +418,7 @@ textarea {
     margin: 0 auto;
 }
 
-.project-index-page h1 , archive-page h1 {
+.project-index-page h1 , .archive-page h1 {
     font-size: 2.5rem;
     color: #333;
     text-align: center;

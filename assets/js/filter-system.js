@@ -124,13 +124,13 @@ function setPriorityBackgroundColor(priority, tagify) {
 
     switch (priority) {
         case 'Yüksek':
-            backgroundColor = '#f12436';  // High (red)
+            backgroundColor = '#dc3545';  // High (red)
             break;
         case 'Orta':
-            backgroundColor = '#e3d324';  // Medium (yellow)
+            backgroundColor = '#6f42c1';  // Medium (yellow)
             break;
         case 'Düşük':
-            backgroundColor = '#46c965';  // Low (green)
+            backgroundColor = '#007bff';  // Low (green)
             break;
     }
 

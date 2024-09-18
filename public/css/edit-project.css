@@ -65,13 +65,18 @@
     font-weight: 500;
     color: #2c3e50;
 }
+
+.fa-regular, .far {
+    color: white;
+}
 .filter-tagify {
-    width: 170px; /* Adjust width for a more compact appearance */
+    width: fit-content; /* Adjust width for a more compact appearance */
     padding: 4px 8px;
     border: none;
     border-radius: 4px;
     font-size: 0.9em;
     box-sizing: border-box;
+    color: white;
 }
 
 .filter-section span.tagify__input {
@@ -84,10 +89,13 @@
     border-radius: 4px;
     box-sizing: border-box;
 }
-
+.tagify__tag-text {
+    color: #ffffff;
+}
 .filter-section .tagify__tag {
     background-color: #9329d1; /* Blue color for tags */
     color: #ffffff;
+    border-radius: 5px;
 }
 
     /* Apply Tagify styles for different filters */
@@ -342,6 +350,9 @@ textarea {
 .back-to-list:hover,
 .new-project-btn:hover {
     background-color: #27ae60;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight:500;
 }
 
 .delete-project-btn:hover {
@@ -398,7 +409,7 @@ textarea {
     }
 }
 /* Modern CSS for Project Index Page */
-.project-index-page {
+.project-index-page,.archive-page {
     font-family: 'Poppins', sans-serif;
     background-color: #f4f4f9;
     color: #333;
@@ -407,14 +418,14 @@ textarea {
     margin: 0 auto;
 }
 
-.project-index-page h1 {
+.project-index-page h1 , archive-page h1 {
     font-size: 2.5rem;
     color: #333;
     text-align: center;
     margin-bottom: 20px;
 }
 
-.project-index-page .table {
+.project-index-page .table , .archive-page .table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
@@ -423,19 +434,23 @@ textarea {
 
 }
 
-.project-index-page .table th, .project-index-page .table td {
+.project-index-page .table th, .project-index-page .table td , .archive-page .table th, .archive-page .table td {
     padding: 15px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
-.project-index-page .table th {
+.project-index-page .table th , .archive-page .table th {
     background-color: #f8f9fa;
     font-weight: 600;
 }
 
-.project-index-page .table tr:hover {
+.project-index-page .table tr:hover , .archive-page .table tr:hover {
     background-color: #f1f1f1;
+}
+.archive-page .table td:last-child {
+    text-align: center;
+    align-items: center;
 }
 
 .button-container {
@@ -458,6 +473,6 @@ textarea {
 .button-container button:hover {
     background-color: #0056b3;
 }
-table td {
-    width: 10%;
+.archive-page .button-container {
+    justify-content: center;
 }

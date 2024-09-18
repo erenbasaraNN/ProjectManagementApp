@@ -1009,6 +1009,10 @@ body.hidden {
     display: none;
 }
 
+.formm .btn {
+    width: fit-content;
+}
+
 @media (max-width: 768px) {
     .navbar-left h2 {
         font-size: 18px;

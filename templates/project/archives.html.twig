@@ -3,39 +3,44 @@
 {% block title %}Archived Issues - {{ project.name }}{% endblock %}
 
 {% block body %}
-    <h1 class="archive-title">Archived Issues for Project: {{ project.name }}</h1>
+    <div class="archive-page">
 
-    {% if archived_issues is empty %}
-        <p>No archived issues found for this project.</p>
-    {% else %}
-        <table>
-            <thead>
-            <tr>
-                <th>Issue Name</th>
-                <th>Status</th>
-                <th>Priority</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for issue in archived_issues %}
+        <h1 class="archive-title">Archived Issues for Project: {{ project.name }}</h1>
+
+        {% if archived_issues is empty %}
+            <p>No archived issues found for this project.</p>
+        {% else %}
+            <table>
+                <thead>
                 <tr>
-                    <td>{{ issue.name }}</td>
-                    <td>{{ issue.status }}</td>
-                    <td>{{ issue.priority }}</td>
-                    <td>{{ issue.description }}</td>
-                    <td>
-                        <!-- Archive button -->
-                        <form method="POST" action="{{ path('unarchive_issue', {'id': issue.id}) }}">
-                            <button type="submit" class="btn btn-danger">UnArchive</button>
-                        </form>
-                    </td>
+                    <th>Issue Name</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Description</th>
+                    <th>Actions</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
+                </thead>
+                <tbody>
+                {% for issue in archived_issues %}
+                    <tr>
+                        <td>{{ issue.name }}</td>
+                        <td>{{ issue.status }}</td>
+                        <td>{{ issue.priority }}</td>
+                        <td>{{ issue.description }}</td>
+                        <td>
+                            <!-- Archive button -->
+                            <div class="button-container">
+                                <form method="POST" class="formm" action="{{ path('unarchive', {'id': issue.id}) }}">
+                                    <button type="submit" class="btn">UnArchive</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
 
-    <a href="{{ path('project_show', { id: project.id }) }}">Back to Project</a>
+        <a class="btn" href="{{ path('project_show', { id: project.id }) }}">Back to Project</a>
+    </div>
 {% endblock %}

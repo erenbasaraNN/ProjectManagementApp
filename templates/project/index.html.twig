@@ -29,8 +29,8 @@
                     <td>{{ project.endDate ? project.endDate|date('Y-m-d H:i:s') : '' }}</td>
                     <td>
                         <div class="button-container">
-                            <button id="butonum">Show</button>
-                            <button id="butonum">Edit</button>
+                            <a href="{{ path('project_show', { id: project.id }) }}"><button id="butonum" >Show</button></a>
+                            <a href="{{ path('project_edit', { id: project.id }) }}"><button id="butonum" >Edit</button></a>
                         </div>
                     </td>
                 </tr>
